@@ -21,7 +21,7 @@ let player;
 let cursors;
 let ground = [];
 let house;
-// let obstacles = [];
+let obstacles = [];
 
 function preload(){
     //exec avant le chargement du jeu
@@ -44,16 +44,17 @@ function create(){
     //exec quand le jeu est chargé une premiere fois
     //house = this.add.image(800, 258, "background").setOrigin(0.67, 0.6);
     //house.setDisplaySize(1194, 670);
-    player = this.physics.add.sprite(100,100,"player");
+    player = this.physics.add.sprite(100,757,"player");
     player.setSize(144, 90);
     player.setOffset(0,0);
+    player.body.gravity.y = 3000;
 
     // visuel qui répète l’image
-    this.ground = this.add.tileSprite(0, 802, 1194, 32, 'ground').setOrigin(0, 0);
+    this.ground = this.add.tileSprite(-40, 802, 10000, 32, 'ground').setOrigin(0, 0);
 
     // collider invisible (rectangle physique)
     let groundCollider = this.physics.add.staticImage(600, 818, null) // sans texture
-        .setSize(1194, 32)
+        .setSize(10000, 32)
         .setVisible(false);
 
     this.physics.add.collider(player, groundCollider);
@@ -78,7 +79,10 @@ function create(){
         repeat: -1
     })
 
+    this.cameras.main.startFollow(player, true, 0.1, 0, -497, 340);
+
     cursors = this.input.keyboard.createCursorKeys();
+
     this.physics.world.createDebugGraphic();
 
 }
@@ -86,7 +90,7 @@ function create(){
 function update(){
     //exec frame par frame
 
-    player.setVelocity(0);
+    player.setVelocityX(0);
 
     if (cursors.left.isDown){
         player.setVelocityX(-200);
@@ -101,10 +105,13 @@ function update(){
     else if(cursors.up.isDown){
         player.setVelocityY(-200);
     }
-    else if(cursors.down.isDown){
-        player.setVelocityY(200);
-    }
     else {
         player.anims.play('static',true);  
+    }
+
+    if (player.positionX >= 0) {
+        
+    } else {
+        player.setPosition = 0
     }
 }
