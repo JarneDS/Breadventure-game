@@ -22,14 +22,14 @@ let obstacles = [];
 
 function preload(){
     //exec avant le chargement du jeu
-    this.load.image("player","assets/images/henri1.png");
+    this.load.image("player","assets/player/henri.png");
     this.load.image("obstacles","assets/images/obstacle.png");
 
-    this.load.spritesheet("player_ss", "assets/player/henri1sprite.png",{
+    this.load.spritesheet("player_walking", "assets/player/henriwalking.png",{
         frameWidth: 144,
         frameHeight: 144,
     })
-    this.load.spritesheet("player_sss", "assets/player/henri1sprite2.png",{
+    this.load.spritesheet("player_static", "assets/player/henristatic.png",{
         frameWidth: 144,
         frameHeight: 144,
     })
@@ -46,8 +46,8 @@ function create(){
     }
 
     this.anims.create({
-        key:'right',
-        frames: this.anims.generateFrameNumbers('player_ss', {
+        key:'walking',
+        frames: this.anims.generateFrameNumbers('player_walking', {
             start: 0,
             end: 5,
         }),
@@ -56,7 +56,7 @@ function create(){
     })
     this.anims.create({
         key:'static',
-        frames: this.anims.generateFrameNumbers('player_sss', {
+        frames: this.anims.generateFrameNumbers('player_static', {
             start: 0,
             end: 1,
         }),
@@ -75,12 +75,12 @@ function update(){
 
     if (cursors.left.isDown){
         player.setVelocityX(-200);
-        player.anims.play('right', true);
+        player.anims.play('walking', true);
         player.setFlipX(true); 
     }
     else if(cursors.right.isDown){
         player.setVelocityX(200);
-        player.anims.play('right',true);
+        player.anims.play('walking',true);
         player.setFlipX(false); 
     } 
     else if(cursors.up.isDown){
