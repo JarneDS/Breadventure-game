@@ -2,8 +2,8 @@ import "phaser";
 
 const config = {
     type: Phaser.AUTO,
-    width: 800,
-    Height: 600,
+    width: 1194,
+    height: 834,
     scene: {
         preload,
         create,
@@ -11,39 +11,53 @@ const config = {
     },
     physics: {
         default: 'arcade',
-        arcade: {gravity :{y: 0}}
+        arcade: {gravity :{y: 0}},
+        debug: true
     }
 }
 
 const game = new Phaser.Game(config);
 let player;
 let cursors;
-let obstacles = [];
+let ground = [];
+let house;
+// let obstacles = [];
 
 function preload(){
     //exec avant le chargement du jeu
     this.load.image("player","assets/player/henri.png");
-    this.load.image("obstacles","assets/images/obstacle.png");
+    this.load.image("background","assets/bg/bg1.png");
+    this.load.image("ground", "assets/bg/sol.png");
+    
 
     this.load.spritesheet("player_walking", "assets/player/henriwalking.png",{
         frameWidth: 144,
-        frameHeight: 144,
+        frameHeight: 90,
     })
     this.load.spritesheet("player_static", "assets/player/henristatic.png",{
         frameWidth: 144,
-        frameHeight: 144,
+        frameHeight: 90,
     })
 }
 
 function create(){
     //exec quand le jeu est chargé une premiere fois
+    //house = this.add.image(800, 258, "background").setOrigin(0.67, 0.6);
+    //house.setDisplaySize(1194, 670);
     player = this.physics.add.sprite(100,100,"player");
+    player.setSize(144, 90);
+    player.setOffset(0,0);
 
-    for (let i = 0; i<10;i++){
-        obstacles[i] = this.physics.add.sprite(i*50,200,"obstacles");
-        obstacles[i].setImmovable(true)
-        this.physics.add.collider(player, obstacles[i]);
-    }
+    // visuel qui répète l’image
+    this.ground = this.add.tileSprite(0, 802, 1194, 32, 'ground').setOrigin(0, 0);
+
+    // collider invisible (rectangle physique)
+    let groundCollider = this.physics.add.staticImage(600, 818, null) // sans texture
+        .setSize(1194, 32)
+        .setVisible(false);
+
+    this.physics.add.collider(player, groundCollider);
+
 
     this.anims.create({
         key:'walking',
@@ -65,6 +79,7 @@ function create(){
     })
 
     cursors = this.input.keyboard.createCursorKeys();
+    this.physics.world.createDebugGraphic();
 
 }
 
