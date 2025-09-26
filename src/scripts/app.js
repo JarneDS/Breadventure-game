@@ -19,6 +19,7 @@ const config = {
 const game = new Phaser.Game(config);
 let player;
 let cursors;
+let cone;
 let house;
 let obstacles = [];
 
@@ -27,36 +28,44 @@ function preload(){
     this.load.image("player","assets/player/henri.png");
     this.load.image("background","assets/bg/bg1.png");
     this.load.image("ground", "assets/bg/sol.png");
+    this.load.image("cone", "assets/objects/conev2.png");
     
 
-    this.load.spritesheet("player_walking", "assets/player/henriwalking.png",{
-        frameWidth: 144,
+    this.load.spritesheet("player_walking", "assets/player/henriwalkingv2.png",{
+        frameWidth: 42,
         frameHeight: 90,
     })
-    this.load.spritesheet("player_static", "assets/player/henristatic.png",{
-        frameWidth: 144,
+    this.load.spritesheet("player_static", "assets/player/henristaticv2.png",{
+        frameWidth: 42,
+        frameHeight: 90,
+    })
+    this.load.spritesheet("player_jumping", "assets/player/henrijumping.png", {
+        frameWidth: 54,
         frameHeight: 90,
     })
 }
 
 function create(){
     // exec quand le jeu est chargé une premiere fois
-    
+    this.house = this.add.tileSprite(-40, 290, 10000, 512, 'background').setOrigin(0, 0);
     player = this.physics.add.sprite(100,757,"player");
-    player.setSize(144, 90);
+    //player.setSize(144, 90);
+    player.setSize(42, 90);
     player.setOffset(0,0);
     player.body.gravity.y = 500;
 
+    this.cone = this.physics.add.staticImage(30, 770, 'cone');
+
     // visuel qui répète l’image
     this.ground = this.add.tileSprite(-40, 802, 10000, 32, 'ground').setOrigin(0, 0);
-    this.house = this.add.tileSprite(-40, 400, 10000, 256, 'background').setOrigin(0, 0);
+    
     // collider invisible (rectangle physique)
     let groundCollider = this.physics.add.staticImage(600, 818, null) // sans texture
         .setSize(10000, 32)
         .setVisible(false);
 
     this.physics.add.collider(player, groundCollider);
-
+    this.physics.add.collider(player, this.cone);
 
     this.anims.create({
         key:'walking',
@@ -76,6 +85,15 @@ function create(){
         frameRate: 3,
         repeat: -1
     })
+    this.anims.create({
+        key:'jumping',
+        frames: this.anims.generateFrameNumbers('player_jumping', {
+            start: 0,
+            end: 2,
+        }),
+        frameRate: 6,
+        repeat: 0
+    })
 
     this.cameras.main.startFollow(player, true, 0.1, 0, -497, 340);
 
@@ -85,31 +103,38 @@ function create(){
 
 }
 
-function update(){
-    //exec frame par frame
-
+function update() {
     player.setVelocityX(0);
 
-    if (cursors.left.isDown){
-        player.setVelocityX(-200);
-        player.anims.play('walking', true);
-        player.setFlipX(true); 
-    }
-    else if(cursors.right.isDown){
-        player.setVelocityX(200);
-        player.anims.play('walking',true);
-        player.setFlipX(false); 
-    } 
-    else if(Phaser.Input.Keyboard.JustDown(cursors.up) && player.body.onFloor()){
+    // Saut
+    if (Phaser.Input.Keyboard.JustDown(cursors.up) && player.body.onFloor()) {
         player.setVelocityY(-200);
-    }
-    else {
-        player.anims.play('static',true);  
+        player.anims.play('jumping');
     }
 
-    if (player.positionX >= 0) {
-        
+    // Déplacement horizontal (au sol ou en l'air)
+    if (cursors.left.isDown) {
+        player.setVelocityX(-200);
+        player.setFlipX(true);
+    } else if (cursors.right.isDown) {
+        player.setVelocityX(200);
+        player.setFlipX(false);
+    }
+
+    // Animation
+    if (!player.body.onFloor()) {
+        if (!player.anims.isPlaying || player.anims.currentAnim.key !== 'jumping') {
+        player.setTexture('player_jumping');
+        player.setFrame(2);}
+    } else if (player.body.velocity.x !== 0) {
+        player.anims.play('walking', true);
     } else {
-        player.setPosition = 0
+        player.anims.play('static', true);
+    }
+
+    // Empêcher de sortir de l'écran à gauche
+    if (player.x < 0) {
+        player.x = 0;
     }
 }
+
