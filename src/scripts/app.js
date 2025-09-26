@@ -19,7 +19,6 @@ const config = {
 const game = new Phaser.Game(config);
 let player;
 let cursors;
-let ground = [];
 let house;
 let obstacles = [];
 
@@ -41,17 +40,16 @@ function preload(){
 }
 
 function create(){
-    //exec quand le jeu est chargé une premiere fois
-    //house = this.add.image(800, 258, "background").setOrigin(0.67, 0.6);
-    //house.setDisplaySize(1194, 670);
+    // exec quand le jeu est chargé une premiere fois
+    
     player = this.physics.add.sprite(100,757,"player");
     player.setSize(144, 90);
     player.setOffset(0,0);
-    player.body.gravity.y = 3000;
+    player.body.gravity.y = 500;
 
     // visuel qui répète l’image
     this.ground = this.add.tileSprite(-40, 802, 10000, 32, 'ground').setOrigin(0, 0);
-
+    this.house = this.add.tileSprite(-40, 400, 10000, 256, 'background').setOrigin(0, 0);
     // collider invisible (rectangle physique)
     let groundCollider = this.physics.add.staticImage(600, 818, null) // sans texture
         .setSize(10000, 32)
@@ -102,7 +100,7 @@ function update(){
         player.anims.play('walking',true);
         player.setFlipX(false); 
     } 
-    else if(cursors.up.isDown){
+    else if(Phaser.Input.Keyboard.JustDown(cursors.up) && player.body.onFloor()){
         player.setVelocityY(-200);
     }
     else {
