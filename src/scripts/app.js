@@ -30,28 +30,76 @@ function preload(){
     this.load.image("ground", "assets/bg/sol.png");
     this.load.image("cone", "assets/objects/conev2.png");
     
+    // walking
+    this.load.spritesheet("player_walking", "assets/player/henriwalking.png",{
+        frameWidth: 144,
+        frameHeight: 144,
+    })
 
-    this.load.spritesheet("player_walking", "assets/player/henriwalkingv2.png",{
-        frameWidth: 42,
-        frameHeight: 90,
+    this.load.spritesheet("player_umbrella_walking", "assets/player/henriumbrellawalking.png", {
+        frameWidth: 144,
+        frameHeight: 144,
     })
-    this.load.spritesheet("player_static", "assets/player/henristaticv2.png",{
-        frameWidth: 42,
-        frameHeight: 90,
+
+    this.load.spritesheet("player_bread_walking", "assets/player/henribreadwalking.png", {
+        frameWidth: 144,
+        frameHeight: 144,
     })
+
+    this.load.spritesheet("player_brum_walking", "assets/player/henribrumwalking.png", {
+        frameWidth: 144,
+        frameHeight: 144,
+    })
+
+    // static
+    this.load.spritesheet("player_static", "assets/player/henristatic.png",{
+        frameWidth: 144,
+        frameHeight: 144,
+    })
+    
+    this.load.spritesheet("player_umbrella_static", "assets/player/henriumbrella.png", {
+        frameWidth: 144,
+        frameHeight: 144,
+    })
+
+    this.load.spritesheet("player_bread_static", "assets/player/henribread.png", {
+        frameWidth: 144,
+        frameHeight: 144,
+    })
+
+    this.load.spritesheet("player_brum_static", "assets/player/henribrum.png", {
+        frameWidth: 144,
+        frameHeight: 144,
+    })
+
+    // jumping
     this.load.spritesheet("player_jumping", "assets/player/henrijumping.png", {
-        frameWidth: 54,
-        frameHeight: 90,
+        frameWidth: 144,
+        frameHeight: 144,
+    })
+    
+    this.load.spritesheet("player_umbrella_jumping", "assets/player/henriumbrellajumping.png", {
+        frameWidth: 144,
+        frameHeight: 144,
+    })
+
+    this.load.spritesheet("player_bread_jumping", "assets/player/henribreadjumping.png", {
+        frameWidth: 144,
+        frameHeight: 144,
+    })
+
+    this.load.spritesheet("player_brum_jumping", "assets/player/henribrumjumping.png", {
+        frameWidth: 144,
+        frameHeight: 144,
     })
 }
 
 function create(){
     // exec quand le jeu est chargé une premiere fois
     this.house = this.add.tileSprite(-40, 290, 10000, 512, 'background').setOrigin(0, 0);
-    player = this.physics.add.sprite(100,757,"player");
-    //player.setSize(144, 90);
+    player = this.physics.add.sprite(100, 707, "player");
     player.setSize(42, 90);
-    player.setOffset(0,0);
+    player.setOffset(50,54);
     player.body.gravity.y = 500;
 
     this.cone = this.physics.add.staticImage(30, 770, 'cone');
@@ -95,7 +143,7 @@ function create(){
         repeat: 0
     })
 
-    this.cameras.main.startFollow(player, true, 0.1, 0, -497, 340);
+    this.cameras.main.startFollow(player, true, 0.1, 0, -497, 290);
 
     cursors = this.input.keyboard.createCursorKeys();
 
@@ -109,7 +157,6 @@ function update() {
     // Saut
     if (Phaser.Input.Keyboard.JustDown(cursors.up) && player.body.onFloor()) { // dire à Phaser de ne que permettre le saut une fois et que quand le personnage touche le sol
         player.setVelocityY(-200);
-        player.anims.play('jumping');
     }
 
     // Déplacement horizontal (au sol ou en l'air)
@@ -123,9 +170,9 @@ function update() {
 
     // Animation
     if (!player.body.onFloor()) {
-        if (!player.anims.isPlaying || player.anims.currentAnim.key !== 'jumping') { // si la condition isPlaying est pas existant est faux ou que 'jumping' n'est pas réel non plus
-        player.setTexture('player_jumping'); // faire en sorte que l'image du joueur soit mis sur bras levé
-        player.setFrame(2);}
+        if (player.anims.isPlaying) { // si isPlaying est en cours
+        player.anims.play('jumping', true); 
+        player.setFrame(2);} // faire en sorte que l'image du joueur soit mis sur bras levé
     } else if (player.body.velocity.x !== 0) {
         player.anims.play('walking', true);
     } else {
