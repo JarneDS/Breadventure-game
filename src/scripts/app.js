@@ -107,7 +107,7 @@ function update() {
     player.setVelocityX(0);
 
     // Saut
-    if (Phaser.Input.Keyboard.JustDown(cursors.up) && player.body.onFloor()) {
+    if (Phaser.Input.Keyboard.JustDown(cursors.up) && player.body.onFloor()) { // dire à Phaser de ne que permettre le saut une fois et que quand le personnage touche le sol
         player.setVelocityY(-200);
         player.anims.play('jumping');
     }
@@ -123,8 +123,8 @@ function update() {
 
     // Animation
     if (!player.body.onFloor()) {
-        if (!player.anims.isPlaying || player.anims.currentAnim.key !== 'jumping') {
-        player.setTexture('player_jumping');
+        if (!player.anims.isPlaying || player.anims.currentAnim.key !== 'jumping') { // si la condition isPlaying est pas existant est faux ou que 'jumping' n'est pas réel non plus
+        player.setTexture('player_jumping'); // faire en sorte que l'image du joueur soit mis sur bras levé
         player.setFrame(2);}
     } else if (player.body.velocity.x !== 0) {
         player.anims.play('walking', true);
