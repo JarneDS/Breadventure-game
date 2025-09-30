@@ -21,6 +21,7 @@ let player;
 let cursors;
 let obstacles = [];
 let money = 5;
+let bateau;
 
 function preload(){
     //exec avant le chargement du jeu
@@ -29,6 +30,7 @@ function preload(){
     this.load.image("ground", "assets/bg/sol.png");
     this.load.image("cone", "assets/objects/travaux-panneau.png");
     this.load.image("money", "assets/objects/money.png");
+    this.load.image("bateau", "assets/objects/bateau.png")
     
     // walking
     this.load.spritesheet("player_walking", "assets/player/henriwalking.png",{
@@ -97,13 +99,20 @@ function preload(){
 function create(){
     // exec quand le jeu est chargé une premiere fois
     this.house = this.add.tileSprite(-40, 290, 10000, 512, 'background').setOrigin(0, 0);
+    // bateau
+    bateau = this.physics.add.staticImage(400, 674, 'bateau');
+    bateau.setSize(256, 40);
+    bateau.setOffset(0, 216);
+    bateau.flipX = true;
+
+    // player
     player = this.physics.add.sprite(100, 707, "player");
     player.setSize(42, 90);
     player.setOffset(50,54);
-    player.body.gravity.y = 500;
+    player.body.gravity.y = 400;
 
     this.cone = this.physics.add.staticImage(30, 756, 'cone');
-
+    this.physics.add.collider(player, bateau);
     // visuel qui répète l’image
     this.ground = this.add.tileSprite(-40, 802, 10000, 32, 'ground').setOrigin(0, 0);
     
@@ -150,7 +159,7 @@ function create(){
 
     // argent
     for (let i = 0; i < 5; i++) {
-        let randomX = Phaser.Math.Between(100, 500); // emplacement random des pièces
+        let randomX = Phaser.Math.Between(100, 10000); // emplacement random des pièces
         let obstacle = this.physics.add.staticImage(randomX, 760, 'money'); // emplacement random des pièces sur l'axe X
         obstacles.push(obstacle); // ajouter obstacle à la liste obstacles
 
@@ -163,6 +172,18 @@ function create(){
 
     this.scoreText = this.add.text(10, 10, 'Argent : 5€', {fontSize: '28px'}); // initialisez le text
     this.scoreText.setScrollFactor(0); // Empêche la text de défiler avec le fond
+
+    // animation bateau
+    this.tweens.add({
+        targets: bateau,
+        x: 800, // position finale sur l’axe X (ajuste selon la largeur de ton écran)
+        duration: 3000, // durée en millisecondes
+        yoyo: true, // revient en arrière
+        repeat: -1, // répète indéfiniment
+        onYoyo: () => bateau.flipX = !bateau.flipX,
+        onRepeat: () => bateau.flipX = !bateau.flipX,
+    });
+
 
     this.physics.world.createDebugGraphic();
 
