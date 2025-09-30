@@ -159,7 +159,7 @@ function create(){
         repeat: 0
     })
 
-    this.cameras.main.startFollow(player, true, 0.1, 0, -497, 290); // suivre le bonhomme
+    this.cameras.main.startFollow(player, true, 0.1, 0, -497, 290); // suivre le perso
 
     cursors = this.input.keyboard.createCursorKeys();
 
@@ -172,7 +172,7 @@ function create(){
         this.physics.add.overlap(player, obstacle, () => { // collision entre sprite (player) et les pièces de monnaie
             obstacle.destroy(); // détruire la pièce touchée
             money += 1; // ajouter 1 à chaque pièce touchée à money
-            this.scoreText.setText('Argent : ' + money + "€"); // mettre à jour le text
+            this.scoreText.setText('Argent : ' + money + "€"); // mettre à jour le texte
         }, null, this);
     };
 
