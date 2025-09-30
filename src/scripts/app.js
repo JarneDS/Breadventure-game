@@ -24,6 +24,7 @@ let money = 5;
 let bateau;
 
 function preload(){
+
     //exec avant le chargement du jeu
     this.load.image("player","assets/player/henri.png");
     this.load.image("background","assets/bg/bg1.png");
@@ -97,8 +98,10 @@ function preload(){
 }
 
 function create(){
+
     // exec quand le jeu est chargé une premiere fois
     this.house = this.add.tileSprite(-40, 290, 10000, 512, 'background').setOrigin(0, 0);
+
     // bateau
     bateau = this.physics.add.image(400, 674, 'bateau');
     bateau.setSize(256, 40);
@@ -115,6 +118,7 @@ function create(){
 
     this.cone = this.physics.add.staticImage(30, 756, 'cone');
     this.physics.add.collider(player, bateau);
+
     // visuel qui répète l’image
     this.ground = this.add.tileSprite(-40, 802, 10000, 32, 'ground').setOrigin(0, 0);
     
@@ -178,8 +182,8 @@ function create(){
     // animation bateau
     this.tweens.add({
         targets: bateau,
-        x: 800, // position finale sur l’axe X (ajuste selon la largeur de ton écran)
-        duration: 3000, // durée en millisecondes
+        x: 800, // position finale sur axe X
+        duration: 3000, // durée (ms)
         yoyo: true, // revient en arrière
         repeat: -1, // répète indéfiniment
         onYoyo: () => bateau.flipX = !bateau.flipX,
