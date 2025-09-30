@@ -100,10 +100,12 @@ function create(){
     // exec quand le jeu est chargé une premiere fois
     this.house = this.add.tileSprite(-40, 290, 10000, 512, 'background').setOrigin(0, 0);
     // bateau
-    bateau = this.physics.add.staticImage(400, 674, 'bateau');
+    bateau = this.physics.add.image(400, 674, 'bateau');
     bateau.setSize(256, 40);
     bateau.setOffset(0, 216);
     bateau.flipX = true;
+    bateau.body.setImmovable(true);
+    bateau.body.allowGravity = false;
 
     // player
     player = this.physics.add.sprite(100, 707, "player");
