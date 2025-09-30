@@ -19,16 +19,16 @@ const config = {
 const game = new Phaser.Game(config);
 let player;
 let cursors;
-let cone;
-let house;
 let obstacles = [];
+let money = 5;
 
 function preload(){
     //exec avant le chargement du jeu
     this.load.image("player","assets/player/henri.png");
     this.load.image("background","assets/bg/bg1.png");
     this.load.image("ground", "assets/bg/sol.png");
-    this.load.image("cone", "assets/objects/conev2.png");
+    this.load.image("cone", "assets/objects/travaux-panneau.png");
+    this.load.image("money", "assets/objects/money.png");
     
     // walking
     this.load.spritesheet("player_walking", "assets/player/henriwalking.png",{
@@ -102,7 +102,7 @@ function create(){
     player.setOffset(50,54);
     player.body.gravity.y = 500;
 
-    this.cone = this.physics.add.staticImage(30, 770, 'cone');
+    this.cone = this.physics.add.staticImage(30, 756, 'cone');
 
     // visuel qui répète l’image
     this.ground = this.add.tileSprite(-40, 802, 10000, 32, 'ground').setOrigin(0, 0);
@@ -115,6 +115,7 @@ function create(){
     this.physics.add.collider(player, groundCollider);
     this.physics.add.collider(player, this.cone);
 
+    // animations avec spritesheet
     this.anims.create({
         key:'walking',
         frames: this.anims.generateFrameNumbers('player_walking', {
@@ -143,9 +144,25 @@ function create(){
         repeat: 0
     })
 
-    this.cameras.main.startFollow(player, true, 0.1, 0, -497, 290);
+    this.cameras.main.startFollow(player, true, 0.1, 0, -497, 290); // suivre le bonhomme
 
     cursors = this.input.keyboard.createCursorKeys();
+
+    // argent
+    for (let i = 0; i < 5; i++) {
+        let randomX = Phaser.Math.Between(100, 500); // emplacement random des pièces
+        let obstacle = this.physics.add.staticImage(randomX, 760, 'money'); // emplacement random des pièces sur l'axe X
+        obstacles.push(obstacle); // ajouter obstacle à la liste obstacles
+
+        this.physics.add.overlap(player, obstacle, () => { // collision entre sprite (player) et les pièces de monnaie
+            obstacle.destroy(); // détruire la pièce touchée
+            money += 1; // ajouter 1 à chaque pièce touchée à money
+            this.scoreText.setText('Argent : ' + money + "€"); // mettre à jour le text
+        }, null, this);
+    };
+
+    this.scoreText = this.add.text(10, 10, 'Argent : 5€', {fontSize: '28px'}); // initialisez le text
+    this.scoreText.setScrollFactor(0); // Empêche la text de défiler avec le fond
 
     this.physics.world.createDebugGraphic();
 
@@ -184,4 +201,3 @@ function update() {
         player.x = 0;
     }
 }
-
