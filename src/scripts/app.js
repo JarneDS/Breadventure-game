@@ -28,6 +28,7 @@ function preload(){
     //exec avant le chargement du jeu
     this.load.image("player","assets/player/henri.png");
     this.load.image("background","assets/bg/bg1.png");
+    this.load.image("background1","assets/bg/bg_parc.png");
     this.load.image("ground", "assets/bg/sol.png");
     this.load.image("cone", "assets/objects/travaux-panneau.png");
     this.load.image("money", "assets/objects/money.png");
@@ -101,6 +102,8 @@ function create(){
 
     // exec quand le jeu est chargé une premiere fois
     this.house = this.add.tileSprite(-40, 290, 10000, 512, 'background').setOrigin(0, 0);
+    this.parc = this.add.tileSprite(-40, -350, 2048, 512, 'background1').setOrigin(0, 0);
+
 
     // bateau
     bateau = this.physics.add.image(400, 674, 'bateau');
