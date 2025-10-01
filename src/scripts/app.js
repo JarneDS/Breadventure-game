@@ -169,7 +169,7 @@ function create(){
     // argent
     for (let i = 0; i < 5; i++) {
         let randomX = Phaser.Math.Between(100, 10000); // emplacement pièces (random)
-        let obstacle = this.physics.add.staticImage(randomX, 760, 'money'); // emplacement random pièces sur axe X
+        let obstacle = this.physics.add.staticImage(randomX, 695, 'money'); // emplacement random pièces sur axe X
         obstacles.push(obstacle); // ajouter obstacle à la liste obstacles
 
         this.physics.add.overlap(player, obstacle, () => { // collision entre sprite (player) et les pièces de monnaie
