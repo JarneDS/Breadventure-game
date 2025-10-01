@@ -101,12 +101,12 @@ function preload(){
 function create(){
 
     // exec quand le jeu est chargé une premiere fois
-    this.house = this.add.tileSprite(-40, 290, 10000, 512, 'background').setOrigin(0, 0);
-    this.parc = this.add.tileSprite(-40, -350, 2048, 512, 'background1').setOrigin(0, 0);
+    this.house = this.add.tileSprite(-40, 226, 4096, 512, 'background').setOrigin(0, 0);
+    this.parc = this.add.tileSprite(-40, -350, 2048, 1024, 'background1').setOrigin(0, 0);
 
 
     // bateau
-    bateau = this.physics.add.image(400, 674, 'bateau');
+    bateau = this.physics.add.image(400, 610, 'bateau');
     bateau.setSize(256, 40);
     bateau.setOffset(0, 216);
     bateau.flipX = true;
@@ -114,20 +114,20 @@ function create(){
     bateau.body.allowGravity = false;
 
     // player
-    player = this.physics.add.sprite(100, 707, "player");
+    player = this.physics.add.sprite(100, 666, "player");
     player.setSize(42, 90);
     player.setOffset(50,54);
     player.body.gravity.y = 400;
 
-    this.cone = this.physics.add.staticImage(30, 756, 'cone');
+    this.cone = this.physics.add.staticImage(30, 692, 'cone');
     this.physics.add.collider(player, bateau);
 
     // visuel qui répète l’image
-    this.ground = this.add.tileSprite(-40, 802, 10000, 32, 'ground').setOrigin(0, 0);
+    this.ground = this.add.tileSprite(-40, 738, 4096, 100, 'ground').setOrigin(0, 0);
     
     // collider invisible (rectangle physique)
-    let groundCollider = this.physics.add.staticImage(600, 818, null) // sans texture
-        .setSize(10000, 32)
+    let groundCollider = this.physics.add.staticImage(600, 788, null) // sans texture
+        .setSize(10000, 100)
         .setVisible(false);
 
     this.physics.add.collider(player, groundCollider);
@@ -162,7 +162,7 @@ function create(){
         repeat: 0
     })
 
-    this.cameras.main.startFollow(player, true, 0.1, 0, -497, 290); // suivre le perso
+    this.cameras.main.startFollow(player, true, 0.1, 0.1, -497, 245); // suivre le perso
 
     cursors = this.input.keyboard.createCursorKeys();
 
@@ -194,7 +194,7 @@ function create(){
     });
 
 
-    this.physics.world.createDebugGraphic();
+    //this.physics.world.createDebugGraphic();
 
 }
 
