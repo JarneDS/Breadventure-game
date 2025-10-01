@@ -106,7 +106,7 @@ function create(){
 
 
     // bateau
-    bateau = this.physics.add.image(430, 610, 'bateau');
+    bateau = this.physics.add.image(4456, 610, 'bateau');
     bateau.setSize(256, 40);
     bateau.setOffset(0, 216);
     bateau.flipX = true;
@@ -185,7 +185,7 @@ function create(){
     // animation bateau
     this.tweens.add({
         targets: bateau,
-        x: 1050, // position finale sur axe X
+        x: 5058, // position finale sur axe X
         duration: 3000, // durée (ms)
         yoyo: true, // revient en arrière
         repeat: -1, // répète indéfiniment
