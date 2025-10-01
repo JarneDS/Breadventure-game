@@ -102,11 +102,11 @@ function create(){
 
     // exec quand le jeu est chargé une premiere fois
     this.house = this.add.tileSprite(-40, 226, 4096, 512, 'background').setOrigin(0, 0);
-    this.parc = this.add.tileSprite(-40, -350, 2048, 1024, 'background1').setOrigin(0, 0);
+    this.parc = this.add.tileSprite(40, -185, 2048, 1024, 'background1').setOrigin(0, 0);
 
 
     // bateau
-    bateau = this.physics.add.image(400, 610, 'bateau');
+    bateau = this.physics.add.image(430, 610, 'bateau');
     bateau.setSize(256, 40);
     bateau.setOffset(0, 216);
     bateau.flipX = true;
@@ -185,7 +185,7 @@ function create(){
     // animation bateau
     this.tweens.add({
         targets: bateau,
-        x: 800, // position finale sur axe X
+        x: 1050, // position finale sur axe X
         duration: 3000, // durée (ms)
         yoyo: true, // revient en arrière
         repeat: -1, // répète indéfiniment
