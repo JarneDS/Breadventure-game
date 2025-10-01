@@ -32,7 +32,8 @@ function preload(){
     this.load.image("ground", "assets/bg/sol.png");
     this.load.image("cone", "assets/objects/travaux-panneau.png");
     this.load.image("money", "assets/objects/money.png");
-    this.load.image("bateau", "assets/objects/bateau.png")
+    this.load.image("bateau", "assets/objects/bateau.png");
+    this.load.image("groundParc", "assets/bg/sol_parc.png");
     
     // walking
     this.load.spritesheet("player_walking", "assets/player/henriwalking.png",{
@@ -102,7 +103,7 @@ function create(){
 
     // exec quand le jeu est chargé une premiere fois
     this.house = this.add.tileSprite(-40, 226, 4096, 512, 'background').setOrigin(0, 0);
-    this.parc = this.add.tileSprite(4056, -185, 2048, 1024, 'background1').setOrigin(0, 0);
+    this.parc = this.add.tileSprite(4056, -185, 2048, 924, 'background1').setOrigin(0, 0);
 
 
     // bateau
@@ -124,6 +125,7 @@ function create(){
 
     // visuel qui répète l’image
     this.ground = this.add.tileSprite(-40, 738, 4096, 100, 'ground').setOrigin(0, 0);
+    this.parcGround = this.add.tileSprite(4056, 738, 2048, 100, 'groundParc').setOrigin(0, 0);
     
     // collider invisible (rectangle physique)
     let groundCollider = this.physics.add.staticImage(600, 788, null) // sans texture
@@ -194,7 +196,7 @@ function create(){
     });
 
 
-    this.physics.world.createDebugGraphic();
+    //this.physics.world.createDebugGraphic();
 
 }
 
