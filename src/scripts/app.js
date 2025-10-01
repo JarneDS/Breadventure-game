@@ -102,7 +102,7 @@ function create(){
 
     // exec quand le jeu est chargé une premiere fois
     this.house = this.add.tileSprite(-40, 226, 4096, 512, 'background').setOrigin(0, 0);
-    this.parc = this.add.tileSprite(40, -185, 2048, 1024, 'background1').setOrigin(0, 0);
+    this.parc = this.add.tileSprite(4056, -185, 2048, 1024, 'background1').setOrigin(0, 0);
 
 
     // bateau
@@ -194,7 +194,7 @@ function create(){
     });
 
 
-    //this.physics.world.createDebugGraphic();
+    this.physics.world.createDebugGraphic();
 
 }
 
