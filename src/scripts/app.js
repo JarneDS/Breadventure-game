@@ -129,11 +129,30 @@ function create(){
     
     // collider invisible (rectangle physique)
     let groundCollider = this.physics.add.staticImage(600, 788, null) // sans texture
-        .setSize(10000, 100)
+        .setSize(7422, 100)
+        .setVisible(false);
+    
+    let waterGroundCollider = this.physics.add.staticImage(4756, 814, null)
+        .setSize(891, 26)
+        .setVisible(false);
+
+    let groundCollider2 = this.physics.add.staticImage(8912, 788, null)
+        .setSize(7422, 100)
+        .setVisible(false);
+
+    let groundColliderExtra1 = this.physics.add.staticImage(4325, 786, null)
+        .setSize(30, 30)
+        .setVisible(false);
+    let groundColliderExtra2 = this.physics.add.staticImage(5185, 786, null)
+        .setSize(30, 30)
         .setVisible(false);
 
     this.physics.add.collider(player, groundCollider);
     this.physics.add.collider(player, this.cone);
+    this.physics.add.collider(player, waterGroundCollider);
+    this.physics.add.collider(player, groundCollider2);
+    this.physics.add.collider(player, groundColliderExtra1);
+    this.physics.add.collider(player, groundColliderExtra2);
 
     // animations avec spritesheet
     this.anims.create({
@@ -164,6 +183,7 @@ function create(){
         repeat: 0
     })
 
+    this.cameras.main.setBounds(0, 0, 10000, 0); 
     this.cameras.main.startFollow(player, true, 0.1, 0.1, -497, 245); // suivre le perso
 
     cursors = this.input.keyboard.createCursorKeys();
@@ -196,7 +216,7 @@ function create(){
     });
 
 
-    //this.physics.world.createDebugGraphic();
+    this.physics.world.createDebugGraphic();
 
 }
 
