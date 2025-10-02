@@ -208,7 +208,7 @@ function create(){
     this.tweens.add({
         targets: bateau,
         x: 5058, // position finale sur axe X
-        duration: 3000, // durée (ms)
+        duration: 3250, // durée (ms)
         yoyo: true, // revient en arrière
         repeat: -1, // répète indéfiniment
         onYoyo: () => bateau.flipX = !bateau.flipX,
