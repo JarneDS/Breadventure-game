@@ -126,6 +126,7 @@ function create(){
 
     // visuel qui répète l’image
     this.ground = this.add.tileSprite(-40, 738, 4096, 100, 'ground').setOrigin(0, 0);
+    this.ground2 = this.add.tileSprite(6144, 738, 4096, 100, 'ground').setOrigin(0, 0);
     this.parcGround = this.add.tileSprite(4056, 738, 2048, 100, 'groundParc').setOrigin(0, 0);
     
     this.flaqueEau = this.add.tileSprite(260, 736, 92, 48, 'flaqueEau').setOrigin(0, 0);
@@ -186,7 +187,7 @@ function create(){
         repeat: 0
     })
 
-    this.cameras.main.setBounds(0, 0, 10000, 0); 
+    this.cameras.main.setBounds(0, 0, 10000, 0); // faire en sorte que la caméra ne descente pas plus loin quand le personnage descend
     this.cameras.main.startFollow(player, true, 0.1, 0.1, -497, 245); // suivre le perso
 
     cursors = this.input.keyboard.createCursorKeys();
@@ -235,9 +236,12 @@ function update() {
     if (cursors.left.isDown) {
         player.setVelocityX(-200);
         player.setFlipX(true);
+        this.cameras.main.startFollow(player, true, 0.1, 0.1, 297, 245);
     } else if (cursors.right.isDown) {
         player.setVelocityX(200);
         player.setFlipX(false);
+        this.cameras.main.startFollow(player, true, 0.1, 0.1, -297, 245);
+        
     }
 
     // Animation
