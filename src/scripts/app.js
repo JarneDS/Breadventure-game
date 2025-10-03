@@ -114,7 +114,7 @@ function create(){
     keyObject = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
 
     // chargement des cielles
-    this.cielle1 = this.add.tileSprite(-140, -286, 4196, 1940, 'cielVille').setOrigin(0, 0);
+    this.cielle1 = this.add.tileSprite(-140, -286, 4396, 1940, 'cielVille').setOrigin(0, 0);
 
     // exec quand le jeu est chargé une premiere fois
     this.house = this.add.tileSprite(-40, 226, 4096, 512, 'background').setOrigin(0, 0);
