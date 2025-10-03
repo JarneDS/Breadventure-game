@@ -25,6 +25,7 @@ let bateau;
 let bakeryTextShown = false;
 let bakeryText = null;
 let keyObject;
+let insects;
 
 
  
@@ -108,6 +109,11 @@ function preload(){
     })
 
     //insectes
+    this.load.spritesheet("insects", "assets/obstacles/insectes.png", {
+        frameWidth: 128,
+        frameHeight: 128,
+    })
+
 }
  
 function create(){
@@ -129,6 +135,14 @@ function create(){
     bateau.flipX = true;
     bateau.body.setImmovable(true);
     bateau.body.allowGravity = false;
+
+    let x = Phaser.Math.Between(-100, 10000);
+    //insectes
+    insects = this.physics.add.image(x, 650, 'insects');
+    insects.setSize(64, 64);
+    insects.setOffset(0, 0);
+    insects.body.setImmovable(true);
+    insects.body.allowGravity = false;
  
     // player
     player = this.physics.add.sprite(100, 736, "player");
@@ -254,7 +268,13 @@ function create(){
         onRepeat: () => bateau.flipX = !bateau.flipX,
     });
  
-    // animation
+    // animation insectes
+    this.tweens.add({
+        targets: insects,
+        x: -10, // position finale sur axe X
+        duration: 3250, // durée (ms)
+        yoyo: false // revient en arrière
+    });
  
  
     //this.physics.world.createDebugGraphic();
