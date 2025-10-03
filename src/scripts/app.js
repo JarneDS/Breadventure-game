@@ -22,7 +22,11 @@ let cursors;
 let obstacles = [];
 let money = 5;
 let bateau;
-let playerIsOnBoat;
+let bakeryTextShown = false;
+let bakeryText = null;
+let keyObject;
+
+
  
 function preload(){
  
@@ -106,7 +110,9 @@ function preload(){
 }
  
 function create(){
- 
+    keyObject = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
+
+    
     // exec quand le jeu est chargé une premiere fois
     this.house = this.add.tileSprite(-40, 226, 4096, 512, 'background').setOrigin(0, 0);
     this.parc = this.add.tileSprite(4056, -185, 2048, 924, 'background1').setOrigin(0, 0);
@@ -160,8 +166,8 @@ function create(){
     let groundColliderExtra2 = this.physics.add.staticImage(5185, 786, null)
         .setSize(30, 30)
         .setVisible(false);
-    let enterBakery = this.physics.add.staticImage(6970, -286, null)
-        .setSize(42, 90)
+    let enterBakery = this.physics.add.staticImage(7036, 699, null)
+        .setSize(51, 79)
         .setVisible(false);
  
     this.physics.add.collider(player, groundCollider);
@@ -170,7 +176,18 @@ function create(){
     this.physics.add.collider(player, groundCollider2);
     this.physics.add.collider(player, groundColliderExtra1);
     this.physics.add.collider(player, groundColliderExtra2);
-    this.physics.add.collider(player, enterBakery);
+    
+    // entrer dans la boulangerie
+    this.physics.add.overlap(player, enterBakery, () => {
+        if (!bakeryTextShown) {
+            bakeryText = this.add.text(10, 20, 'Appuyer sur A pour entrer', {
+                fontSize: '28px',
+                fill: '#fff'
+            });
+            bakeryText.setScrollFactor(0);
+            bakeryTextShown = true;
+        }
+    }, null, this);
  
     // animations avec spritesheet
     this.anims.create({
@@ -243,7 +260,7 @@ function create(){
  
 function update() {
     player.setVelocityX(0);
- 
+
     // Saut
     if (Phaser.Input.Keyboard.JustDown(cursors.up) && player.body.onFloor()) {
         player.setVelocityY(-200);
@@ -272,6 +289,23 @@ function update() {
     if (player.x < 0) {
         player.x = 0;
     }
+
+    if (bakeryTextShown) {
+        const distance = Phaser.Math.Distance.Between(player.x, player.y, 7036, 699); // coordonnées de enterBakery
+        if (distance > 100) {
+            bakeryText.destroy();
+            bakeryText = null;
+            bakeryTextShown = false;
+        }
+    }
+
+    if (keyObject.isDown && bakeryTextShown) {
+        console.log("Entrée dans la boulangerie !");
+        // Exemple : this.scene.start('BakeryScene');
+    }
+
+
+
 }
  
  
