@@ -25,7 +25,7 @@ let bateau;
 let bakeryTextShown = false;
 let bakeryText = null;
 let keyObject;
-let insects;
+//let insects;
 
 
  
@@ -107,13 +107,13 @@ function preload(){
         frameWidth: 144,
         frameHeight: 144,
     })
-
+/*
     //insectes
     this.load.spritesheet("insects", "assets/obstacles/insectes.png", {
-        frameWidth: 64,
-        frameHeight: 64,
+        frameWidth: 56,
+        frameHeight: 42,
     })
-
+*/
 }
  
 function create(){
@@ -135,15 +135,17 @@ function create(){
     bateau.flipX = true;
     bateau.body.setImmovable(true);
     bateau.body.allowGravity = false;
-
+/*
     let x = Phaser.Math.Between(3000, 10000);
     //insectes
-    insects = this.physics.add.sprite(x, 700, 'insects');
-    insects.setSize(64, 64);
+    insects = this.physics.add.sprite(x, 715, 'insects');
+    insects.setSize(56, 42);
     insects.setOffset(0, 0);
+    insects.displayWidth = 48;
+    insects.displayHeight = 36;
     insects.body.setImmovable(true);
     insects.body.allowGravity = false;
- 
+ */
     // player
     player = this.physics.add.sprite(100, 736, "player");
     player.setOrigin(0.5, 1);
@@ -234,7 +236,7 @@ function create(){
         frameRate: 6,
         repeat: 0
     })
-
+/*
     this.anims.create({
         key:'fly',
         frames: this.anims.generateFrameNumbers('insects', {
@@ -243,7 +245,7 @@ function create(){
         }),
         frameRate: 6,
         repeat: -1
-    })
+    })*/
  
     this.cameras.main.setBounds(0, 0, 10000, 0); // -> zone de la caméra pour se déplacer
     this.cameras.main.startFollow(player, true, 0.1, 0.1, 0, 245); // modif, un seul starfollow, et setbounds.
@@ -277,7 +279,7 @@ function create(){
         onYoyo: () => bateau.flipX = !bateau.flipX,
         onRepeat: () => bateau.flipX = !bateau.flipX,
     });
- 
+ /*
     // animation insectes
     this.tweens.add({
         targets: insects,
@@ -285,7 +287,7 @@ function create(){
         duration: 14000, // durée (ms)
         yoyo: false // revient en arrière
     });
- 
+ */
  
     this.physics.world.createDebugGraphic();
  
@@ -304,7 +306,7 @@ function update() {
         player.setFlipX(true);
     
     } else if (cursors.right.isDown) {
-        player.setVelocityX(230);
+        player.setVelocityX(600);
         player.setFlipX(false);
     }
  
@@ -337,7 +339,7 @@ function update() {
         // Exemple : this.scene.start('BakeryScene');
     }
 
-    insects.anims.play('fly', true);
+    //insects.anims.play('fly', true);
 }
  
  
