@@ -98,6 +98,12 @@ function preload(){
         frameWidth: 144,
         frameHeight: 144,
     })
+
+    //insectes
+    this.load.spritesheet("player_umbrella_jumping", "assets/player/henriumbrellajumping.png", {
+        frameWidth: 144,
+        frameHeight: 144,
+    })
 }
  
 function create(){
