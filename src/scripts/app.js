@@ -136,9 +136,9 @@ function create(){
     bateau.body.setImmovable(true);
     bateau.body.allowGravity = false;
 
-    let x = Phaser.Math.Between(-100, 10000);
+    let x = Phaser.Math.Between(3000, 10000);
     //insectes
-    insects = this.physics.add.image(x, 650, 'insects');
+    insects = this.physics.add.image(x, 700, 'insects');
     insects.setSize(64, 64);
     insects.setOffset(0, 0);
     insects.body.setImmovable(true);
@@ -271,13 +271,13 @@ function create(){
     // animation insectes
     this.tweens.add({
         targets: insects,
-        x: -10, // position finale sur axe X
-        duration: 3250, // durée (ms)
+        x: -100, // position finale sur axe X
+        duration: 14000, // durée (ms)
         yoyo: false // revient en arrière
     });
  
  
-    //this.physics.world.createDebugGraphic();
+    this.physics.world.createDebugGraphic();
  
 }
  
@@ -290,11 +290,11 @@ function update() {
     }
  
     if (cursors.left.isDown) { // modif on flip on modifie pas la caméra
-        player.setVelocityX(-200);
+        player.setVelocityX(-230);
         player.setFlipX(true);
     
     } else if (cursors.right.isDown) {
-        player.setVelocityX(600);
+        player.setVelocityX(230);
         player.setFlipX(false);
     }
  
