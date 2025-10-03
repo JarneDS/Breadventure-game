@@ -1,5 +1,5 @@
 import "phaser";
-
+ 
 const config = {
     type: Phaser.AUTO,
     width: 1194,
@@ -15,16 +15,16 @@ const config = {
         debug: true
     }
 }
-
+ 
 const game = new Phaser.Game(config);
 let player;
 let cursors;
 let obstacles = [];
 let money = 5;
 let bateau;
-
+ 
 function preload(){
-
+ 
     //exec avant le chargement du jeu
     this.load.image("player","assets/player/henri.png");
     this.load.image("background","assets/bg/bg1.png");
@@ -41,22 +41,22 @@ function preload(){
         frameWidth: 144,
         frameHeight: 144,
     })
-
+ 
     this.load.spritesheet("player_umbrella_walking", "assets/player/henriumbrellawalking.png", {
         frameWidth: 144,
         frameHeight: 144,
     })
-
+ 
     this.load.spritesheet("player_bread_walking", "assets/player/henribreadwalking.png", {
         frameWidth: 144,
         frameHeight: 144,
     })
-
+ 
     this.load.spritesheet("player_brum_walking", "assets/player/henribrumwalking.png", {
         frameWidth: 144,
         frameHeight: 144,
     })
-
+ 
     // static
     this.load.spritesheet("player_static", "assets/player/henristatic.png",{
         frameWidth: 144,
@@ -67,17 +67,17 @@ function preload(){
         frameWidth: 144,
         frameHeight: 144,
     })
-
+ 
     this.load.spritesheet("player_bread_static", "assets/player/henribread.png", {
         frameWidth: 144,
         frameHeight: 144,
     })
-
+ 
     this.load.spritesheet("player_brum_static", "assets/player/henribrum.png", {
         frameWidth: 144,
         frameHeight: 144,
     })
-
+ 
     // jumping
     this.load.spritesheet("player_jumping", "assets/player/henrijumping.png", {
         frameWidth: 144,
@@ -88,25 +88,25 @@ function preload(){
         frameWidth: 144,
         frameHeight: 144,
     })
-
+ 
     this.load.spritesheet("player_bread_jumping", "assets/player/henribreadjumping.png", {
         frameWidth: 144,
         frameHeight: 144,
     })
-
+ 
     this.load.spritesheet("player_brum_jumping", "assets/player/henribrumjumping.png", {
         frameWidth: 144,
         frameHeight: 144,
     })
 }
-
+ 
 function create(){
-
+ 
     // exec quand le jeu est chargé une premiere fois
     this.house = this.add.tileSprite(-40, 226, 4096, 512, 'background').setOrigin(0, 0);
     this.parc = this.add.tileSprite(4056, -185, 2048, 924, 'background1').setOrigin(0, 0);
-
-
+ 
+ 
     // bateau
     bateau = this.physics.add.image(4456, 610, 'bateau');
     bateau.setSize(256, 40);
@@ -114,16 +114,19 @@ function create(){
     bateau.flipX = true;
     bateau.body.setImmovable(true);
     bateau.body.allowGravity = false;
-
+ 
     // player
     player = this.physics.add.sprite(100, 666, "player");
+    player.setOrigin(0.5, 1);
     player.setSize(42, 90);
-    player.setOffset(50,54);
+    player.setOffset((144 - 42) / 2, 144 - 90); //modif symétrique
     player.body.gravity.y = 400;
-
+ 
+ 
+ 
     this.cone = this.physics.add.staticImage(30, 692, 'cone');
     this.physics.add.collider(player, bateau);
-
+ 
     // visuel qui répète l’image
     this.ground = this.add.tileSprite(-40, 738, 4096, 100, 'ground').setOrigin(0, 0);
     this.ground2 = this.add.tileSprite(6104, 738, 4096, 100, 'ground').setOrigin(0, 0);
@@ -139,25 +142,25 @@ function create(){
     let waterGroundCollider = this.physics.add.staticImage(4756, 814, null)
         .setSize(891, 26)
         .setVisible(false);
-
+ 
     let groundCollider2 = this.physics.add.staticImage(8912, 788, null)
         .setSize(7422, 100)
         .setVisible(false);
-
+ 
     let groundColliderExtra1 = this.physics.add.staticImage(4325, 786, null)
         .setSize(30, 30)
         .setVisible(false);
     let groundColliderExtra2 = this.physics.add.staticImage(5185, 786, null)
         .setSize(30, 30)
         .setVisible(false);
-
+ 
     this.physics.add.collider(player, groundCollider);
     this.physics.add.collider(player, this.cone);
     this.physics.add.collider(player, waterGroundCollider);
     this.physics.add.collider(player, groundCollider2);
     this.physics.add.collider(player, groundColliderExtra1);
     this.physics.add.collider(player, groundColliderExtra2);
-
+ 
     // animations avec spritesheet
     this.anims.create({
         key:'walking',
@@ -186,28 +189,29 @@ function create(){
         frameRate: 6,
         repeat: 0
     })
-
-    this.cameras.main.setBounds(0, 0, 10000, 0); // faire en sorte que la caméra ne descente pas plus loin quand le personnage descend
-    this.cameras.main.startFollow(player, true, 0.1, 0.1, -497, 245); // suivre le perso
-
+ 
+    this.cameras.main.setBounds(0, 0, 10000, 0); // -> zone de la caméra pour se déplacer
+    this.cameras.main.startFollow(player, true, 0.1, 0.1, 0, 245); // modif, un seul starfollow, et setbounds.
+ 
+ 
     cursors = this.input.keyboard.createCursorKeys();
-
+ 
     // argent
     for (let i = 0; i < 5; i++) {
         let randomX = Phaser.Math.Between(100, 10000); // emplacement pièces (random)
         let obstacle = this.physics.add.staticImage(randomX, 695, 'money'); // emplacement random pièces sur axe X
         obstacles.push(obstacle); // ajouter obstacle à la liste obstacles
-
+ 
         this.physics.add.overlap(player, obstacle, () => { // collision entre sprite (player) et les pièces de monnaie
             obstacle.destroy(); // détruire la pièce touchée
             money += 1; // ajouter 1 à chaque pièce touchée à money
             this.scoreText.setText('Argent : ' + money + "€"); // mettre à jour le texte
         }, null, this);
     };
-
+ 
     this.scoreText = this.add.text(10, 10, 'Argent : 5€', {fontSize: '28px'}); // initialisez le text
     this.scoreText.setScrollFactor(0); // Empêche la text de défiler avec le fond
-
+ 
     // animation bateau
     this.tweens.add({
         targets: bateau,
@@ -218,45 +222,45 @@ function create(){
         onYoyo: () => bateau.flipX = !bateau.flipX,
         onRepeat: () => bateau.flipX = !bateau.flipX,
     });
-
-
-    //this.physics.world.createDebugGraphic();
-
+ 
+    // animation
+ 
+ 
+    this.physics.world.createDebugGraphic();
+ 
 }
-
+ 
 function update() {
     player.setVelocityX(0);
-
+ 
     // Saut
-    if (Phaser.Input.Keyboard.JustDown(cursors.up) && player.body.onFloor()) { // dire à Phaser de ne que permettre le saut une fois et que quand le personnage touche le sol
+    if (Phaser.Input.Keyboard.JustDown(cursors.up) && player.body.onFloor()) {
         player.setVelocityY(-200);
     }
-
-    // Déplacement horizontal (au sol ou en l'air)
-    if (cursors.left.isDown) {
+ 
+    if (cursors.left.isDown) { // modif on flip on modifie pas la caméra
         player.setVelocityX(-200);
         player.setFlipX(true);
-        this.cameras.main.startFollow(player, true, 0.1, 0.1, 297, 245);
+    
     } else if (cursors.right.isDown) {
-        player.setVelocityX(500);
+        player.setVelocityX(200);
         player.setFlipX(false);
-        this.cameras.main.startFollow(player, true, 0.1, 0.1, -297, 245);
-        
     }
-
-    // Animation
+ 
     if (!player.body.onFloor()) {
-        if (player.anims.isPlaying) { // si isPlaying est en cours
-        player.anims.play('jumping', true); 
-        player.setFrame(2);} // faire en sorte que l'image du joueur soit mis sur bras levé
+        if (player.anims.isPlaying) {
+            player.anims.play('jumping', true);
+            player.setFrame(2);
+        }
     } else if (player.body.velocity.x !== 0) {
         player.anims.play('walking', true);
     } else {
         player.anims.play('static', true);
     }
-
-    // Empêcher de sortir de l'écran à gauche
+ 
     if (player.x < 0) {
         player.x = 0;
     }
 }
+ 
+ 
