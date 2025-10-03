@@ -184,7 +184,7 @@ function create(){
     // entrer dans la boulangerie
     this.physics.add.overlap(player, enterBakery, () => {
         if (!bakeryTextShown) {
-            bakeryText = this.add.text(10, 20, 'Appuyer sur A pour entrer', {
+            bakeryText = this.add.text(10, 50, 'Appuyer sur A pour entrer', {
                 fontSize: '28px',
                 fill: '#fff'
             });
@@ -307,9 +307,6 @@ function update() {
         console.log("Entrée dans la boulangerie !");
         // Exemple : this.scene.start('BakeryScene');
     }
-
-
-
 }
  
  
