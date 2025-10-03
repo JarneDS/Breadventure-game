@@ -22,6 +22,7 @@ let cursors;
 let obstacles = [];
 let money = 5;
 let bateau;
+let playerIsOnBoat;
  
 function preload(){
  
@@ -35,6 +36,8 @@ function preload(){
     this.load.image("bateau", "assets/objects/bateau.png");
     this.load.image("groundParc", "assets/bg/sol_parc.png");
     this.load.image("flaqueEau", "assets/obstacles/eau_flaque.png");
+    this.load.image("parc_se", "assets/bg/parc_se.png");
+    this.load.image("bakery", "assets/bg/bakery.png");
     
     // walking
     this.load.spritesheet("player_walking", "assets/player/henriwalking.png",{
@@ -107,7 +110,8 @@ function create(){
     // exec quand le jeu est chargé une premiere fois
     this.house = this.add.tileSprite(-40, 226, 4096, 512, 'background').setOrigin(0, 0);
     this.parc = this.add.tileSprite(4056, -185, 2048, 924, 'background1').setOrigin(0, 0);
- 
+    this.parc2 = this.add.tileSprite(6090, -285, 880, 1024, 'parc_se').setOrigin(0, 0).setFlipX(1);
+    this.bakery = this.add.tileSprite(6970, -286, 2048, 1024, 'bakery').setOrigin(0, 0);
  
     // bateau
     bateau = this.physics.add.image(4456, 610, 'bateau');
@@ -118,7 +122,7 @@ function create(){
     bateau.body.allowGravity = false;
  
     // player
-    player = this.physics.add.sprite(100, 666, "player");
+    player = this.physics.add.sprite(100, 736, "player");
     player.setOrigin(0.5, 1);
     player.setSize(42, 90);
     player.setOffset((144 - 42) / 2, 144 - 90); //modif symétrique
@@ -128,6 +132,7 @@ function create(){
  
     this.cone = this.physics.add.staticImage(30, 692, 'cone');
     this.physics.add.collider(player, bateau);
+
  
     // visuel qui répète l’image
     this.ground = this.add.tileSprite(-40, 738, 4096, 100, 'ground').setOrigin(0, 0);
@@ -155,6 +160,9 @@ function create(){
     let groundColliderExtra2 = this.physics.add.staticImage(5185, 786, null)
         .setSize(30, 30)
         .setVisible(false);
+    let enterBakery = this.physics.add.staticImage(6970, -286, null)
+        .setSize(42, 90)
+        .setVisible(false);
  
     this.physics.add.collider(player, groundCollider);
     this.physics.add.collider(player, this.cone);
@@ -162,6 +170,7 @@ function create(){
     this.physics.add.collider(player, groundCollider2);
     this.physics.add.collider(player, groundColliderExtra1);
     this.physics.add.collider(player, groundColliderExtra2);
+    this.physics.add.collider(player, enterBakery);
  
     // animations avec spritesheet
     this.anims.create({
@@ -245,7 +254,7 @@ function update() {
         player.setFlipX(true);
     
     } else if (cursors.right.isDown) {
-        player.setVelocityX(200);
+        player.setVelocityX(600);
         player.setFlipX(false);
     }
  
