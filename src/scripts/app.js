@@ -98,6 +98,12 @@ function preload(){
         frameWidth: 144,
         frameHeight: 144,
     })
+
+    //insectes
+    this.load.spritesheet("player_umbrella_jumping", "assets/player/henriumbrellajumping.png", {
+        frameWidth: 144,
+        frameHeight: 144,
+    })
 }
 
 function create(){
@@ -117,6 +123,7 @@ function create(){
 
     // player
     player = this.physics.add.sprite(100, 666, "player");
+    player.setOrigin(0.5, 1);
     player.setSize(42, 90);
     player.setOffset(50,54);
     player.body.gravity.y = 400;
