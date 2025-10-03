@@ -34,6 +34,7 @@ function preload(){
     this.load.image("money", "assets/objects/money.png");
     this.load.image("bateau", "assets/objects/bateau.png");
     this.load.image("groundParc", "assets/bg/sol_parc.png");
+    this.load.image("flaqueEau", "assets/obstacles/eau_flaque.png");
     
     // walking
     this.load.spritesheet("player_walking", "assets/player/henriwalking.png",{
@@ -127,6 +128,8 @@ function create(){
     this.ground = this.add.tileSprite(-40, 738, 4096, 100, 'ground').setOrigin(0, 0);
     this.ground2 = this.add.tileSprite(6144, 738, 4096, 100, 'ground').setOrigin(0, 0);
     this.parcGround = this.add.tileSprite(4056, 738, 2048, 100, 'groundParc').setOrigin(0, 0);
+    
+    this.flaqueEau = this.add.tileSprite(260, 738, 92, 48, 'flaqueEau').setOrigin(0, 0);
     
     // collider invisible (rectangle physique)
     let groundCollider = this.physics.add.staticImage(600, 788, null) // sans texture
