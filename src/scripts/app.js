@@ -43,6 +43,7 @@ function preload(){
     this.load.image("flaqueEau", "assets/obstacles/eau_flaque.png");
     this.load.image("parc_se", "assets/bg/parc_se.png");
     this.load.image("bakery", "assets/bg/bakery.png");
+    this.load.image("cielVille", "assets/bg/cielle_ville.png");
     
     // walking
     this.load.spritesheet("player_walking", "assets/player/henriwalking.png",{
@@ -118,7 +119,9 @@ function preload(){
 function create(){
     keyObject = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
 
-    
+    // chargement des cielles
+    this.cielle1 = this.add.tileSprite(-140, -286, 4396, 1940, 'cielVille').setOrigin(0, 0);
+
     // exec quand le jeu est chargé une premiere fois
     this.house = this.add.tileSprite(-40, 226, 4096, 512, 'background').setOrigin(0, 0);
     this.parc = this.add.tileSprite(4056, -185, 2048, 924, 'background1').setOrigin(0, 0);
@@ -194,7 +197,7 @@ function create(){
     // entrer dans la boulangerie
     this.physics.add.overlap(player, enterBakery, () => {
         if (!bakeryTextShown) {
-            bakeryText = this.add.text(10, 20, 'Appuyer sur A pour entrer', {
+            bakeryText = this.add.text(10, 50, 'Appuyer sur A pour entrer', {
                 fontSize: '28px',
                 fill: '#fff'
             });
@@ -274,7 +277,7 @@ function create(){
     });
  
  
-    this.physics.world.createDebugGraphic();
+    //this.physics.world.createDebugGraphic();
  
 }
  
@@ -323,9 +326,6 @@ function update() {
         console.log("Entrée dans la boulangerie !");
         // Exemple : this.scene.start('BakeryScene');
     }
-
-
-
 }
  
  
