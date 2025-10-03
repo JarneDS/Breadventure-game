@@ -110,8 +110,8 @@ function preload(){
 
     //insectes
     this.load.spritesheet("insects", "assets/obstacles/insectes.png", {
-        frameWidth: 128,
-        frameHeight: 128,
+        frameWidth: 64,
+        frameHeight: 64,
     })
 
 }
@@ -138,7 +138,7 @@ function create(){
 
     let x = Phaser.Math.Between(-100, 10000);
     //insectes
-    insects = this.physics.add.image(x, 650, 'insects');
+    insects = this.physics.add.sprite(x, 650, 'insects');
     insects.setSize(64, 64);
     insects.setOffset(0, 0);
     insects.body.setImmovable(true);
@@ -234,6 +234,16 @@ function create(){
         frameRate: 6,
         repeat: 0
     })
+
+    this.anims.create({
+        key:'fly',
+        frames: this.anims.generateFrameNumbers('insects', {
+            start: 0,
+            end: 1,
+        }),
+        frameRate: 6,
+        repeat: -1
+    })
  
     this.cameras.main.setBounds(0, 0, 10000, 0); // -> zone de la caméra pour se déplacer
     this.cameras.main.startFollow(player, true, 0.1, 0.1, 0, 245); // modif, un seul starfollow, et setbounds.
@@ -326,6 +336,8 @@ function update() {
         console.log("Entrée dans la boulangerie !");
         // Exemple : this.scene.start('BakeryScene');
     }
+
+    insects.anims.play('fly', true);
 }
  
  
