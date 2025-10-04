@@ -390,19 +390,42 @@ class BakeryScene extends Phaser.Scene {
     }
 
     preload() {
-        this.load.image("interieur_bakery", "assets/bg/cielle_ville.png");
+        this.load.image("interieur_bakery", "assets/bg/interieur_bakery.png");
     }
 
     create(data) {
         this.returnX = data.returnX; // reprend les coordonnées X et Y du player avant d'entrer dans la boulangerie pour pouvoir les utilisé plus tard
         this.returnY = data.returnY;
 
-        this.add.image(0, 0, "interieur_bakery").setOrigin(0, 0);
+        this.interiorBakery = this.add.tileSprite(0, -190, 1024, 1024, 'interieur_bakery').setOrigin(0, 0);
         player = this.physics.add.sprite(100, 736, "player");
         player.setOrigin(0.5, 1);
         player.setSize(42, 90);
         player.setOffset((144 - 42) / 2, 144 - 90); //modif symétrique
         player.body.gravity.y = 400;
+
+        let exitBakery = this.physics.add.staticImage(30, 699, null)
+            .setSize(51, 79)
+            .setVisible(false);
+
+        this.physics.add.overlap(player, exitBakery, () => {
+            if (!bakeryTextShown) {
+                bakeryText = this.add.text(10, 50, 'Appuyer sur A pour sortir', {
+                    fontSize: '28px',
+                    fill: '#fff'
+                });
+                bakeryText.setScrollFactor(0);
+                bakeryTextShown = true;
+            }
+        }, null, this);
+
+        let groundColliderBakery = this.physics.add.staticImage(600, 784, null) // sans texture
+            .setSize(1200, 100)
+            .setVisible(false);
+
+        this.physics.add.collider(player, exitBakery);
+        this.physics.add.collider(player, groundColliderBakery);
+
 
         this.canExit = false;
         this.time.delayedCall(500, () => {
