@@ -119,7 +119,7 @@ class MainWorld extends Phaser.Scene {
     */
     }
     
-    create(){
+    create(data){
         keyObject = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
         Phaser.Input.Keyboard.JustDown(keyObject);
 
@@ -153,7 +153,10 @@ class MainWorld extends Phaser.Scene {
         insects.body.allowGravity = false;
     */
         // player
-        player = this.physics.add.sprite(100, 736, "player");
+        const spawnX = (data && data.playerX !== undefined) ? data.playerX : 100; // au début du jeu, le joueur arrive sur les coordonnées X = 100 et Y = 736
+        const spawnY = (data && data.playerY !== undefined) ? data.playerY : 736;
+
+        player = this.physics.add.sprite(spawnX, spawnY, "player"); // le joueur est placé aux coordonnées X et Y qui sont défini au moment du chargement (100, 736) ou porte magasin / boulangerie
         player.setOrigin(0.5, 1);
         player.setSize(42, 90);
         player.setOffset((144 - 42) / 2, 144 - 90); //modif symétrique
@@ -350,8 +353,10 @@ class MainWorld extends Phaser.Scene {
         }
 
         if (keyObject.isDown && bakeryTextShown) {
-            console.log("Entrée dans la boulangerie !");
-            this.scene.start('BakeryScene');
+            this.scene.start('BakeryScene', {
+                returnX: player.x, // donne les coordonnées X et Y du joueur au BakeryScene que le joueur avait avant d'entrer dans la boulangerie
+                returnY: player.y  
+            });  
         }
 
         //insects.anims.play('fly', true);
@@ -388,7 +393,10 @@ class BakeryScene extends Phaser.Scene {
         this.load.image("interieur_bakery", "assets/bg/cielle_ville.png");
     }
 
-    create() {
+    create(data) {
+        this.returnX = data.returnX; // reprend les coordonnées X et Y du player avant d'entrer dans la boulangerie pour pouvoir les utilisé plus tard
+        this.returnY = data.returnY;
+
         this.add.image(0, 0, "interieur_bakery").setOrigin(0, 0);
         player = this.physics.add.sprite(100, 736, "player");
         player.setOrigin(0.5, 1);
@@ -406,8 +414,10 @@ class BakeryScene extends Phaser.Scene {
 
     update() {
         if (Phaser.Input.Keyboard.JustDown(this.keyA) && this.canExit) {
-            console.log("Sortie de la boulangerie !");
-            this.scene.start('MainWorld');
+            this.scene.start('MainWorld', {
+                playerX: this.returnX, // donne les coordonnées X et Y du joueur au MainWorld que le joueur avait avant d'entrer dans la boulangerie
+                playerY: this.returnY
+            });
         }
     }
 }
