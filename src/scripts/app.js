@@ -26,6 +26,7 @@ let bakeryTextShown = false;
 let bakeryText = null;
 let keyObject;
 //let insects;
+let playerOnBoat;
 
 
  
@@ -135,6 +136,8 @@ function create(){
     bateau.flipX = true;
     bateau.body.setImmovable(true);
     bateau.body.allowGravity = false;
+    bateau.prevX = bateau.x;
+
 /*
     let x = Phaser.Math.Between(3000, 10000);
     //insectes
@@ -288,6 +291,15 @@ function create(){
         yoyo: false // revient en arrière
     });
  */
+
+    this.physics.add.collider(player, bateau, () => {
+        // Regarde si le joueur est sur le bateau
+        if (player.body.touching.down && bateau.body.touching.up) {
+            playerOnBoat = true;
+        }
+    }, null, this);
+
+
  
     this.physics.world.createDebugGraphic();
  
@@ -340,6 +352,29 @@ function update() {
     }
 
     //insects.anims.play('fly', true);
+
+    // Remet playerOnBoat sur false à chaque frame
+    playerOnBoat = false;
+
+    // Regarde si le joueur est sur le bateau
+    playerOnBoat = (
+        player.body.touching.down &&
+        bateau.body.touching.up &&
+        Phaser.Geom.Intersects.RectangleToRectangle(player.getBounds(), bateau.getBounds())
+    );
+
+    if (playerOnBoat) {
+        // Calcule de combien le bateau à bouger
+        const deltaX = bateau.x - bateau.prevX;
+
+        // Bouge le joueur du même nombre que le bateau
+        player.x += deltaX;
+    }
+
+    // Update l'emplacement précédent du bateau
+    bateau.prevX = bateau.x;
+
+
 }
  
  
