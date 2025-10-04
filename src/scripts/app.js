@@ -394,6 +394,8 @@ class BakeryScene extends Phaser.Scene {
     }
 
     create(data) {
+        cursors = this.input.keyboard.createCursorKeys();
+        
         this.returnX = data.returnX; // reprend les coordonnées X et Y du player avant d'entrer dans la boulangerie pour pouvoir les utilisé plus tard
         this.returnY = data.returnY;
 
@@ -441,6 +443,37 @@ class BakeryScene extends Phaser.Scene {
                 playerX: this.returnX, // donne les coordonnées X et Y du joueur au MainWorld que le joueur avait avant d'entrer dans la boulangerie
                 playerY: this.returnY
             });
+        }
+
+        player.setVelocityX(0);
+
+        // Saut
+        if (Phaser.Input.Keyboard.JustDown(cursors.up) && player.body.onFloor()) {
+            player.setVelocityY(-200);
+        }
+    
+        if (cursors.left.isDown) { // modif on flip on modifie pas la caméra
+            player.setVelocityX(-230);
+            player.setFlipX(true);
+        
+        } else if (cursors.right.isDown) {
+            player.setVelocityX(600);
+            player.setFlipX(false);
+        }
+    
+        if (!player.body.onFloor()) {
+            if (player.anims.isPlaying) {
+                player.anims.play('jumping', true);
+                player.setFrame(2);
+            }
+        } else if (player.body.velocity.x !== 0) {
+            player.anims.play('walking', true);
+        } else {
+            player.anims.play('static', true);
+        }
+    
+        if (player.x < 0) {
+            player.x = 0;
         }
     }
 }
