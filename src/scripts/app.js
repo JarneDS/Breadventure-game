@@ -399,7 +399,7 @@ class BakeryScene extends Phaser.Scene {
         this.returnX = data.returnX; // reprend les coordonnées X et Y du player avant d'entrer dans la boulangerie pour pouvoir les utilisé plus tard
         this.returnY = data.returnY;
 
-        this.interiorBakery = this.add.tileSprite(0, -190, 1024, 1024, 'interieur_bakery').setOrigin(0, 0);
+        this.interiorBakery = this.add.tileSprite(0, -190, 1194, 1024, 'interieur_bakery').setOrigin(0, 0);
         player = this.physics.add.sprite(100, 736, "player");
         player.setOrigin(0.5, 1);
         player.setSize(42, 90);
