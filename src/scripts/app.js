@@ -20,13 +20,14 @@ const game = new Phaser.Game(config);*/
 let player;
 let cursors;
 let obstacles = [];
-let money = 5;
+let money = money ?? 5;
 let bateau;
 let bakeryTextShown = false;
 let bakeryText = null;
 let keyObject;
 //let insects;
 let playerOnBoat;
+
 
 class MainWorld extends Phaser.Scene {
     constructor() {
@@ -161,8 +162,7 @@ class MainWorld extends Phaser.Scene {
         player.setSize(42, 90);
         player.setOffset((144 - 42) / 2, 144 - 90); //modif symétrique
         player.body.gravity.y = 400;
-    
-    
+        player.money = money;
     
         this.cone = this.physics.add.staticImage(30, 692, 'cone');
         this.physics.add.collider(player, bateau);
@@ -275,7 +275,7 @@ class MainWorld extends Phaser.Scene {
             }, null, this);
         };
     
-        this.scoreText = this.add.text(10, 10, 'Argent : 5€', {fontSize: '28px'}); // initialisez le text
+        this.scoreText = this.add.text(10, 10, 'Argent : ' + money + '€', {fontSize: '28px'}); // initialisez le text
         this.scoreText.setScrollFactor(0); // Empêche la text de défiler avec le fond
     
         // animation bateau
@@ -304,6 +304,10 @@ class MainWorld extends Phaser.Scene {
                 playerOnBoat = true;
             }
         }, null, this);
+
+        if (data && data.money !== undefined) {
+            money = data.money;
+        }
 
 
     
@@ -355,7 +359,7 @@ class MainWorld extends Phaser.Scene {
         if (keyObject.isDown && bakeryTextShown) {
             this.scene.start('BakeryScene', {
                 returnX: player.x, // donne les coordonnées X et Y du joueur au BakeryScene que le joueur avait avant d'entrer dans la boulangerie
-                returnY: player.y  
+                returnY: player.y,
             });  
         }
 
@@ -398,6 +402,7 @@ class BakeryScene extends Phaser.Scene {
         
         this.returnX = data.returnX; // reprend les coordonnées X et Y du player avant d'entrer dans la boulangerie pour pouvoir les utilisé plus tard
         this.returnY = data.returnY;
+        player.money = data.returnMoney;
 
         this.interiorBakery = this.add.tileSprite(0, -190, 1194, 1024, 'interieur_bakery').setOrigin(0, 0);
         player = this.physics.add.sprite(100, 736, "player");
@@ -441,7 +446,8 @@ class BakeryScene extends Phaser.Scene {
         if (Phaser.Input.Keyboard.JustDown(this.keyA) && this.canExit) {
             this.scene.start('MainWorld', {
                 playerX: this.returnX, // donne les coordonnées X et Y du joueur au MainWorld que le joueur avait avant d'entrer dans la boulangerie
-                playerY: this.returnY
+                playerY: this.returnY,
+                money: money
             });
         }
 
