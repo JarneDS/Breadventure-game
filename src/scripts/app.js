@@ -24,6 +24,8 @@ let money = money ?? 5;
 let bateau;
 let bakeryTextShown = false;
 let bakeryText = null;
+let bakeryTextShown2 = false;
+let bakeryText2 = null;
 let keyObject;
 //let insects;
 let playerOnBoat;
@@ -411,26 +413,34 @@ class BakeryScene extends Phaser.Scene {
         player.setOffset((144 - 42) / 2, 144 - 90); //modif symétrique
         player.body.gravity.y = 400;
 
-        let exitBakery = this.physics.add.staticImage(30, 699, null)
-            .setSize(51, 79)
+        let exitBakery = this.physics.add.staticImage(184, 685, null)
+            .setSize(74, 100)
             .setVisible(false);
 
         this.physics.add.overlap(player, exitBakery, () => {
-            if (!bakeryTextShown) {
-                bakeryText = this.add.text(10, 50, 'Appuyer sur A pour sortir', {
+            if (!bakeryTextShown2) {
+                bakeryText2 = this.add.text(10, 50, 'Appuyer sur A pour sortir', {
                     fontSize: '28px',
                     fill: '#fff'
                 });
-                bakeryText.setScrollFactor(0);
-                bakeryTextShown = true;
+                bakeryText2.setScrollFactor(0);
+                bakeryTextShown2 = true;
             }
         }, null, this);
+
+        if (bakeryTextShown2) {
+            const distance = Phaser.Math.Distance.Between(player.x, player.y, 184, 685); // coordonnées de exitBakery
+            if (distance > 50) {
+                bakeryText2.destroy();
+                bakeryText2 = null;
+                bakeryTextShown2 = false;
+            }
+        }
 
         let groundColliderBakery = this.physics.add.staticImage(600, 784, null) // sans texture
             .setSize(1200, 100)
             .setVisible(false);
 
-        this.physics.add.collider(player, exitBakery);
         this.physics.add.collider(player, groundColliderBakery);
 
 
@@ -490,7 +500,7 @@ const config = {
     height: 834,
     physics: {
         default: 'arcade',
-        arcade: { gravity: { y: 0 }, debug: true }
+        arcade: { gravity: { y: 0 }, debug: true } // debug a mettre sur false pour enlever les lignes
     },
     scene: [MainWorld, BakeryScene]
 };
