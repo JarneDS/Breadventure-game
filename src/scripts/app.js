@@ -349,11 +349,11 @@ class MainWorld extends Phaser.Scene {
             this.physics.add.overlap(player, obstacle, () => { // collision entre sprite (player) et les pièces de monnaie
                 obstacle.destroy(); // détruire la pièce touchée
                 money += 1; // ajouter 1 à chaque pièce touchée à money
-                this.scoreText.setText('Pièces : ' + money); // mettre à jour le texte
+                this.scoreText.setText('Pièces : ' + money + "$"); // mettre à jour le texte
             }, null, this);
         };
     
-        this.scoreText = this.add.text(10, 10, 'Pièces : ' + money, {fontSize: '28px'}); // initialisez le text
+        this.scoreText = this.add.text(10, 10, 'Argent : ' + money + '$', {fontSize: '28px'}); // initialisez le text
         this.scoreText.setScrollFactor(0); // Empêche la text de défiler avec le fond
     
         // animation bateau
