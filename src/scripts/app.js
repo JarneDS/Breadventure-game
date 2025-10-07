@@ -35,6 +35,9 @@ class MainWorld extends Phaser.Scene {
         this.load.image("parc_se", "assets/bg/parc_se.png");
         this.load.image("bakery", "assets/bg/bakery.png");
         this.load.image("cielVille", "assets/bg/cielle_ville.png");
+
+        //effects
+        this.load.image("eau_vue", "assets/objects/vue_eau.png");
         
         // walking
         this.load.spritesheet("player_walking", "assets/player/henriwalking.png",{
@@ -295,7 +298,7 @@ class MainWorld extends Phaser.Scene {
         // brum
         this.anims.create({
             key:'walking_brum',
-            frames: this.anims.generateFrameNumbers('player_brum_jumping', {
+            frames: this.anims.generateFrameNumbers('player_brum_walking', {
                 start: 0,
                 end: 5,
             }),
@@ -384,8 +387,59 @@ class MainWorld extends Phaser.Scene {
             money = data.money;
         }
 
+        let eau = this.physics.add.staticImage(306, 758, null)
+            .setSize(92, 48)
+            .setVisible(false);
 
-    
+        this.physics.add.overlap(player, eau, () => {
+            const overlay = this.add.image(0, 0, "eau_vue").setOrigin(0, 0);
+
+            overlay.displayWidth = this.sys.game.config.width;
+            overlay.displayHeight = this.sys.game.config.height;
+
+            overlay.setScrollFactor(0);
+        }, null, this);
+
+        let overlayVisible = false;
+        let overlay = null;
+
+        // Crée une zone invisible pour détecter le contact
+        let eauRiviere = this.add.zone(4756, 790, 891, 10);
+        this.physics.add.existing(eauRiviere, true); // true = static
+
+        // Détection de l'entrée dans la zone
+        this.physics.add.overlap(player, eauRiviere, () => {
+            if (!overlayVisible) {
+                overlayVisible = true;
+
+                overlay = this.add.rectangle(
+                    0,
+                    0,
+                    this.sys.game.config.width,
+                    this.sys.game.config.height,
+                    0x1A74CC
+                ).setOrigin(0);
+
+                overlay.setScrollFactor(0);
+            }
+        }, null, this);
+
+        // Vérifie en continu si le joueur est encore dans la zone
+        this.events.on('update', () => {
+            const isTouching = Phaser.Geom.Intersects.RectangleToRectangle(
+                player.getBounds(),
+                eauRiviere.getBounds()
+            );
+
+            if (!isTouching && overlayVisible) {
+                overlayVisible = false;
+                if (overlay) {
+                    overlay.destroy();
+                    overlay = null;
+                }
+            }
+        });
+
         this.physics.world.createDebugGraphic();
     
     }
@@ -407,15 +461,14 @@ class MainWorld extends Phaser.Scene {
             player.setFlipX(false);
         }
     
+        const prefix = playerHasBread ? '_pain' : '';
         if (!player.body.onFloor()) {
-            if (player.anims.isPlaying) {
-                player.anims.play('jumping', true);
-                player.setFrame(2);
-            }
+            player.anims.play('jumping' + prefix, true);
+            player.setFrame(2);
         } else if (player.body.velocity.x !== 0) {
-            player.anims.play('walking', true);
+            player.anims.play('walking' + prefix, true);
         } else {
-            player.anims.play('static', true);
+            player.anims.play('static' + prefix, true);
         }
     
         if (player.x < 0) {
@@ -530,7 +583,8 @@ class BakeryScene extends Phaser.Scene {
             this.scene.start('MainWorld', {
                 playerX: this.returnX, // donne les coordonnées X et Y du joueur au MainWorld que le joueur avait avant d'entrer dans la boulangerie
                 playerY: this.returnY,
-                money: money
+                money: money,
+                playerHasBread
             });
         }
 
@@ -543,15 +597,15 @@ class BakeryScene extends Phaser.Scene {
             }
         }
 
-        // --- Movement ---
+        // Mouvement
         player.setVelocityX(0);
 
-        // Jump
+        // Saut
         if (Phaser.Input.Keyboard.JustDown(cursors.up) && player.body.onFloor()) {
             player.setVelocityY(-200);
         }
 
-        // Left / Right
+        // Gauche / Droite
         if (cursors.left.isDown) {
             player.setVelocityX(-230);
             player.setFlipX(true);
@@ -560,7 +614,7 @@ class BakeryScene extends Phaser.Scene {
             player.setFlipX(false);
         }
 
-        // --- Animation ---
+        // Animation
         const prefix = playerHasBread ? '_pain' : '';
         if (!player.body.onFloor()) {
             player.anims.play('jumping' + prefix, true);
@@ -571,7 +625,7 @@ class BakeryScene extends Phaser.Scene {
             player.anims.play('static' + prefix, true);
         }
 
-        // Boundaries
+        // Murs gauche et droite
         player.x = Phaser.Math.Clamp(player.x, 0, 1194);
     }
 }
