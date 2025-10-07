@@ -482,11 +482,11 @@ class BakeryScene extends Phaser.Scene {
                 // MAJ texte argent
                 if (this.moneyText) this.moneyText.setText('Argent : ' + money + '$');
 
-                // feedback visuel
+                // Achat -> -5$ +texte pour user
                 const txt = this.add.text(10, 100, '-5$', { fontSize: '28px', fill: '#ff5555' });
                 txt.setScrollFactor(0);
                 this.time.delayedCall(1200, () => txt.destroy());
-            } else if (money < 5) {
+            } else if (money < 5) { //Alerte argent pas suffisant (pas 5$ dispo)
                 const warn = this.add.text(10, 100, 'Pas assez d\'argent !', { fontSize: '28px', fill: '#ff0000' });
                 warn.setScrollFactor(0);
                 this.time.delayedCall(1500, () => warn.destroy());
