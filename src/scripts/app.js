@@ -35,6 +35,8 @@ class MainWorld extends Phaser.Scene {
         this.load.image("parc_se", "assets/bg/parc_se.png");
         this.load.image("bakery", "assets/bg/bakery.png");
         this.load.image("cielVille", "assets/bg/cielle_ville.png");
+        this.load.image("cielleParc", "assets/bg/cielle_parc.png");
+        this.load.image("cielleParc_se", "assets/bg/cielle_parc_se.png");
 
         //effects
         this.load.image("eau_vue", "assets/objects/vue_eau.png");
@@ -116,6 +118,8 @@ class MainWorld extends Phaser.Scene {
 
         // chargement des cielles
         this.cielle1 = this.add.tileSprite(-140, -286, 4396, 1940, 'cielVille').setOrigin(0, 0);
+        this.cielle2 = this.add.tileSprite(4056, -200, 2048, 924, 'cielleParc').setOrigin(0, 0);
+        this.cielle3 = this.add.tileSprite(6090, -200, 880, 924, 'cielleParc_se').setOrigin(0, 0).setFlipX(1);
 
         // exec quand le jeu est chargé une premiere fois
         this.house = this.add.tileSprite(-40, 226, 4096, 512, 'background2').setOrigin(0, 0);
@@ -341,17 +345,21 @@ class MainWorld extends Phaser.Scene {
         cursors = this.input.keyboard.createCursorKeys();
     
         // argent
-        for (let i = 0; i < 5; i++) {
-            let randomX = Phaser.Math.Between(100, 10000); // emplacement pièces (random)
-            let obstacle = this.physics.add.staticImage(randomX, 695, 'money'); // emplacement random pièces sur axe X
-            obstacles.push(obstacle); // ajouter obstacle à la liste obstacles
-    
-            this.physics.add.overlap(player, obstacle, () => { // collision entre sprite (player) et les pièces de monnaie
-                obstacle.destroy(); // détruire la pièce touchée
-                money += 1; // ajouter 1 à chaque pièce touchée à money
-                this.scoreText.setText('Argent : ' + money + "€"); // mettre à jour le texte
-            }, null, this);
-        };
+        // argent (ne génère les pièces qu'une seule fois)
+        if (obstacles.length === 0) {
+            for (let i = 0; i < 5; i++) {
+                let randomX = Phaser.Math.Between(100, 10000);
+                let obstacle = this.physics.add.staticImage(randomX, 695, 'money');
+                obstacles.push(obstacle);
+
+                this.physics.add.overlap(player, obstacle, () => {
+                    obstacle.destroy();
+                    money += 1;
+                    this.scoreText.setText('Argent : ' + money + "€");
+                }, null, this);
+            }
+        }
+
     
         this.scoreText = this.add.text(10, 10, 'Argent : ' + money + '€', {fontSize: '28px'}); // initialisez le text
         this.scoreText.setScrollFactor(0); // Empêche la text de défiler avec le fond
@@ -390,7 +398,7 @@ class MainWorld extends Phaser.Scene {
         let eau = this.physics.add.staticImage(306, 758, null)
             .setSize(92, 48)
             .setVisible(false);
-
+/*
         this.physics.add.overlap(player, eau, () => {
             const overlay = this.add.image(0, 0, "eau_vue").setOrigin(0, 0);
 
@@ -399,9 +407,9 @@ class MainWorld extends Phaser.Scene {
 
             overlay.setScrollFactor(0);
         }, null, this);
-
+*/
         let overlayVisible = false;
-        let overlay = null;
+        let overlay2 = null;
 
         // Crée une zone invisible pour détecter le contact
         let eauRiviere = this.add.zone(4756, 790, 891, 10);
@@ -412,7 +420,7 @@ class MainWorld extends Phaser.Scene {
             if (!overlayVisible) {
                 overlayVisible = true;
 
-                overlay = this.add.rectangle(
+                overlay2 = this.add.rectangle(
                     0,
                     0,
                     this.sys.game.config.width,
@@ -420,7 +428,7 @@ class MainWorld extends Phaser.Scene {
                     0x1A74CC
                 ).setOrigin(0);
 
-                overlay.setScrollFactor(0);
+                overlay2.setScrollFactor(0);
             }
         }, null, this);
 
@@ -433,9 +441,9 @@ class MainWorld extends Phaser.Scene {
 
             if (!isTouching && overlayVisible) {
                 overlayVisible = false;
-                if (overlay) {
-                    overlay.destroy();
-                    overlay = null;
+                if (overlay2) {
+                    overlay2.destroy();
+                    overlay2 = null;
                 }
             }
         });
