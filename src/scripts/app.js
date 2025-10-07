@@ -109,6 +109,10 @@ class MainWorld extends Phaser.Scene {
         this.cielle1 = this.add.tileSprite(-140, -286, 4396, 1940, 'cielVille').setOrigin(0, 0);
         this.cielle2 = this.add.tileSprite(4056, -200, 2048, 924, 'cielleParc').setOrigin(0, 0);
         this.cielle3 = this.add.tileSprite(6090, -200, 880, 924, 'cielleParc_se').setOrigin(0, 0).setFlipX(1);
+        this.cielle2 = this.add.tileSprite(4056, -286, 2048, 1024, 'cielleParc').setOrigin(0, 0);
+        this.cielle3 = this.add.tileSprite(6090, -286, 880, 1024, 'cielleParc_se').setOrigin(0, 0).setFlipX(1);
+
+        // exec quand le jeu est chargé une premiere fois
         this.house = this.add.tileSprite(-40, 226, 4096, 512, 'background2').setOrigin(0, 0);
         this.parc = this.add.tileSprite(4056, -185, 2048, 924, 'background1').setOrigin(0, 0);
         this.parc2 = this.add.tileSprite(6090, -285, 880, 1024, 'parc_se').setOrigin(0, 0).setFlipX(1);
@@ -311,14 +315,14 @@ class MainWorld extends Phaser.Scene {
         let eau = this.physics.add.staticImage(306, 758, null)
             .setSize(92, 48)
             .setVisible(false);
-/*
+
         this.physics.add.overlap(player, eau, () => {
             const overlay = this.add.image(0, 0, "eau_vue").setOrigin(0, 0);
             overlay.displayWidth = this.sys.game.config.width;
             overlay.displayHeight = this.sys.game.config.height;
             overlay.setScrollFactor(0);
         }, null, this);
-*/
+
         let overlayVisible = false;
         let overlay2 = null;
 
