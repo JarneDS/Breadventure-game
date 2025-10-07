@@ -275,7 +275,7 @@ class MainWorld extends Phaser.Scene {
                 this.physics.add.overlap(player, obstacle, () => {
                     obstacle.destroy();
                     money += 1;
-                    this.scoreText.setText('Argent : ' + money + "€");
+                    this.scoreText.setText('Argent : ' + money + "$");
                 }, null, this);
             }
         }
