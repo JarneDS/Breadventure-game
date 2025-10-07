@@ -429,6 +429,7 @@ class MainWorld extends Phaser.Scene {
                 ).setOrigin(0);
 
                 overlay2.setScrollFactor(0);
+                overlay2.setAlpha(0.9); // transparence
             }
         }, null, this);
 
