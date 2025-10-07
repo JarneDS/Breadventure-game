@@ -1,22 +1,5 @@
 import "phaser";
- 
-/*const config = {
-    type: Phaser.AUTO,
-    width: 1194,
-    height: 834,
-    scene: {
-        preload,
-        create,
-        update
-    },
-    physics: {
-        default: 'arcade',
-        arcade: {gravity :{y: 0}},
-        debug: true
-    }
-}
- 
-const game = new Phaser.Game(config);*/
+
 let player;
 let cursors;
 let obstacles = [];
@@ -29,6 +12,7 @@ let bakeryText2 = null;
 let keyObject;
 //let insects;
 let playerOnBoat;
+let playerHasBread = false;
 
 
 class MainWorld extends Phaser.Scene {
@@ -40,6 +24,7 @@ class MainWorld extends Phaser.Scene {
         //exec avant le chargement du jeu
         this.load.image("player","assets/player/henri.png");
         this.load.image("background","assets/bg/bg1.png");
+        this.load.image("background2","assets/bg/bg2.png");
         this.load.image("background1","assets/bg/bg_parc.png");
         this.load.image("ground", "assets/bg/sol.png");
         this.load.image("cone", "assets/objects/travaux-panneau.png");
@@ -130,7 +115,7 @@ class MainWorld extends Phaser.Scene {
         this.cielle1 = this.add.tileSprite(-140, -286, 4396, 1940, 'cielVille').setOrigin(0, 0);
 
         // exec quand le jeu est chargé une premiere fois
-        this.house = this.add.tileSprite(-40, 226, 4096, 512, 'background').setOrigin(0, 0);
+        this.house = this.add.tileSprite(-40, 226, 4096, 512, 'background2').setOrigin(0, 0);
         this.parc = this.add.tileSprite(4056, -185, 2048, 924, 'background1').setOrigin(0, 0);
         this.parc2 = this.add.tileSprite(6090, -285, 880, 1024, 'parc_se').setOrigin(0, 0).setFlipX(1);
         this.bakery = this.add.tileSprite(6970, -286, 2048, 1024, 'bakery').setOrigin(0, 0);
@@ -220,6 +205,7 @@ class MainWorld extends Phaser.Scene {
         }, null, this);
     
         // animations avec spritesheet
+        // base
         this.anims.create({
             key:'walking',
             frames: this.anims.generateFrameNumbers('player_walking', {
@@ -241,6 +227,93 @@ class MainWorld extends Phaser.Scene {
         this.anims.create({
             key:'jumping',
             frames: this.anims.generateFrameNumbers('player_jumping', {
+                start: 0,
+                end: 2,
+            }),
+            frameRate: 6,
+            repeat: 0
+        })
+
+        // pain
+        this.anims.create({
+            key:'walking_pain',
+            frames: this.anims.generateFrameNumbers('player_bread_walking', {
+                start: 0,
+                end: 5,
+            }),
+            frameRate: 24,
+            repeat: -1
+        })
+        this.anims.create({
+            key:'static_pain',
+            frames: this.anims.generateFrameNumbers('player_bread_static', {
+                start: 0,
+                end: 1,
+            }),
+            frameRate: 3,
+            repeat: -1
+        })
+        this.anims.create({
+            key:'jumping_pain',
+            frames: this.anims.generateFrameNumbers('player_bread_jumping', {
+                start: 0,
+                end: 2,
+            }),
+            frameRate: 6,
+            repeat: 0
+        })
+
+        // umbrella
+        this.anims.create({
+            key:'walking_umbrella',
+            frames: this.anims.generateFrameNumbers('player_umbrella_walking', {
+                start: 0,
+                end: 5,
+            }),
+            frameRate: 24,
+            repeat: -1
+        })
+        this.anims.create({
+            key:'static_umbrella',
+            frames: this.anims.generateFrameNumbers('player_umbrella_static', {
+                start: 0,
+                end: 1,
+            }),
+            frameRate: 3,
+            repeat: -1
+        })
+        this.anims.create({
+            key:'jumping_umbrella',
+            frames: this.anims.generateFrameNumbers('player_umbrella_jumping', {
+                start: 0,
+                end: 2,
+            }),
+            frameRate: 6,
+            repeat: 0
+        })
+
+        // brum
+        this.anims.create({
+            key:'walking_brum',
+            frames: this.anims.generateFrameNumbers('player_brum_jumping', {
+                start: 0,
+                end: 5,
+            }),
+            frameRate: 24,
+            repeat: -1
+        })
+        this.anims.create({
+            key:'static_brum',
+            frames: this.anims.generateFrameNumbers('player_brum_static', {
+                start: 0,
+                end: 1,
+            }),
+            frameRate: 3,
+            repeat: -1
+        })
+        this.anims.create({
+            key:'jumping_brum',
+            frames: this.anims.generateFrameNumbers('player_brum_jumping', {
                 start: 0,
                 end: 2,
             }),
@@ -330,7 +403,7 @@ class MainWorld extends Phaser.Scene {
             player.setFlipX(true);
         
         } else if (cursors.right.isDown) {
-            player.setVelocityX(600);
+            player.setVelocityX(800);
             player.setFlipX(false);
         }
     
@@ -397,6 +470,7 @@ class BakeryScene extends Phaser.Scene {
 
     preload() {
         this.load.image("interieur_bakery", "assets/bg/interieur_bakery.png");
+        this.load.image("pain", "assets/objects/pain.png")
     }
 
     create(data) {
@@ -413,8 +487,8 @@ class BakeryScene extends Phaser.Scene {
         player.setOffset((144 - 42) / 2, 144 - 90); //modif symétrique
         player.body.gravity.y = 400;
 
-        let exitBakery = this.physics.add.staticImage(184, 685, null)
-            .setSize(74, 100)
+        let exitBakery = this.physics.add.staticImage(183, 685, null)
+            .setSize(70, 100)
             .setVisible(false);
 
         this.physics.add.overlap(player, exitBakery, () => {
@@ -427,15 +501,6 @@ class BakeryScene extends Phaser.Scene {
                 bakeryTextShown2 = true;
             }
         }, null, this);
-
-        if (bakeryTextShown2) {
-            const distance = Phaser.Math.Distance.Between(player.x, player.y, 184, 685); // coordonnées de exitBakery
-            if (distance > 50) {
-                bakeryText2.destroy();
-                bakeryText2 = null;
-                bakeryTextShown2 = false;
-            }
-        }
 
         let groundColliderBakery = this.physics.add.staticImage(600, 784, null) // sans texture
             .setSize(1200, 100)
@@ -450,10 +515,18 @@ class BakeryScene extends Phaser.Scene {
         });
         
         this.keyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
+
+        this.pain = this.physics.add.image(945, 648, 'pain');
+
+        this.physics.add.overlap(player, this.pain, () => {
+            playerHasBread = true;
+            this.pain.disableBody(true, true);
+        });
+
     }
 
     update() {
-        if (Phaser.Input.Keyboard.JustDown(this.keyA) && this.canExit) {
+        if (Phaser.Input.Keyboard.JustDown(this.keyA) && bakeryTextShown2) {
             this.scene.start('MainWorld', {
                 playerX: this.returnX, // donne les coordonnées X et Y du joueur au MainWorld que le joueur avait avant d'entrer dans la boulangerie
                 playerY: this.returnY,
@@ -461,36 +534,45 @@ class BakeryScene extends Phaser.Scene {
             });
         }
 
+        if (bakeryTextShown2) {
+            const distance = Phaser.Math.Distance.Between(player.x, player.y, 183, 685); // coordonnées de exitBakery
+            if (distance > 80) {
+                bakeryText2.destroy();
+                bakeryText2 = null;
+                bakeryTextShown2 = false;
+            }
+        }
+
+        // --- Movement ---
         player.setVelocityX(0);
 
-        // Saut
+        // Jump
         if (Phaser.Input.Keyboard.JustDown(cursors.up) && player.body.onFloor()) {
             player.setVelocityY(-200);
         }
-    
-        if (cursors.left.isDown) { // modif on flip on modifie pas la caméra
+
+        // Left / Right
+        if (cursors.left.isDown) {
             player.setVelocityX(-230);
             player.setFlipX(true);
-        
         } else if (cursors.right.isDown) {
-            player.setVelocityX(600);
+            player.setVelocityX(230);
             player.setFlipX(false);
         }
-    
+
+        // --- Animation ---
+        const prefix = playerHasBread ? '_pain' : '';
         if (!player.body.onFloor()) {
-            if (player.anims.isPlaying) {
-                player.anims.play('jumping', true);
-                player.setFrame(2);
-            }
+            player.anims.play('jumping' + prefix, true);
+            player.setFrame(2);
         } else if (player.body.velocity.x !== 0) {
-            player.anims.play('walking', true);
+            player.anims.play('walking' + prefix, true);
         } else {
-            player.anims.play('static', true);
+            player.anims.play('static' + prefix, true);
         }
-    
-        if (player.x < 0) {
-            player.x = 0;
-        }
+
+        // Boundaries
+        player.x = Phaser.Math.Clamp(player.x, 0, 1194);
     }
 }
 
