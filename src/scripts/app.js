@@ -33,6 +33,8 @@ class MainWorld extends Phaser.Scene {
         this.load.image("parc_se", "assets/bg/parc_se.png");
         this.load.image("bakery", "assets/bg/bakery.png");
         this.load.image("cielVille", "assets/bg/cielle_ville.png");
+        this.load.image("cielleParc", "assets/bg/cielle_parc.png");
+        this.load.image("cielleParc_se", "assets/bg/cielle_parc_se.png");
 
         //effects
         this.load.image("eau_vue", "assets/objects/vue_eau.png");
@@ -105,6 +107,8 @@ class MainWorld extends Phaser.Scene {
 
         // ciel + décors
         this.cielle1 = this.add.tileSprite(-140, -286, 4396, 1940, 'cielVille').setOrigin(0, 0);
+        this.cielle2 = this.add.tileSprite(4056, -200, 2048, 924, 'cielleParc').setOrigin(0, 0);
+        this.cielle3 = this.add.tileSprite(6090, -200, 880, 924, 'cielleParc_se').setOrigin(0, 0).setFlipX(1);
         this.house = this.add.tileSprite(-40, 226, 4096, 512, 'background2').setOrigin(0, 0);
         this.parc = this.add.tileSprite(4056, -185, 2048, 924, 'background1').setOrigin(0, 0);
         this.parc2 = this.add.tileSprite(6090, -285, 880, 1024, 'parc_se').setOrigin(0, 0).setFlipX(1);
@@ -260,18 +264,22 @@ class MainWorld extends Phaser.Scene {
     
         cursors = this.input.keyboard.createCursorKeys();
     
-        // pièces aléatoires
-        for (let i = 0; i < 5; i++) {
-            let randomX = Phaser.Math.Between(100, 10000);
-            let obstacle = this.physics.add.staticImage(randomX, 695, 'money');
-            obstacles.push(obstacle);
-    
-            this.physics.add.overlap(player, obstacle, () => {
-                obstacle.destroy();
-                money += 1;
-                this.scoreText.setText('Argent : ' + money + '$');
-            }, null, this);
-        };
+        // argent
+        // argent (ne génère les pièces qu'une seule fois)
+        if (obstacles.length === 0) {
+            for (let i = 0; i < 5; i++) {
+                let randomX = Phaser.Math.Between(100, 10000);
+                let obstacle = this.physics.add.staticImage(randomX, 695, 'money');
+                obstacles.push(obstacle);
+
+                this.physics.add.overlap(player, obstacle, () => {
+                    obstacle.destroy();
+                    money += 1;
+                    this.scoreText.setText('Argent : ' + money + "€");
+                }, null, this);
+            }
+        }
+
     
         // HUD argent
         this.scoreText = this.add.text(10, 10, 'Argent : ' + money + '$', {fontSize: '28px'});
@@ -300,31 +308,38 @@ class MainWorld extends Phaser.Scene {
             this.scoreText.setText('Argent : ' + money + '$');
         }
 
-        // effet eau flaque
-        let eau = this.physics.add.staticImage(306, 758, null).setSize(92, 48).setVisible(false);
+        let eau = this.physics.add.staticImage(306, 758, null)
+            .setSize(92, 48)
+            .setVisible(false);
+/*
         this.physics.add.overlap(player, eau, () => {
             const overlay = this.add.image(0, 0, "eau_vue").setOrigin(0, 0);
             overlay.displayWidth = this.sys.game.config.width;
             overlay.displayHeight = this.sys.game.config.height;
             overlay.setScrollFactor(0);
         }, null, this);
-
-        // effet eau rivière
+*/
         let overlayVisible = false;
-        let overlay = null;
+        let overlay2 = null;
+
+        // Crée une zone invisible pour détecter le contact
         let eauRiviere = this.add.zone(4756, 790, 891, 10);
         this.physics.add.existing(eauRiviere, true);
 
         this.physics.add.overlap(player, eauRiviere, () => {
             if (!overlayVisible) {
                 overlayVisible = true;
-                overlay = this.add.rectangle(
-                    0, 0,
+
+                overlay2 = this.add.rectangle(
+                    0,
+                    0,
                     this.sys.game.config.width,
                     this.sys.game.config.height,
                     0x1A74CC
                 ).setOrigin(0);
-                overlay.setScrollFactor(0);
+
+                overlay2.setScrollFactor(0);
+                overlay2.setAlpha(0.9); // transparence
             }
         }, null, this);
 
@@ -335,9 +350,9 @@ class MainWorld extends Phaser.Scene {
             );
             if (!isTouching && overlayVisible) {
                 overlayVisible = false;
-                if (overlay) {
-                    overlay.destroy();
-                    overlay = null;
+                if (overlay2) {
+                    overlay2.destroy();
+                    overlay2 = null;
                 }
             }
         });
