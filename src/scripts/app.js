@@ -361,7 +361,7 @@ class MainWorld extends Phaser.Scene {
         }
 
     
-        this.scoreText = this.add.text(10, 10, 'Argent : ' + money + '€', {fontSize: '28px'}); // initialisez le text
+        this.scoreText = this.add.text(10, 10, 'Argent : ' + money + '$', {fontSize: '28px'}); // initialisez le text
         this.scoreText.setScrollFactor(0); // Empêche la text de défiler avec le fond
     
         // animation bateau
