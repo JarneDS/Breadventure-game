@@ -272,7 +272,7 @@ class MainWorld extends Phaser.Scene {
         // argent (ne génère les pièces qu'une seule fois)
         if (obstacles.length === 0) {
             for (let i = 0; i < 5; i++) {
-                let randomX = Phaser.Math.Between(100, 10000);
+                let randomX = Phaser.Math.Between(1200, 10000);
                 let obstacle = this.physics.add.staticImage(randomX, 695, 'money');
                 obstacles.push(obstacle);
 
