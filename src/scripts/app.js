@@ -145,7 +145,7 @@ class MainWorld extends Phaser.Scene {
         this.ground = this.add.tileSprite(-40, 738, 4096, 100, 'ground').setOrigin(0, 0);
         this.ground2 = this.add.tileSprite(6104, 738, 4096, 100, 'ground').setOrigin(0, 0);
         this.parcGround = this.add.tileSprite(4056, 738, 2048, 100, 'groundParc').setOrigin(0, 0);
-        this.flaqueEau = this.add.tileSprite(260, 736, 92, 48, 'flaqueEau').setOrigin(0, 0);
+        this.flaqueEau = this.add.tileSprite(1000, 736, 92, 48, 'flaqueEau').setOrigin(0, 0);
         
         // colliders invisibles
         let groundCollider = this.physics.add.staticImage(600, 788, null).setSize(7422, 100).setVisible(false);
@@ -312,8 +312,8 @@ class MainWorld extends Phaser.Scene {
             this.scoreText.setText('Argent : ' + money + '$');
         }
 
-        let eau = this.physics.add.staticImage(306, 758, null)
-            .setSize(92, 48)
+        let eau = this.physics.add.staticImage(1046, 758, null)
+            .setSize(90, 48)
             .setVisible(false);
 
         this.physics.add.overlap(player, eau, () => {
