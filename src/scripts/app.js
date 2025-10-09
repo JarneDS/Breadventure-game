@@ -398,14 +398,21 @@ class MainWorld extends Phaser.Scene {
         if (bakeryTextShown) {
             const distance = Phaser.Math.Distance.Between(player.x, player.y, 7036, 699);
             if (distance > 100) {
-                if (bakeryText) bakeryText.destroy();
+                if (bakeryText)
+                bakeryText.destroy();
                 bakeryText = null;
                 bakeryTextShown = false;
             }
         }
 
+        if (playerHasBread && bakeryText) {
+            bakeryText.destroy();
+            bakeryText = null;
+            bakeryTextShown = false;
+        }
+
         // touche A pour entrer
-        if (keyObject.isDown && bakeryTextShown) {
+        if (keyObject.isDown && bakeryTextShown && !playerHasBread){
             this.scene.start('BakeryScene', {
                 returnX: player.x,
                 returnY: player.y,
