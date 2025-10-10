@@ -153,8 +153,8 @@ class MainWorld extends Phaser.Scene {
         let groundCollider = this.physics.add.staticImage(600, 788, null).setSize(7422, 100).setVisible(false);
         let waterGroundCollider = this.physics.add.staticImage(4756, 814, null).setSize(891, 26).setVisible(false);
         let groundCollider2 = this.physics.add.staticImage(8912, 788, null).setSize(7422, 100).setVisible(false);
-        let groundColliderExtra1 = this.physics.add.staticImage(4325, 786, null).setSize(30, 30).setVisible(false);
-        let groundColliderExtra2 = this.physics.add.staticImage(5185, 786, null).setSize(30, 30).setVisible(false);
+        let groundColliderExtra1 = this.physics.add.staticImage(4327, 786, null).setSize(34, 30).setVisible(false);
+        let groundColliderExtra2 = this.physics.add.staticImage(5185, 786, null).setSize(32, 30).setVisible(false);
         let enterBakery = this.physics.add.staticImage(7036, 699, null).setSize(51, 79).setVisible(false);
     
         this.physics.add.collider(player, groundCollider);
@@ -413,7 +413,7 @@ class MainWorld extends Phaser.Scene {
             bakeryText = null;
             bakeryTextShown = false;
         }
-        
+
         if (playerHasBread) {
             const distance2 = Phaser.Math.Distance.Between(player.x, player.y, 7036, 699);
 
