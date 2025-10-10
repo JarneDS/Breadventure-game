@@ -31,6 +31,7 @@ class MainWorld extends Phaser.Scene {
         this.load.image("background","assets/bg/bg1.png");
         this.load.image("background2","assets/bg/bg2.png");
         this.load.image("background1","assets/bg/bg_parc.png");
+        this.load.image("chantier","assets/bg/chantier.png"); //chantier
         this.load.image("ground", "assets/bg/sol.png");
         this.load.image("cone", "assets/objects/travaux-panneau.png");
         this.load.image("money", "assets/objects/money.png");
@@ -124,6 +125,7 @@ class MainWorld extends Phaser.Scene {
         // exec quand le jeu est chargé une premiere fois
         this.house = this.add.tileSprite(-40, 226, 4096, 512, 'background2').setOrigin(0, 0);
         this.parc = this.add.tileSprite(4056, -185, 2048, 924, 'background1').setOrigin(0, 0);
+        this.chantier = this.add.tileSprite(7320, -285, 2048, 1024, 'chantier').setOrigin(0, 0); //chantier
         this.parc2 = this.add.tileSprite(6090, -285, 880, 1024, 'parc_se').setOrigin(0, 0).setFlipX(1);
         this.bakery = this.add.tileSprite(6970, -286, 2048, 1024, 'bakery').setOrigin(0, 0);
         this.shop = this.add.tileSprite(6970, -286, 2048, 1024, 'shop').setOrigin(0, 0);
@@ -166,6 +168,7 @@ class MainWorld extends Phaser.Scene {
         let groundColliderExtra2 = this.physics.add.staticImage(5185, 786, null).setSize(32, 30).setVisible(false);
         //let enterBakery = this.physics.add.staticImage(7036, 699, null).setSize(51, 79).setVisible(false);
         let enterShop = this.physics.add.staticImage(7036, 699, null).setSize(51, 79).setVisible(false);
+        let bac = this.physics.add.staticImage(7955, 716, null).setSize(150, 50).setVisible(false); //chantier - bac camion 
     
         this.physics.add.collider(player, groundCollider);
         this.physics.add.collider(player, this.cone);
@@ -173,6 +176,7 @@ class MainWorld extends Phaser.Scene {
         this.physics.add.collider(player, groundCollider2);
         this.physics.add.collider(player, groundColliderExtra1);
         this.physics.add.collider(player, groundColliderExtra2);
+        this.physics.add.collider(player, bac); //chantier - bac camion 
         /*
         // entrer dans la boulangerie (message)
         this.physics.add.overlap(player, enterBakery, () => {
