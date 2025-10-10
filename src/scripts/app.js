@@ -343,6 +343,7 @@ class MainWorld extends Phaser.Scene {
             repeat: 0
         })
     /*
+        // insecte
         this.anims.create({
             key:'fly',
             frames: this.anims.generateFrameNumbers('insects', { start: 0, end: 1 }),
@@ -357,7 +358,7 @@ class MainWorld extends Phaser.Scene {
         cursors = this.input.keyboard.createCursorKeys();
     
         // argent
-        // argent (ne génère les pièces qu'une seule fois)
+        // argent (ne génère qu'une pièce à la fois)
         if (obstacles.length === 0) {
             for (let i = 0; i < 5; i++) {
                 let randomX = Phaser.Math.Between(1200, 10000);
