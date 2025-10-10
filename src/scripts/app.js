@@ -294,7 +294,7 @@ class MainWorld extends Phaser.Scene {
         })
     */
         // caméra
-        this.cameras.main.setBounds(0, 0, 20000, 0);
+        this.cameras.main.setBounds(0, 0, 14050, 0);
         this.cameras.main.startFollow(player, true, 0.1, 0.1, 0, 245);
     
         cursors = this.input.keyboard.createCursorKeys();
@@ -414,7 +414,6 @@ class MainWorld extends Phaser.Scene {
     
     update() {
         player.setVelocityX(0);
-
         // Saut
         if (Phaser.Input.Keyboard.JustDown(cursors.up) && player.body.onFloor()) {
             player.setVelocityY(-230);
@@ -425,7 +424,7 @@ class MainWorld extends Phaser.Scene {
             player.setVelocityX(-230);
             player.setFlipX(true);
         } else if (cursors.right.isDown) {
-            player.setVelocityX(800);
+            player.setVelocityX(230);
             player.setFlipX(false);
         }
     
@@ -441,6 +440,7 @@ class MainWorld extends Phaser.Scene {
         }
     
         if (player.x < 0) player.x = 0;
+        if (player.x > 14040) player.x = 14040;
 
         // texte "entrer"
         if (bakeryTextShown) {
@@ -537,7 +537,7 @@ class BakeryScene extends Phaser.Scene {
         this.returnY = data.returnY;
         
         this.interiorBakery = this.add.tileSprite(0, -190, 1194, 1024, 'interieur_bakery').setOrigin(0, 0);
-        player = this.physics.add.sprite(100, 736, "player");
+        player = this.physics.add.sprite(184, 736, "player");
         player.setOrigin(0.5, 1);
         player.setSize(42, 90);
         player.setOffset((144 - 42) / 2, 144 - 90);
