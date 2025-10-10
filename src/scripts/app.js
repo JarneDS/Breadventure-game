@@ -127,9 +127,10 @@ class MainWorld extends Phaser.Scene {
         this.parc = this.add.tileSprite(4056, -185, 2048, 924, 'background1').setOrigin(0, 0);
         this.chantier = this.add.tileSprite(7320, -285, 2048, 1024, 'chantier').setOrigin(0, 0); //chantier
         this.parc2 = this.add.tileSprite(6090, -285, 880, 1024, 'parc_se').setOrigin(0, 0).setFlipX(1);
-        this.bakery = this.add.tileSprite(6970, -286, 2048, 1024, 'bakery').setOrigin(0, 0);
         this.shop = this.add.tileSprite(6970, -286, 2048, 1024, 'shop').setOrigin(0, 0);
-        this.house2 = this.add.tileSprite(8000, 226, 2048, 512, 'background2').setOrigin(0, 0).setFlipX(1);
+        this.house2 = this.add.tileSprite(9400, 226, 2048, 512, 'background2').setOrigin(0, 0);
+        this.house3 = this.add.tileSprite(11448, 226, 2048, 512, 'background').setOrigin(0, 0);
+        this.bakery = this.add.tileSprite(13496, -286, 2048, 1024, 'bakery').setOrigin(0, 0);
     
         // bateau
         bateau = this.physics.add.image(4456, 610, 'bateau');
@@ -163,10 +164,10 @@ class MainWorld extends Phaser.Scene {
         // colliders invisibles
         let groundCollider = this.physics.add.staticImage(600, 788, null).setSize(7422, 100).setVisible(false);
         let waterGroundCollider = this.physics.add.staticImage(4756, 814, null).setSize(891, 26).setVisible(false);
-        let groundCollider2 = this.physics.add.staticImage(9297, 788, null).setSize(8192, 100).setVisible(false);
+        let groundCollider2 = this.physics.add.staticImage(9701, 788, null).setSize(9000, 100).setVisible(false);
         let groundColliderExtra1 = this.physics.add.staticImage(4327, 786, null).setSize(34, 30).setVisible(false);
         let groundColliderExtra2 = this.physics.add.staticImage(5185, 786, null).setSize(32, 30).setVisible(false);
-        //let enterBakery = this.physics.add.staticImage(7036, 699, null).setSize(51, 79).setVisible(false);
+        let enterBakery = this.physics.add.staticImage(13564, 699, null).setSize(52, 79).setVisible(false);
         let enterShop = this.physics.add.staticImage(7036, 699, null).setSize(51, 79).setVisible(false);
         let bac = this.physics.add.staticImage(7955, 716, null).setSize(150, 50).setVisible(false); //chantier - bac camion 
     
@@ -177,11 +178,11 @@ class MainWorld extends Phaser.Scene {
         this.physics.add.collider(player, groundColliderExtra1);
         this.physics.add.collider(player, groundColliderExtra2);
         this.physics.add.collider(player, bac); //chantier - bac camion 
-        /*
+        
         // entrer dans la boulangerie (message)
         this.physics.add.overlap(player, enterBakery, () => {
             if (!bakeryTextShown) {
-                bakeryText = this.add.text(10, 50, 'Appuyer sur A pour entrer', {
+                bakeryText = this.add.text(10, 50, 'Appuyer sur A pour entrer dans la boulangerie', {
                     fontSize: '28px',
                     fill: '#fff'
                 });
@@ -189,7 +190,7 @@ class MainWorld extends Phaser.Scene {
                 bakeryTextShown = true;
             }
         }, null, this);
-*/
+
         // entrer dans le shop (message)
         this.physics.add.overlap(player, enterShop, () => {
             if (!shopTextShown) {
@@ -441,7 +442,7 @@ class MainWorld extends Phaser.Scene {
 
         // texte "entrer"
         if (bakeryTextShown) {
-            const distance = Phaser.Math.Distance.Between(player.x, player.y, 7036, 699);
+            const distance = Phaser.Math.Distance.Between(player.x, player.y, 13564, 699);
             if (distance > 100) {
                 if (bakeryText) {
                     bakeryText.destroy();
@@ -458,7 +459,7 @@ class MainWorld extends Phaser.Scene {
         }
 
         if (playerHasBread) {
-            const distance2 = Phaser.Math.Distance.Between(player.x, player.y, 7036, 699);
+            const distance2 = Phaser.Math.Distance.Between(player.x, player.y, 13564, 699);
 
             if (!painPrisShown && distance2 <= 100) {
                 painPris = this.add.text(10, 50, 'Vous avez déjà un pain...', {
@@ -494,14 +495,14 @@ class MainWorld extends Phaser.Scene {
                 returnY: player.y,
             });  
         }
-/*
+
         // touche A pour entrer dans le shop
         if (keyObject.isDown && shopTextShown){
             this.scene.start('ShopScene', {
                 returnX: player.x,
                 returnY: player.y,
             });  
-        }*/
+        }
 
         // bateau: suivi du mouvement
         playerOnBoat = (
@@ -643,6 +644,47 @@ class BakeryScene extends Phaser.Scene {
     }
 }
 
+class ShopScene extends Phaser.Scene {
+    constructor() {
+        super('ShopScene');
+    }
+
+    preload() {
+
+    }
+
+    create(data) {
+        this.returnX = data.returnX;
+        this.returnY = data.returnY;
+
+        player = this.physics.add.sprite(100, 736, "player");
+        player.setOrigin(0.5, 1);
+        player.setSize(42, 90);
+        player.setOffset((144 - 42) / 2, 144 - 90);
+        player.body.gravity.y = 400;
+
+        let groundColliderShop = this.physics.add.staticImage(600, 784, null).setSize(1200, 100).setVisible(false);
+        this.physics.add.collider(player, groundColliderShop);
+        
+        this.keyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
+
+        this.canExit = false;
+        this.time.delayedCall(500, () => { this.canExit = true; });
+    }
+
+    update() {
+        // sortir du shop
+        if (Phaser.Input.Keyboard.JustDown(this.keyA)) {
+            this.scene.start('MainWorld', {
+                playerX: this.returnX,
+                playerY: this.returnY,
+                money: money,
+                playerHasBread
+            });
+        }
+    }
+}
+
 const config = {
     type: Phaser.AUTO,
     width: 1194,
@@ -652,7 +694,7 @@ const config = {
         arcade: { gravity: { y: 0 }, debug: true }
     },
     render: { pixelArt: true, antialias: false }, // ajout pour une image nette (eau)
-    scene: [MainWorld, BakeryScene]
+    scene: [MainWorld, BakeryScene, ShopScene]
 };
 
 const game = new Phaser.Game(config);
