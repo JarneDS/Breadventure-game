@@ -472,7 +472,7 @@ class BakeryScene extends Phaser.Scene {
         this.returnY = data.returnY;
         
         this.interiorBakery = this.add.tileSprite(0, -190, 1194, 1024, 'interieur_bakery').setOrigin(0, 0);
-        player = this.physics.add.sprite(100, 736, "player");
+        player = this.physics.add.sprite(183, 736, "player");
         player.setOrigin(0.5, 1);
         player.setSize(42, 90);
         player.setOffset((144 - 42) / 2, 144 - 90);
