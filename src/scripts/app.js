@@ -5,6 +5,8 @@ let cursors;
 let obstacles = [];
 let money = 7; // valeur par défaut
 let bateau;
+let smallPlat;
+let bigPlat;
 let bakeryTextShown = false;
 let bakeryText = null;
 let bakeryTextShown2 = false;
@@ -19,6 +21,7 @@ let shopTextShown = false;
 let shopText = null;
 //let insects;
 let playerOnBoat;
+let playerOnPlat
 let playerHasBread = false;
 
 class LoadingScene extends Phaser.Scene {
@@ -39,6 +42,8 @@ class LoadingScene extends Phaser.Scene {
         this.load.image("cone", "assets/objects/travaux-panneau.png");
         this.load.image("money", "assets/objects/money.png");
         this.load.image("bateau", "assets/objects/bateau.png");
+        this.load.image("smallPlat", "assets/objects/platformSmall.png"); //platformSmall
+        this.load.image("bigPlat", "assets/objects/platformBig.png"); //platformBig
         this.load.image("groundParc", "assets/bg/sol_parc.png");
         this.load.image("flaqueEau", "assets/obstacles/eau_flaque.png");
         this.load.image("parc_se", "assets/bg/parc_se.png");
@@ -187,6 +192,20 @@ class MainWorld extends Phaser.Scene {
         bateau.body.allowGravity = false;
         bateau.prevX = bateau.x;
 
+        // Small Platform
+        smallPlat = this.physics.add.image(8832, 445, 'smallPlat');
+        smallPlat.setSize(100, 28);
+        smallPlat.setOffset(-2, 262)
+        smallPlat.body.setImmovable(true);
+        smallPlat.body.allowGravity = false;
+
+        // Big Platform
+        bigPlat = this.physics.add.image(8392, 365, 'bigPlat');
+        bigPlat.setSize(100, 28);
+        bigPlat.setOffset(-2, 470)
+        bigPlat.body.setImmovable(true);
+        bigPlat.body.allowGravity = false;
+
         // player
         const spawnX = (data && data.playerX !== undefined) ? data.playerX : 100;
         const spawnY = (data && data.playerY !== undefined) ? data.playerY : 736;
@@ -199,7 +218,6 @@ class MainWorld extends Phaser.Scene {
         player.money = money;
     
         this.cone = this.physics.add.staticImage(30, 692, 'cone');
-        this.physics.add.collider(player, bateau);
 
         // sols visuels
         this.ground = this.add.tileSprite(-40, 738, 4096, 100, 'ground').setOrigin(0, 0);
@@ -223,6 +241,7 @@ class MainWorld extends Phaser.Scene {
         let cabg = this.physics.add.staticImage(8222, 670, null).setSize(20, 40).setVisible(false); //chantier - camion cabine gauche
         let camiona = this.physics.add.staticImage(8298, 694, null).setSize(20, 60).setVisible(false); //chantier - camion avant
     
+        // colliders
         this.physics.add.collider(player, groundCollider);
         this.physics.add.collider(player, this.cone);
         this.physics.add.collider(player, waterGroundCollider);
@@ -236,7 +255,9 @@ class MainWorld extends Phaser.Scene {
         this.physics.add.collider(player, cabh); //chantier - camion cabine haut
         this.physics.add.collider(player, cabg); //chantier - camion cabine gauche
         this.physics.add.collider(player, camiona); //chantier - camion avant
-        
+        this.physics.add.collider(player, bateau);
+        this.physics.add.collider(player, smallPlat);
+        this.physics.add.collider(player, bigPlat);
         
         // entrer dans la boulangerie (message)
         this.physics.add.overlap(player, enterBakery, () => {
@@ -392,6 +413,37 @@ class MainWorld extends Phaser.Scene {
         this.physics.add.collider(player, bateau, () => {
             if (player.body.touching.down && bateau.body.touching.up) {
                 playerOnBoat = true;
+            }
+        }, null, this);
+
+        // animation small platform
+        this.tweens.add({
+            targets: smallPlat,
+            x: 9036,
+            duration: 3250,
+            yoyo: true,
+            repeat: -1,
+        });
+
+        this.physics.add.collider(player, smallPlat, () => {
+            if (player.body.touching.down && smallPlat.body.touching.up) {
+                playerOnPlat = true;
+            }
+        }, null, this);
+
+        // animation big platform
+        this.tweens.add({
+            targets: bigPlat,
+            x: 8678,
+            duration: 3550,
+            yoyo: true,
+            repeat: -1,
+            delay: 1625, // = duration / 2
+        });
+
+        this.physics.add.collider(player, bigPlat, () => {
+            if (player.body.touching.down && bigPlat.body.touching.up) {
+                playerOnPlat = true;
             }
         }, null, this);
 
@@ -554,6 +606,8 @@ class MainWorld extends Phaser.Scene {
             this.scene.start('BakeryScene', {
                 returnX: player.x,
                 returnY: player.y,
+                money: money,
+                playerHasBread
             });  
         }
 
@@ -562,6 +616,8 @@ class MainWorld extends Phaser.Scene {
             this.scene.start('ShopScene', {
                 returnX: player.x,
                 returnY: player.y,
+                money: money,
+                playerHasBread
             });  
         }
 
@@ -575,7 +631,31 @@ class MainWorld extends Phaser.Scene {
             const deltaX = bateau.x - bateau.prevX;
             player.x += deltaX;
         }
-        bateau.prevX = bateau.x;    
+        bateau.prevX = bateau.x;
+
+        // Small PLatform
+        let onSmallPlat =
+            player.body.touching.down &&
+            smallPlat.body.touching.up &&
+            Phaser.Geom.Intersects.RectangleToRectangle(player.getBounds(), smallPlat.getBounds());
+
+        if (onSmallPlat) {
+            const deltaX = smallPlat.x - (smallPlat.prevX || smallPlat.x);
+            player.x += deltaX;
+        }
+        smallPlat.prevX = smallPlat.x;
+
+        // Big Platform
+        let onBigPlat =
+            player.body.touching.down &&
+            bigPlat.body.touching.up &&
+            Phaser.Geom.Intersects.RectangleToRectangle(player.getBounds(), bigPlat.getBounds());
+
+        if (onBigPlat) {
+            const deltaX = bigPlat.x - (bigPlat.prevX || bigPlat.x);
+            player.x += deltaX;
+        }
+        bigPlat.prevX = bigPlat.x;
     }
 }
 
