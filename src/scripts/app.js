@@ -21,11 +21,14 @@ let shopText = null;
 let playerOnBoat;
 let playerHasBread = false;
 
-class MainWorld extends Phaser.Scene {
+class LoadingScene extends Phaser.Scene {
     constructor() {
-        super('MainWorld');
+        super('LoadingScene');
     }
-    preload(){
+
+    preload() {
+        this.load.image("logo", "assets/logo/logo.png");
+        this.load.image("intro", "assets/bg/intro.png");
         // assets
         this.load.image("player","assets/player/henri.png");
         this.load.image("background","assets/bg/bg1.png");
@@ -110,6 +113,48 @@ class MainWorld extends Phaser.Scene {
             frameHeight: 42,
         })
     */
+    }
+
+    create() {
+        this.bg = this.add.tileSprite(0, 0, 1194, 834, 'intro').setOrigin(0, 0);
+        this.logo = this.add.tileSprite(597, 150, 875, 113, 'logo').setOrigin(0.5, 0.5);
+        this.perso = this.add.sprite(100, 712, 'player_bread_static');
+        const textExplication = this.add.text(10, 50, '', {
+            fontSize: '28px',
+            fill: '#000'
+        });
+        const appuyA = this.add.text(597, 700, 'Appuyer sur A pour commencer le jeu', {
+            fontSize: '36px',
+            fill: '#000'
+        });
+
+        appuyA.setOrigin(0.5, 0.5);
+
+        this.anims.create({
+            key:'static_pain',
+            frames: this.anims.generateFrameNumbers('player_bread_static', { start: 0, end: 1 }),
+            frameRate: 3,
+            repeat: -1
+        })
+
+        this.perso.play('static_pain');
+
+        // Ajout d'une touche A
+        this.keyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
+
+        // Attendre que l'utilisateur appuie sur A
+        this.input.keyboard.on('keydown-A', () => {
+            this.scene.start('MainWorld');
+        });
+    }
+}
+
+class MainWorld extends Phaser.Scene {
+    constructor() {
+        super('MainWorld');
+    }
+    preload(){
+        
     }
     
     create(data){
@@ -709,7 +754,7 @@ const config = {
         arcade: { gravity: { y: 0 }, debug: true }
     },
     render: { pixelArt: true, antialias: false }, // ajout pour une image nette (eau)
-    scene: [MainWorld, BakeryScene, ShopScene]
+    scene: [LoadingScene, MainWorld, BakeryScene, ShopScene]
 };
 
 const game = new Phaser.Game(config);
