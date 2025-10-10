@@ -14,6 +14,7 @@ let painPris = null;
 let keyObject;
 let keyObjectE;
 let overlay = null;
+let mouchoirs = 1;
 //let insects;
 let playerOnBoat;
 let playerHasBread = false;
@@ -39,6 +40,7 @@ class MainWorld extends Phaser.Scene {
         this.load.image("cielVille", "assets/bg/cielle_ville.png");
         this.load.image("cielleParc", "assets/bg/cielle_parc.png");
         this.load.image("cielleParc_se", "assets/bg/cielle_parc_se.png");
+        this.load.image("mouchoirs", "assets/objects/bac_mouchoir.png")
 
         //effects
         this.load.image("eau_vue", "assets/objects/vue_eau.png");
@@ -370,11 +372,17 @@ class MainWorld extends Phaser.Scene {
         keyObjectE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.E);
 
         this.input.keyboard.on('keydown-E', () => {
-            if (overlay) {
+            if (overlay && mouchoirs > 0) {
                 overlay.destroy();
                 overlay = null;
+                mouchoirs -= 1;
+                this.mouchoirText.setText('Mouchoirs : ' + mouchoirs);
             }
         });
+
+        // text mouchoirs
+        this.mouchoirText = this.add.text(400, 10, 'Mouchoirs : ' + mouchoirs, {fontSize: '28px'});
+        this.mouchoirText.setScrollFactor(0);
 
         this.physics.world.createDebugGraphic();
     }
