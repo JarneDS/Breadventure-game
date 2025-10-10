@@ -45,6 +45,7 @@ class MainWorld extends Phaser.Scene {
         this.load.image("cielleParc_se", "assets/bg/cielle_parc_se.png");
         this.load.image("mouchoirs", "assets/objects/bac_mouchoir.png");
         this.load.image("shop", "assets/bg/shop.png");
+        this.load.image("merde", "assets/objects/merde_ecran.png");
 
         //effects
         this.load.image("eau_vue", "assets/objects/vue_eau.png");
@@ -424,7 +425,7 @@ class MainWorld extends Phaser.Scene {
             player.setVelocityX(-230);
             player.setFlipX(true);
         } else if (cursors.right.isDown) {
-            player.setVelocityX(230);
+            player.setVelocityX(800);
             player.setFlipX(false);
         }
     
