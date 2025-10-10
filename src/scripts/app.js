@@ -167,7 +167,8 @@ class MainWorld extends Phaser.Scene {
         let groundColliderExtra2 = this.physics.add.staticImage(5185, 786, null).setSize(32, 30).setVisible(false);
         //let enterBakery = this.physics.add.staticImage(7036, 699, null).setSize(51, 79).setVisible(false);
         let enterShop = this.physics.add.staticImage(7036, 699, null).setSize(51, 79).setVisible(false);
-        let bac = this.physics.add.staticImage(7955, 716, null).setSize(150, 50).setVisible(false); //chantier - bac camion 
+        let bac = this.physics.add.staticImage(7955, 716, null).setSize(150, 50).setVisible(false); //chantier - bac camion
+        // let truck = this.physics.add.staticImage(8155, 716, null).setSize(148, 48).setVisible(false); //chantier - camion 
     
         this.physics.add.collider(player, groundCollider);
         this.physics.add.collider(player, this.cone);
@@ -176,6 +177,7 @@ class MainWorld extends Phaser.Scene {
         this.physics.add.collider(player, groundColliderExtra1);
         this.physics.add.collider(player, groundColliderExtra2);
         this.physics.add.collider(player, bac); //chantier - bac camion 
+        // this.physics.add.collider(player, truck); //chantier - bac camion 
         /*
         // entrer dans la boulangerie (message)
         this.physics.add.overlap(player, enterBakery, () => {
@@ -405,7 +407,7 @@ class MainWorld extends Phaser.Scene {
         this.mouchoirText = this.add.text(400, 10, 'Mouchoirs : ' + mouchoirs, {fontSize: '28px'});
         this.mouchoirText.setScrollFactor(0);
 
-        this.physics.world.createDebugGraphic();
+        // this.physics.world.createDebugGraphic();
     }
     
     update() {
@@ -413,7 +415,7 @@ class MainWorld extends Phaser.Scene {
 
         // Saut
         if (Phaser.Input.Keyboard.JustDown(cursors.up) && player.body.onFloor()) {
-            player.setVelocityY(-200);
+            player.setVelocityY(-230);
         }
     
         // Déplacements
