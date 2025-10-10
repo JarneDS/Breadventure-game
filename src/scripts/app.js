@@ -9,6 +9,8 @@ let bakeryTextShown = false;
 let bakeryText = null;
 let bakeryTextShown2 = false;
 let bakeryText2 = null;
+let painPrisShown = false;
+let painPris = null;
 let keyObject;
 //let insects;
 let playerOnBoat;
@@ -398,10 +400,11 @@ class MainWorld extends Phaser.Scene {
         if (bakeryTextShown) {
             const distance = Phaser.Math.Distance.Between(player.x, player.y, 7036, 699);
             if (distance > 100) {
-                if (bakeryText)
-                bakeryText.destroy();
-                bakeryText = null;
-                bakeryTextShown = false;
+                if (bakeryText) {
+                    bakeryText.destroy();
+                    bakeryText = null;
+                    bakeryTextShown = false;
+                }
             }
         }
 
@@ -409,6 +412,23 @@ class MainWorld extends Phaser.Scene {
             bakeryText.destroy();
             bakeryText = null;
             bakeryTextShown = false;
+        }
+
+        if (playerHasBread){
+            const distance2 = Phaser.Math.Distance.Between(player.x, player.y, 7036, 699);
+            painPris = this.add.text(10, 50, 'Vous avez déjà un pain...', {
+                fontSize: '28px',
+                fill: '#fff'
+            });
+            painPris.setScrollFactor(0);
+            if (distance2 > 100) {
+                if (painPris) {
+                    painPris.destroy();
+                    painPrisShown = false;
+                    painPris = null;
+                }
+            }
+            
         }
 
         // touche A pour entrer
