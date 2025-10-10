@@ -600,8 +600,9 @@ const config = {
     height: 834,
     physics: {
         default: 'arcade',
-        arcade: { gravity: { y: 0 }, debug: true } // mettre false pour enlever les lignes de debug
+        arcade: { gravity: { y: 0 }, debug: true }
     },
+    render: { pixelArt: true, antialias: false }, // ajout pour une image nette (eau)
     scene: [MainWorld, BakeryScene]
 };
 
