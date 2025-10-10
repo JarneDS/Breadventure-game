@@ -127,6 +127,7 @@ class MainWorld extends Phaser.Scene {
         this.parc2 = this.add.tileSprite(6090, -285, 880, 1024, 'parc_se').setOrigin(0, 0).setFlipX(1);
         this.bakery = this.add.tileSprite(6970, -286, 2048, 1024, 'bakery').setOrigin(0, 0);
         this.shop = this.add.tileSprite(6970, -286, 2048, 1024, 'shop').setOrigin(0, 0);
+        this.house2 = this.add.tileSprite(8000, 226, 2048, 512, 'background2').setOrigin(0, 0).setFlipX(1);
     
         // bateau
         bateau = this.physics.add.image(4456, 610, 'bateau');
@@ -153,14 +154,14 @@ class MainWorld extends Phaser.Scene {
 
         // sols visuels
         this.ground = this.add.tileSprite(-40, 738, 4096, 100, 'ground').setOrigin(0, 0);
-        this.ground2 = this.add.tileSprite(6104, 738, 4096, 100, 'ground').setOrigin(0, 0);
+        this.ground2 = this.add.tileSprite(6104, 738, 8192, 100, 'ground').setOrigin(0, 0);
         this.parcGround = this.add.tileSprite(4056, 738, 2048, 100, 'groundParc').setOrigin(0, 0);
         this.flaqueEau = this.add.tileSprite(1000, 736, 92, 48, 'flaqueEau').setOrigin(0, 0);
         
         // colliders invisibles
         let groundCollider = this.physics.add.staticImage(600, 788, null).setSize(7422, 100).setVisible(false);
         let waterGroundCollider = this.physics.add.staticImage(4756, 814, null).setSize(891, 26).setVisible(false);
-        let groundCollider2 = this.physics.add.staticImage(8912, 788, null).setSize(7422, 100).setVisible(false);
+        let groundCollider2 = this.physics.add.staticImage(9297, 788, null).setSize(8192, 100).setVisible(false);
         let groundColliderExtra1 = this.physics.add.staticImage(4327, 786, null).setSize(34, 30).setVisible(false);
         let groundColliderExtra2 = this.physics.add.staticImage(5185, 786, null).setSize(32, 30).setVisible(false);
         //let enterBakery = this.physics.add.staticImage(7036, 699, null).setSize(51, 79).setVisible(false);
@@ -286,7 +287,7 @@ class MainWorld extends Phaser.Scene {
         })
     */
         // caméra
-        this.cameras.main.setBounds(0, 0, 10000, 0);
+        this.cameras.main.setBounds(0, 0, 20000, 0);
         this.cameras.main.startFollow(player, true, 0.1, 0.1, 0, 245);
     
         cursors = this.input.keyboard.createCursorKeys();
