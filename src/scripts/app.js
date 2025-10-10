@@ -12,6 +12,8 @@ let bakeryText2 = null;
 let painPrisShown = false;
 let painPris = null;
 let keyObject;
+let keyObjectE;
+let overlay = null;
 //let insects;
 let playerOnBoat;
 let playerHasBread = false;
@@ -319,10 +321,12 @@ class MainWorld extends Phaser.Scene {
             .setVisible(false);
 
         this.physics.add.overlap(player, eau, () => {
-            const overlay = this.add.image(0, 0, "eau_vue").setOrigin(0, 0);
-            overlay.displayWidth = this.sys.game.config.width;
-            overlay.displayHeight = this.sys.game.config.height;
-            overlay.setScrollFactor(0);
+            if (!overlay) {
+                overlay = this.add.image(0, 0, "eau_vue").setOrigin(0, 0);
+                overlay.displayWidth = this.sys.game.config.width;
+                overlay.displayHeight = this.sys.game.config.height;
+                overlay.setScrollFactor(0);
+            }
         }, null, this);
 
         let overlayVisible = false;
@@ -363,7 +367,14 @@ class MainWorld extends Phaser.Scene {
             }
         });
 
-        this.keyE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.E);
+        keyObjectE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.E);
+
+        this.input.keyboard.on('keydown-E', () => {
+            if (overlay) {
+                overlay.destroy();
+                overlay = null;
+            }
+        });
 
         this.physics.world.createDebugGraphic();
     }
@@ -474,7 +485,7 @@ class BakeryScene extends Phaser.Scene {
         this.returnY = data.returnY;
         
         this.interiorBakery = this.add.tileSprite(0, -190, 1194, 1024, 'interieur_bakery').setOrigin(0, 0);
-        player = this.physics.add.sprite(183, 736, "player");
+        player = this.physics.add.sprite(100, 736, "player");
         player.setOrigin(0.5, 1);
         player.setSize(42, 90);
         player.setOffset((144 - 42) / 2, 144 - 90);
