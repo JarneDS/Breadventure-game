@@ -15,6 +15,8 @@ let keyObject;
 let keyObjectE;
 let overlay = null;
 let mouchoirs = 1;
+let shopTextShown = false;
+let shopText = null;
 //let insects;
 let playerOnBoat;
 let playerHasBread = false;
@@ -41,7 +43,8 @@ class MainWorld extends Phaser.Scene {
         this.load.image("cielVille", "assets/bg/cielle_ville.png");
         this.load.image("cielleParc", "assets/bg/cielle_parc.png");
         this.load.image("cielleParc_se", "assets/bg/cielle_parc_se.png");
-        this.load.image("mouchoirs", "assets/objects/bac_mouchoir.png")
+        this.load.image("mouchoirs", "assets/objects/bac_mouchoir.png");
+        this.load.image("shop", "assets/bg/shop.png");
 
         //effects
         this.load.image("eau_vue", "assets/objects/vue_eau.png");
@@ -125,6 +128,7 @@ class MainWorld extends Phaser.Scene {
         this.chantier = this.add.tileSprite(7320, -285, 2048, 1024, 'chantier').setOrigin(0, 0); //chantier
         this.parc2 = this.add.tileSprite(6090, -285, 880, 1024, 'parc_se').setOrigin(0, 0).setFlipX(1);
         this.bakery = this.add.tileSprite(6970, -286, 2048, 1024, 'bakery').setOrigin(0, 0);
+        this.shop = this.add.tileSprite(6970, -286, 2048, 1024, 'shop').setOrigin(0, 0);
     
         // bateau
         bateau = this.physics.add.image(4456, 610, 'bateau');
@@ -161,7 +165,8 @@ class MainWorld extends Phaser.Scene {
         let groundCollider2 = this.physics.add.staticImage(8912, 788, null).setSize(7422, 100).setVisible(false);
         let groundColliderExtra1 = this.physics.add.staticImage(4327, 786, null).setSize(34, 30).setVisible(false);
         let groundColliderExtra2 = this.physics.add.staticImage(5185, 786, null).setSize(32, 30).setVisible(false);
-        let enterBakery = this.physics.add.staticImage(7036, 699, null).setSize(51, 79).setVisible(false);
+        //let enterBakery = this.physics.add.staticImage(7036, 699, null).setSize(51, 79).setVisible(false);
+        let enterShop = this.physics.add.staticImage(7036, 699, null).setSize(51, 79).setVisible(false);
         let bac = this.physics.add.staticImage(7955, 716, null).setSize(150, 50).setVisible(false); //chantier - bac camion 
     
         this.physics.add.collider(player, groundCollider);
@@ -171,7 +176,7 @@ class MainWorld extends Phaser.Scene {
         this.physics.add.collider(player, groundColliderExtra1);
         this.physics.add.collider(player, groundColliderExtra2);
         this.physics.add.collider(player, bac); //chantier - bac camion 
-        
+        /*
         // entrer dans la boulangerie (message)
         this.physics.add.overlap(player, enterBakery, () => {
             if (!bakeryTextShown) {
@@ -181,6 +186,18 @@ class MainWorld extends Phaser.Scene {
                 });
                 bakeryText.setScrollFactor(0);
                 bakeryTextShown = true;
+            }
+        }, null, this);
+*/
+        // entrer dans le shop (message)
+        this.physics.add.overlap(player, enterShop, () => {
+            if (!shopTextShown) {
+                shopText = this.add.text(10, 50, 'Appuyer sur A pour entrer dans la boutique', {
+                    fontSize: '28px',
+                    fill: '#fff'
+                });
+                shopText.setScrollFactor(0);
+                shopTextShown = true;
             }
         }, null, this);
     
@@ -458,13 +475,32 @@ class MainWorld extends Phaser.Scene {
             }
         }
 
-        // touche A pour entrer
+        if (shopTextShown) {
+            const distance = Phaser.Math.Distance.Between(player.x, player.y, 7036, 699);
+            if (distance > 100) {
+                if (shopText) {
+                    shopText.destroy();
+                    shopText = null;
+                    shopTextShown = false;
+                }
+            }
+        }
+
+        // touche A pour entrer dans la boulangerie
         if (keyObject.isDown && bakeryTextShown && !playerHasBread){
             this.scene.start('BakeryScene', {
                 returnX: player.x,
                 returnY: player.y,
             });  
         }
+/*
+        // touche A pour entrer dans le shop
+        if (keyObject.isDown && shopTextShown){
+            this.scene.start('ShopScene', {
+                returnX: player.x,
+                returnY: player.y,
+            });  
+        }*/
 
         // bateau: suivi du mouvement
         playerOnBoat = (
