@@ -3,7 +3,7 @@ import "phaser";
 let player;
 let cursors;
 let obstacles = [];
-let money = 5; // valeur par défaut
+let money = 7; // valeur par défaut
 let bateau;
 let bakeryTextShown = false;
 let bakeryText = null;
