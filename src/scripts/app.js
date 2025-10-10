@@ -413,22 +413,24 @@ class MainWorld extends Phaser.Scene {
             bakeryText = null;
             bakeryTextShown = false;
         }
-
-        if (playerHasBread){
+        
+        if (playerHasBread) {
             const distance2 = Phaser.Math.Distance.Between(player.x, player.y, 7036, 699);
-            painPris = this.add.text(10, 50, 'Vous avez déjà un pain...', {
-                fontSize: '28px',
-                fill: '#fff'
-            });
-            painPris.setScrollFactor(0);
-            if (distance2 > 100) {
+
+            if (!painPrisShown && distance2 <= 100) {
+                painPris = this.add.text(10, 50, 'Vous avez déjà un pain...', {
+                    fontSize: '28px',
+                    fill: '#fff'
+                });
+                painPris.setScrollFactor(0);
+                painPrisShown = true;
+            } else if (painPrisShown && distance2 > 100) {
                 if (painPris) {
                     painPris.destroy();
-                    painPrisShown = false;
                     painPris = null;
                 }
+                painPrisShown = false;
             }
-            
         }
 
         // touche A pour entrer
