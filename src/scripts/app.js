@@ -363,6 +363,8 @@ class MainWorld extends Phaser.Scene {
             }
         });
 
+        this.keyE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.E);
+
         this.physics.world.createDebugGraphic();
     }
     
