@@ -174,6 +174,9 @@ class MainWorld extends Phaser.Scene {
         let truck = this.physics.add.staticImage(8155, 718, null).setSize(148, 48).setVisible(false); //chantier - camion 
         let bar1 = this.physics.add.staticImage(7868, 718, null).setSize(20, 20).setVisible(false); //chantier - bar gauche 
         let bar2 = this.physics.add.staticImage(8039, 718, null).setSize(20, 18).setVisible(false); //chantier - bar droite
+        let cabh = this.physics.add.staticImage(8262, 628, null).setSize(54, 18).setVisible(false); //chantier - camion cabine haut
+        let cabg = this.physics.add.staticImage(8222, 670, null).setSize(20, 40).setVisible(false); //chantier - camion cabine gauche
+        let camiona = this.physics.add.staticImage(8298, 694, null).setSize(20, 60).setVisible(false); //chantier - camion avant
     
         this.physics.add.collider(player, groundCollider);
         this.physics.add.collider(player, this.cone);
@@ -185,6 +188,10 @@ class MainWorld extends Phaser.Scene {
         this.physics.add.collider(player, truck); //chantier - bac camion 
         this.physics.add.collider(player, bar1); //chantier - bar gauche
         this.physics.add.collider(player, bar2); //chantier - bar droite
+        this.physics.add.collider(player, cabh); //chantier - camion cabine haut
+        this.physics.add.collider(player, cabg); //chantier - camion cabine gauche
+        this.physics.add.collider(player, camiona); //chantier - camion avant
+        
         
         // entrer dans la boulangerie (message)
         this.physics.add.overlap(player, enterBakery, () => {
