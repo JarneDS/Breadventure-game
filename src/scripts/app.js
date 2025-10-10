@@ -170,7 +170,9 @@ class MainWorld extends Phaser.Scene {
         let enterBakery = this.physics.add.staticImage(13564, 699, null).setSize(52, 79).setVisible(false);
         let enterShop = this.physics.add.staticImage(7036, 699, null).setSize(51, 79).setVisible(false);
         let bac = this.physics.add.staticImage(7955, 716, null).setSize(150, 50).setVisible(false); //chantier - bac camion
-        // let truck = this.physics.add.staticImage(8155, 716, null).setSize(148, 48).setVisible(false); //chantier - camion 
+        let truck = this.physics.add.staticImage(8155, 718, null).setSize(148, 48).setVisible(false); //chantier - camion 
+        let bar1 = this.physics.add.staticImage(7868, 718, null).setSize(20, 20).setVisible(false); //chantier - bar gauche 
+        let bar2 = this.physics.add.staticImage(8039, 718, null).setSize(20, 18).setVisible(false); //chantier - bar droite
     
         this.physics.add.collider(player, groundCollider);
         this.physics.add.collider(player, this.cone);
@@ -179,7 +181,9 @@ class MainWorld extends Phaser.Scene {
         this.physics.add.collider(player, groundColliderExtra1);
         this.physics.add.collider(player, groundColliderExtra2);
         this.physics.add.collider(player, bac); //chantier - bac camion 
-        // this.physics.add.collider(player, truck); //chantier - bac camion 
+        this.physics.add.collider(player, truck); //chantier - bac camion 
+        this.physics.add.collider(player, bar1); //chantier - bar gauche
+        this.physics.add.collider(player, bar2); //chantier - bar droite
         
         // entrer dans la boulangerie (message)
         this.physics.add.overlap(player, enterBakery, () => {
@@ -352,6 +356,7 @@ class MainWorld extends Phaser.Scene {
                 overlay = this.add.image(0, 0, "eau_vue").setOrigin(0, 0);
                 overlay.displayWidth = this.sys.game.config.width;
                 overlay.displayHeight = this.sys.game.config.height;
+                overlay.setAlpha(0.9); // transparence
                 overlay.setScrollFactor(0);
             }
         }, null, this);
@@ -424,7 +429,7 @@ class MainWorld extends Phaser.Scene {
             player.setVelocityX(-230);
             player.setFlipX(true);
         } else if (cursors.right.isDown) {
-            player.setVelocityX(230);
+            player.setVelocityX(800);
             player.setFlipX(false);
         }
     
