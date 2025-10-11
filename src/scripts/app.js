@@ -15,8 +15,13 @@ let painPrisShown = false;
 let painPris = null;
 let keyObject;
 let keyObjectE;
-let overlay = null;
-let mouchoirs = 1;
+
+let overlayEau = null; //flaque eau
+let overlayBoue = null; //flaque boue
+
+let overlayStack = []; //pile des overlays -> utile pour effacer le denier apparu
+
+let mouchoirs = 10;
 let shopTextShown = false;
 let shopText = null;
 //let insects;
@@ -401,6 +406,9 @@ class MainWorld extends Phaser.Scene {
         // HUD argent
         this.scoreText = this.add.text(10, 10, 'Argent : ' + money + '$', {fontSize: '28px'});
         this.scoreText.setScrollFactor(0);
+
+        this.mouchoirText = this.add.text(400, 10, 'Mouchoirs : ' + mouchoirs, { fontSize: '28px' });
+        this.mouchoirText.setScrollFactor(0);
     
         // animation bateau
         this.tweens.add({
@@ -462,12 +470,15 @@ class MainWorld extends Phaser.Scene {
             .setVisible(false);
 
         this.physics.add.overlap(player, eau, () => {
-            if (!overlay) {
-                overlay = this.add.image(0, 0, "eau_vue").setOrigin(0, 0);
-                overlay.displayWidth = this.sys.game.config.width;
-                overlay.displayHeight = this.sys.game.config.height;
-                overlay.setAlpha(0.9); // transparence
-                overlay.setScrollFactor(0);
+            if (!overlayEau) {
+                overlayEau = this.add.image(0, 0, "eau_vue").setOrigin(0, 0);
+                overlayEau.displayWidth  = this.sys.game.config.width;
+                overlayEau.displayHeight = this.sys.game.config.height;
+                overlayEau.setAlpha(0.6);
+                overlayEau.setScrollFactor(0);
+                overlayEau.setDepth(999);
+
+                overlayStack.push(overlayEau);
             }
         }, null, this);
 
@@ -477,12 +488,15 @@ class MainWorld extends Phaser.Scene {
             .setVisible(false);
 
         this.physics.add.overlap(player, boue, () => {
-            if (!overlay) {
-                overlay = this.add.image(0, 0, "boue_vue").setOrigin(0, 0);
-                overlay.displayWidth = this.sys.game.config.width;
-                overlay.displayHeight = this.sys.game.config.height;
-                overlay.setAlpha(0.9);
-                overlay.setScrollFactor(0);
+            if (!overlayBoue) {
+                overlayBoue = this.add.image(0, 0, "boue_vue").setOrigin(0, 0);
+                overlayBoue.displayWidth  = this.sys.game.config.width;
+                overlayBoue.displayHeight = this.sys.game.config.height;
+                overlayBoue.setAlpha(0.8);
+                overlayBoue.setScrollFactor(0);
+                overlayBoue.setDepth(1000);
+
+                overlayStack.push(overlayBoue);
             }
         }, null, this);
 
@@ -526,19 +540,21 @@ class MainWorld extends Phaser.Scene {
 
         keyObjectE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.E);
 
-        this.input.keyboard.on('keydown-E', () => {
-            if (overlay && mouchoirs > 0) {
-                overlay.destroy();
-                overlay = null;
-                mouchoirs -= 1;
-                this.mouchoirText.setText('Mouchoirs : ' + mouchoirs);
-            }
+        this.input.keyboard.on("keydown-E", () => {
+        if (mouchoirs <= 0) return;
+        if (overlayStack.length === 0) return;
+
+        const lastOverlay = overlayStack.pop();
+
+        if (lastOverlay) {
+            lastOverlay.destroy();
+            if (lastOverlay === overlayEau) overlayEau = null;
+            if (lastOverlay === overlayBoue) overlayBoue = null;
+        }
+
+        mouchoirs -= 1;
+        this.mouchoirText.setText("Mouchoirs : " + mouchoirs);
         });
-
-        // text mouchoirs
-        this.mouchoirText = this.add.text(400, 10, 'Mouchoirs : ' + mouchoirs, {fontSize: '28px'});
-        this.mouchoirText.setScrollFactor(0);
-
         // this.physics.world.createDebugGraphic();
     }
     
