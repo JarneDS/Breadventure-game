@@ -21,7 +21,7 @@ let overlayBoue = null; //flaque boue
 
 let overlayStack = []; //pile des overlays -> utile pour effacer le denier apparu
 
-let mouchoirs = 10;
+let mouchoirs = 10; //valeur par défaut - valeur TEST -> à modifier
 let shopTextShown = false;
 let shopText = null;
 //let insects;
