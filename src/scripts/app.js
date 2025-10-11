@@ -60,6 +60,7 @@ class LoadingScene extends Phaser.Scene {
         this.load.image("mouchoirs", "assets/objects/bac_mouchoir.png");
         this.load.image("shop", "assets/bg/shop.png");
         this.load.image("merde", "assets/objects/merde_ecran.png");
+        this.load.image("bird", "assets/obstacles/bird.png");
 
         //effects
         this.load.image("eau_vue", "assets/objects/vue_eau.png");
@@ -212,6 +213,33 @@ class MainWorld extends Phaser.Scene {
         bigPlat.setOffset(-2, 470)
         bigPlat.body.setImmovable(true);
         bigPlat.body.allowGravity = false;
+
+        // bird
+        const leftEdge  = -300; //Negatif pour masquer demitour
+        const rightEdge = 14050 + 300; //largeur map (plus large pour masquer demitour)
+        const baseMs    = 30000; //durée base
+
+        const bird = this.add.image(leftEdge, 210, 'bird');
+        bird.setDepth(940);
+        bird.setFlipX(true);
+
+        this.tweens.add({
+        targets: bird,
+        x: rightEdge,
+        duration: baseMs,
+        yoyo: true,
+        repeat: -1,
+        // inverse direction + random temps
+        onYoyo: (tween) => {
+            bird.setFlipX(!bird.flipX);
+            tween.timeScale = Phaser.Math.FloatBetween(0.95, 1.10);
+        },
+        // repetition à chaque boucle
+        onRepeat: (tween) => {
+            bird.setFlipX(!bird.flipX);
+            tween.timeScale = Phaser.Math.FloatBetween(0.95, 1.10);
+        }
+        });
 
         // player
         const spawnX = (data && data.playerX !== undefined) ? data.playerX : 100;
