@@ -500,42 +500,65 @@ class MainWorld extends Phaser.Scene {
             }
         }, null, this);
 
+        //Collider rivière
         let overlayVisible = false;
         let overlay2 = null;
 
-        // Crée une zone invisible pour détecter le contact
+        // Détection contact eau
         let eauRiviere = this.add.zone(4756, 790, 891, 10);
         this.physics.add.existing(eauRiviere, true);
 
         this.physics.add.overlap(player, eauRiviere, () => {
-            if (!overlayVisible) {
-                overlayVisible = true;
+        if (!overlayVisible) {
+            overlayVisible = true;
 
-                overlay2 = this.add.rectangle(
-                    0,
-                    0,
-                    this.sys.game.config.width,
-                    this.sys.game.config.height,
-                    0x1A74CC
-                ).setOrigin(0);
+            if (!overlay2) {
+            overlay2 = this.add.rectangle(
+                0, 0,
+                this.sys.game.config.width,
+                this.sys.game.config.height,
+                0x1A74CC
+            ).setOrigin(0);
 
-                overlay2.setScrollFactor(0);
-                overlay2.setAlpha(0.9); // transparence
+            overlay2.setScrollFactor(0);
+            overlay2.setAlpha(0.9);
+            overlay2.setDepth(950);
             }
+
+            if (overlayEau) {
+                overlayEau.destroy();
+                overlayEau = null;
+            }
+        }
         }, null, this);
 
         this.events.on('update', () => {
-            const isTouching = Phaser.Geom.Intersects.RectangleToRectangle(
-                player.getBounds(),
-                eauRiviere.getBounds()
-            );
-            if (!isTouching && overlayVisible) {
-                overlayVisible = false;
-                if (overlay2) {
-                    overlay2.destroy();
-                    overlay2 = null;
-                }
+        const isTouching = Phaser.Geom.Intersects.RectangleToRectangle(
+            player.getBounds(),
+            eauRiviere.getBounds()
+        );
+
+        // Sortie de l'eau
+        if (!isTouching && overlayVisible) {
+            overlayVisible = false;
+
+            // Masque fond bleu (quand hors de l'eau)
+            if (overlay2) {
+            overlay2.destroy();
+            overlay2 = null;
             }
+
+            // Affichage flaque que à sortie
+            if (!overlayEau) {
+            overlayEau = this.add.image(0, 0, "eau_vue").setOrigin(0, 0);
+            overlayEau.displayWidth  = this.sys.game.config.width;
+            overlayEau.displayHeight = this.sys.game.config.height;
+            overlayEau.setAlpha(0.6);
+            overlayEau.setScrollFactor(0);
+            overlayEau.setDepth(999);
+            overlayStack.push(overlayEau);
+            }
+        }
         });
 
         keyObjectE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.E);
