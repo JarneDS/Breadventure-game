@@ -58,6 +58,7 @@ class LoadingScene extends Phaser.Scene {
 
         //effects
         this.load.image("eau_vue", "assets/objects/vue_eau.png");
+        this.load.image("boue_vue", "assets/objects/boue_vue.png");
         
         // walking
         this.load.spritesheet("player_walking", "assets/player/henriwalking.png",{
@@ -477,7 +478,7 @@ class MainWorld extends Phaser.Scene {
 
         this.physics.add.overlap(player, boue, () => {
             if (!overlay) {
-                overlay = this.add.image(0, 0, "eau_vue").setOrigin(0, 0);
+                overlay = this.add.image(0, 0, "boue_vue").setOrigin(0, 0);
                 overlay.displayWidth = this.sys.game.config.width;
                 overlay.displayHeight = this.sys.game.config.height;
                 overlay.setAlpha(0.9);
