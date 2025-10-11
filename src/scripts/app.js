@@ -287,7 +287,7 @@ class MainWorld extends Phaser.Scene {
             overlayCaca = this.add.image(0, 0, "merde").setOrigin(0, 0);
             overlayCaca.setScrollFactor(0);
             overlayCaca.setDepth(2000);
-            overlayCaca.setAlpha(0.95);
+            overlayCaca.setAlpha(0.99);
 
             overlayStack.push(overlayCaca);
         });
