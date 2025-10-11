@@ -18,6 +18,7 @@ let keyObjectE;
 
 let overlayEau = null; //flaque eau
 let overlayBoue = null; //flaque boue
+let overlayCaca = null; //caca bird
 
 let overlayStack = []; //pile des overlays -> utile pour effacer le denier apparu
 
@@ -61,6 +62,7 @@ class LoadingScene extends Phaser.Scene {
         this.load.image("shop", "assets/bg/shop.png");
         this.load.image("merde", "assets/objects/merde_ecran.png");
         this.load.image("bird", "assets/obstacles/bird.png");
+        this.load.image("caca", "assets/obstacles/caca.png");
 
         //effects
         this.load.image("eau_vue", "assets/objects/vue_eau.png");
@@ -241,6 +243,28 @@ class MainWorld extends Phaser.Scene {
         }
         });
 
+        //caca
+        this.poops = this.physics.add.group({
+            allowGravity: true
+        });
+        
+        const dropPoop = () => {
+            const p = this.poops.create(bird.x, bird.y + 10, "caca");
+            p.setDepth(1200);
+            p.setVelocityX(Phaser.Math.Between(-20, 20)); //drift x
+            p.setVelocityY(Phaser.Math.Between(40, 120)); //chute verticale
+            p.setGravityY(800);
+            p.setCollideWorldBounds(false);
+
+            // détruit si sort très bas de l’écran
+            this.time.delayedCall(8000, () => p.active && p.y > 1000 && p.destroy());
+
+            //chute goutte suiv. (random)
+            this.time.delayedCall(Phaser.Math.Between(1000, 3000), dropPoop);
+        };
+
+        dropPoop();
+
         // player
         const spawnX = (data && data.playerX !== undefined) ? data.playerX : 100;
         const spawnY = (data && data.playerY !== undefined) ? data.playerY : 736;
@@ -251,6 +275,22 @@ class MainWorld extends Phaser.Scene {
         player.setOffset((144 - 42) / 2, 144 - 90);
         player.body.gravity.y = 400;
         player.money = money;
+
+        this.physics.add.overlap(player, this.poops, (_player, poop) => {
+            poop.destroy();
+
+            if (overlayCaca) {
+                overlayCaca.destroy();
+                overlayCaca = null;
+            }
+
+            overlayCaca = this.add.image(0, 0, "merde").setOrigin(0, 0);
+            overlayCaca.setScrollFactor(0);
+            overlayCaca.setDepth(2000);
+            overlayCaca.setAlpha(0.95);
+
+            overlayStack.push(overlayCaca);
+        });
     
         this.cone = this.physics.add.staticImage(30, 692, 'cone');
 
@@ -588,7 +628,16 @@ class MainWorld extends Phaser.Scene {
             }
         }
         });
+        
+        this.physics.add.overlap(player, this.poops, (_player, poop) => {
+            poop.destroy();
+            const splash = this.add.image(0, 0, "merde").setOrigin(0, 0);
+            splash.setScrollFactor(0);
+            splash.setDepth(2000);
+            splash.setAlpha(0.95);
+        });
 
+        //effacer overlays avec E
         keyObjectE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.E);
 
         this.input.keyboard.on("keydown-E", () => {
@@ -601,12 +650,14 @@ class MainWorld extends Phaser.Scene {
             lastOverlay.destroy();
             if (lastOverlay === overlayEau) overlayEau = null;
             if (lastOverlay === overlayBoue) overlayBoue = null;
+            if (lastOverlay === overlayCaca) overlayCaca = null;
         }
 
         mouchoirs -= 1;
         this.mouchoirText.setText("Mouchoirs : " + mouchoirs);
         });
         // this.physics.world.createDebugGraphic();
+
     }
     
     update() {
