@@ -46,6 +46,7 @@ class LoadingScene extends Phaser.Scene {
         this.load.image("bigPlat", "assets/objects/platformBig.png"); //platformBig
         this.load.image("groundParc", "assets/bg/sol_parc.png");
         this.load.image("flaqueEau", "assets/obstacles/eau_flaque.png");
+        this.load.image("boueLong", "assets/obstacles/boueLong.png");
         this.load.image("parc_se", "assets/bg/parc_se.png");
         this.load.image("bakery", "assets/bg/bakery.png");
         this.load.image("cielVille", "assets/bg/cielle_ville.png");
@@ -194,14 +195,14 @@ class MainWorld extends Phaser.Scene {
 
         // Small Platform
         smallPlat = this.physics.add.image(8832, 445, 'smallPlat');
-        smallPlat.setSize(100, 28);
-        smallPlat.setOffset(-2, 262)
+        smallPlat.setSize(100, 26);
+        smallPlat.setOffset(-2, 263)
         smallPlat.body.setImmovable(true);
         smallPlat.body.allowGravity = false;
 
         // Big Platform
         bigPlat = this.physics.add.image(8392, 365, 'bigPlat');
-        bigPlat.setSize(100, 28);
+        bigPlat.setSize(100, 26);
         bigPlat.setOffset(-2, 470)
         bigPlat.body.setImmovable(true);
         bigPlat.body.allowGravity = false;
@@ -224,6 +225,7 @@ class MainWorld extends Phaser.Scene {
         this.ground2 = this.add.tileSprite(6104, 738, 8192, 100, 'ground').setOrigin(0, 0);
         this.parcGround = this.add.tileSprite(4056, 738, 2048, 100, 'groundParc').setOrigin(0, 0);
         this.flaqueEau = this.add.tileSprite(1000, 736, 92, 48, 'flaqueEau').setOrigin(0, 0);
+        this.boueLong = this.add.tileSprite(8346, 738, 718, 44, 'boueLong').setOrigin(0, 0);
         
         // colliders invisibles
         let groundCollider = this.physics.add.staticImage(600, 788, null).setSize(7422, 100).setVisible(false);
@@ -244,7 +246,7 @@ class MainWorld extends Phaser.Scene {
         // colliders
         this.physics.add.collider(player, groundCollider);
         this.physics.add.collider(player, this.cone);
-        this.physics.add.collider(player, waterGroundCollider);
+        this.physics.add.collider(player, waterGroundCollider);//sol riviere
         this.physics.add.collider(player, groundCollider2);
         this.physics.add.collider(player, groundColliderExtra1);
         this.physics.add.collider(player, groundColliderExtra2);
@@ -256,8 +258,8 @@ class MainWorld extends Phaser.Scene {
         this.physics.add.collider(player, cabg); //chantier - camion cabine gauche
         this.physics.add.collider(player, camiona); //chantier - camion avant
         this.physics.add.collider(player, bateau);
-        this.physics.add.collider(player, smallPlat);
-        this.physics.add.collider(player, bigPlat);
+        this.physics.add.collider(player, smallPlat); //Chantier plat petite grue
+        this.physics.add.collider(player, bigPlat); //Chantier plat grande grue
         
         // entrer dans la boulangerie (message)
         this.physics.add.overlap(player, enterBakery, () => {
@@ -453,6 +455,7 @@ class MainWorld extends Phaser.Scene {
             this.scoreText.setText('Argent : ' + money + '$');
         }
 
+        // Collider flaque eau
         let eau = this.physics.add.staticImage(1046, 758, null)
             .setSize(90, 48)
             .setVisible(false);
@@ -463,6 +466,21 @@ class MainWorld extends Phaser.Scene {
                 overlay.displayWidth = this.sys.game.config.width;
                 overlay.displayHeight = this.sys.game.config.height;
                 overlay.setAlpha(0.9); // transparence
+                overlay.setScrollFactor(0);
+            }
+        }, null, this);
+
+        // Collider flaque boue
+        let boue = this.physics.add.staticImage(8705, 758, null)
+            .setSize(718, 48)
+            .setVisible(false);
+
+        this.physics.add.overlap(player, boue, () => {
+            if (!overlay) {
+                overlay = this.add.image(0, 0, "eau_vue").setOrigin(0, 0);
+                overlay.displayWidth = this.sys.game.config.width;
+                overlay.displayHeight = this.sys.game.config.height;
+                overlay.setAlpha(0.9);
                 overlay.setScrollFactor(0);
             }
         }, null, this);
