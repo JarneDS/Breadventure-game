@@ -276,6 +276,7 @@ class MainWorld extends Phaser.Scene {
         player.body.gravity.y = 400;
         player.money = money;
 
+        //Overlay caca
         this.physics.add.overlap(player, this.poops, (_player, poop) => {
             poop.destroy();
 
