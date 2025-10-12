@@ -316,6 +316,10 @@ class MainWorld extends Phaser.Scene {
         let cabh = this.physics.add.staticImage(8262, 628, null).setSize(54, 18).setVisible(false); //chantier - camion cabine haut
         let cabg = this.physics.add.staticImage(8222, 670, null).setSize(20, 40).setVisible(false); //chantier - camion cabine gauche
         let camiona = this.physics.add.staticImage(8298, 694, null).setSize(20, 60).setVisible(false); //chantier - camion avant
+        let plot1 = this.physics.add.staticImage(8331, 704, null).setSize(28, 45).setVisible(false); //chantier - plot devant camion
+        let plot2 = this.physics.add.staticImage(9087, 704, null).setSize(28, 45).setVisible(false); //chantier - plot gauche container
+        let plot3 = this.physics.add.staticImage(9223, 704, null).setSize(28, 45).setVisible(false); //chantier - plot droite container
+        let container = this.physics.add.staticImage(9156, 672, null).setSize(106, 100).setVisible(false); //chantier - container
     
         // colliders
         this.physics.add.collider(player, groundCollider);
@@ -331,6 +335,10 @@ class MainWorld extends Phaser.Scene {
         this.physics.add.collider(player, cabh); //chantier - camion cabine haut
         this.physics.add.collider(player, cabg); //chantier - camion cabine gauche
         this.physics.add.collider(player, camiona); //chantier - camion avant
+        this.physics.add.collider(player, plot1); //chantier - plot camion
+        this.physics.add.collider(player, plot2); //chantier - plot gauche container
+        this.physics.add.collider(player, plot3); //chantier - plot droite container
+        this.physics.add.collider(player, container); //chantier - container
         this.physics.add.collider(player, bateau);
         this.physics.add.collider(player, smallPlat); //Chantier plat petite grue
         this.physics.add.collider(player, bigPlat); //Chantier plat grande grue
