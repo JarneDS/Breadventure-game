@@ -308,8 +308,8 @@ class MainWorld extends Phaser.Scene {
         let groundCollider2 = this.physics.add.staticImage(9701, 788, null).setSize(9000, 100).setVisible(false);
         let groundColliderExtra1 = this.physics.add.staticImage(4327, 786, null).setSize(34, 30).setVisible(false);
         let groundColliderExtra2 = this.physics.add.staticImage(5185, 786, null).setSize(32, 30).setVisible(false);
-        let enterBakery = this.physics.add.staticImage(13564, 699, null).setSize(52, 79).setVisible(false);
-        let enterShop = this.physics.add.staticImage(7036, 699, null).setSize(51, 79).setVisible(false);
+        let enterBakery = this.physics.add.staticImage(13564, 699, null).setSize(52, 79).setVisible(false); //entrée boulangerie
+        let enterShop = this.physics.add.staticImage(7036, 699, null).setSize(51, 79).setVisible(false); //entrée shop
         let bac = this.physics.add.staticImage(7955, 716, null).setSize(150, 50).setVisible(false); //chantier - bac camion
         let truck = this.physics.add.staticImage(8155, 718, null).setSize(148, 48).setVisible(false); //chantier - camion 
         let bar1 = this.physics.add.staticImage(7868, 718, null).setSize(20, 20).setVisible(false); //chantier - bar gauche 
