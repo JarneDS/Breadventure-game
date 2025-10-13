@@ -301,6 +301,7 @@ class MainWorld extends Phaser.Scene {
         this.parcGround = this.add.tileSprite(4056, 738, 2048, 100, 'groundParc').setOrigin(0, 0);
         // this.flaqueEau = this.add.tileSprite(1000, 736, 92, 48, 'flaqueEau').setOrigin(0, 0);
 
+        //flaques d'eau à différentes positions x
         const positionsFlaques = [ 
             { x: 1000, y: 736 },
             { x: 2500, y: 736 },
