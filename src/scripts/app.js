@@ -52,6 +52,7 @@ class LoadingScene extends Phaser.Scene {
         this.load.image("bigPlat", "assets/objects/platformBig.png"); //platformBig
         this.load.image("groundParc", "assets/bg/sol_parc.png");
         this.load.image("flaqueEau", "assets/obstacles/eau_flaque.png");
+        this.load.image("flaqueBoue", "assets/obstacles/boue_flaque.png");
         this.load.image("boueLong", "assets/obstacles/boueLong.png");
         this.load.image("parc_se", "assets/bg/parc_se.png");
         this.load.image("bakery", "assets/bg/bakery.png");
@@ -329,6 +330,38 @@ class MainWorld extends Phaser.Scene {
                     overlayEau.setScrollFactor(0);
                     overlayEau.setDepth(999);
                     overlayStack.push(overlayEau);
+                }
+            }, null, this);
+        });
+
+        //flaques de boue à différentes positions x
+        const positionsFlaques2 = [ 
+            { x: 1500, y: 736 },
+            { x: 3000, y: 736 },
+            { x: 3500, y: 736 },
+            { x: 6550, y: 736 },
+            { x: 10680, y: 736 },
+            { x: 12600, y: 736 },
+        ];
+        this.flaquesBoue = [];
+
+        positionsFlaques2.forEach(pos => {
+            const flaque = this.add.image(pos.x, pos.y, 'flaqueBoue').setOrigin(0, 0);
+            this.flaquesBoue.push(flaque);
+
+            const zoneBoue = this.physics.add.staticImage(pos.x + 46, pos.y + 22, null)
+                .setSize(92, 48)
+                .setVisible(false);
+
+            this.physics.add.overlap(player, zoneBoue, () => {
+                if (!overlayBoue) {
+                    overlayBoue = this.add.image(0, 0, "boue_vue").setOrigin(0, 0);
+                    overlayBoue.displayWidth  = this.sys.game.config.width;
+                    overlayBoue.displayHeight = this.sys.game.config.height;
+                    overlayBoue.setAlpha(0.6);
+                    overlayBoue.setScrollFactor(0);
+                    overlayBoue.setDepth(999);
+                    overlayStack.push(overlayBoue);
                 }
             }, null, this);
         });
