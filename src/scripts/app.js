@@ -299,7 +299,39 @@ class MainWorld extends Phaser.Scene {
         this.ground = this.add.tileSprite(-40, 738, 4096, 100, 'ground').setOrigin(0, 0);
         this.ground2 = this.add.tileSprite(6104, 738, 8192, 100, 'ground').setOrigin(0, 0);
         this.parcGround = this.add.tileSprite(4056, 738, 2048, 100, 'groundParc').setOrigin(0, 0);
-        this.flaqueEau = this.add.tileSprite(1000, 736, 92, 48, 'flaqueEau').setOrigin(0, 0);
+        // this.flaqueEau = this.add.tileSprite(1000, 736, 92, 48, 'flaqueEau').setOrigin(0, 0);
+
+        const positionsFlaques = [ 
+            { x: 1000, y: 736 },
+            { x: 2500, y: 736 },
+            { x: 3900, y: 736 },
+            { x: 6200, y: 736 },
+            { x: 11200, y: 736 },
+            { x: 13000, y: 736 },
+        ];
+        this.flaquesEau = [];
+
+        positionsFlaques.forEach(pos => {
+            const flaque = this.add.image(pos.x, pos.y, 'flaqueEau').setOrigin(0, 0);
+            this.flaquesEau.push(flaque);
+
+            const zoneEau = this.physics.add.staticImage(pos.x + 46, pos.y + 22, null)
+                .setSize(92, 48)
+                .setVisible(false);
+
+            this.physics.add.overlap(player, zoneEau, () => {
+                if (!overlayEau) {
+                    overlayEau = this.add.image(0, 0, "eau_vue").setOrigin(0, 0);
+                    overlayEau.displayWidth  = this.sys.game.config.width;
+                    overlayEau.displayHeight = this.sys.game.config.height;
+                    overlayEau.setAlpha(0.6);
+                    overlayEau.setScrollFactor(0);
+                    overlayEau.setDepth(999);
+                    overlayStack.push(overlayEau);
+                }
+            }, null, this);
+        });
+
         this.boueLong = this.add.tileSprite(8346, 738, 718, 44, 'boueLong').setOrigin(0, 0);
         
         // colliders invisibles
