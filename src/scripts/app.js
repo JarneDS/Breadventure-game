@@ -366,6 +366,7 @@ class MainWorld extends Phaser.Scene {
             }, null, this);
         });
 
+        // Boue chantier
         this.boueLong = this.add.tileSprite(8346, 738, 718, 44, 'boueLong').setOrigin(0, 0);
         
         // colliders invisibles
