@@ -169,7 +169,8 @@ class MainWorld extends Phaser.Scene {
     constructor() {
         super('MainWorld');
     }
-    preload(){
+
+    preload(){ // permet de ne pas recharger images
         
     }
     
