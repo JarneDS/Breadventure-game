@@ -177,6 +177,12 @@ class MainWorld extends Phaser.Scene {
         keyObject = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
         Phaser.Input.Keyboard.JustDown(keyObject);
 
+        // permet fonctionnement des flaques après sortie bakery
+        overlayEau = null;
+        overlayBoue = null;
+        overlayCaca = null;
+        overlayStack = [];
+
         // ciel + décors
         this.cielle1 = this.add.tileSprite(-140, -286, 4396, 1940, 'cielVille').setOrigin(0, 0);
         this.cielle2 = this.add.tileSprite(4056, -200, 2048, 924, 'cielleParc').setOrigin(0, 0);
