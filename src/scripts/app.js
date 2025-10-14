@@ -934,12 +934,30 @@ class BakeryScene extends Phaser.Scene {
 
         this.pain = this.physics.add.image(945, 648, 'pain');
 
+        this.anims.create({
+            key:'receive_bread',
+            frames: this.anims.generateFrameNumbers('player_receive', { start: 0, end: 3 }),
+            frameRate: 6,
+            repeat: 0
+        })
+
         // Achat du pain: -5 pièces si possible, MAJ HUD
         this.physics.add.overlap(player, this.pain, () => {
             if (!playerHasBread && money >= 5) {
                 playerHasBread = true;
                 this.pain.disableBody(true, true);
                 money -= 5;
+
+                if (playerHasBread) {
+                    player.anims.play('receive_bread'); // joue l’animation
+                    player.setVelocity(0, 0);
+                    player.body.moves = false;
+                    this.time.delayedCall(2000, () => player.body.moves = true);
+                    this.time.delayedCall(2000, () => {
+                        // Après 1 seconde, revenir à une animation normale
+                        player.anims.play('static_pain');
+                    });
+                }
 
                 // MAJ texte argent
                 if (this.moneyText) this.moneyText.setText('Argent : ' + money + '$');
@@ -954,17 +972,14 @@ class BakeryScene extends Phaser.Scene {
                 this.time.delayedCall(1500, () => warn.destroy());
             }
         });
-
-        this.anims.create({
-            key:'receive_bread',
-            frames: this.anims.generateFrameNumbers('player_receive', { start: 0, end: 3 }),
-            frameRate: 6,
-            repeat: 0
-        })
-
     }
 
     update() {
+
+        if (player.anims.currentAnim && player.anims.currentAnim.key === 'receive_bread') {
+            return; // Empêche update d'écraser l'animation pendant qu'elle joue
+        }
+
         // sortir de la boulangerie
         if (Phaser.Input.Keyboard.JustDown(this.keyA) && bakeryTextShown2) {
             this.scene.start('MainWorld', {
@@ -1010,10 +1025,6 @@ class BakeryScene extends Phaser.Scene {
             player.anims.play('walking' + prefix, true);
         } else {
             player.anims.play('static' + prefix, true);
-        }
-
-        if (playerHasBread) {
-            player.anims.play('receive_bread', true);
         }
 
         // Murs gauche et droite
