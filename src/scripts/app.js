@@ -143,6 +143,109 @@ class LoadingScene extends Phaser.Scene {
     }
 
     create() {
+        // animations
+        // base
+        this.anims.create({
+            key:'walking',
+            frames: this.anims.generateFrameNumbers('player_walking', { start: 0, end: 5 }),
+            frameRate: 24,
+            repeat: -1
+        })
+        this.anims.create({
+            key:'static',
+            frames: this.anims.generateFrameNumbers('player_static', { start: 0, end: 1 }),
+            frameRate: 3,
+            repeat: -1
+        })
+        this.anims.create({
+            key:'jumping',
+            frames: this.anims.generateFrameNumbers('player_jumping', { start: 0, end: 2 }),
+            frameRate: 6,
+            repeat: 0
+        })
+
+        // pain
+        this.anims.create({
+            key:'walking_pain',
+            frames: this.anims.generateFrameNumbers('player_bread_walking', { start: 0, end: 5 }),
+            frameRate: 24,
+            repeat: -1
+        })
+        this.anims.create({
+            key:'static_pain',
+            frames: this.anims.generateFrameNumbers('player_bread_static', { start: 0, end: 1 }),
+            frameRate: 3,
+            repeat: -1
+        })
+        this.anims.create({
+            key:'jumping_pain',
+            frames: this.anims.generateFrameNumbers('player_bread_jumping', { start: 0, end: 2 }),
+            frameRate: 6,
+            repeat: 0
+        })
+
+        // umbrella
+        this.anims.create({
+            key:'walking_umbrella',
+            frames: this.anims.generateFrameNumbers('player_umbrella_walking', { start: 0, end: 5 }),
+            frameRate: 24,
+            repeat: -1
+        })
+        this.anims.create({
+            key:'static_umbrella',
+            frames: this.anims.generateFrameNumbers('player_umbrella_static', { start: 0, end: 1 }),
+            frameRate: 3,
+            repeat: -1
+        })
+        this.anims.create({
+            key:'jumping_umbrella',
+            frames: this.anims.generateFrameNumbers('player_umbrella_jumping', { start: 0, end: 2 }),
+            frameRate: 6,
+            repeat: 0
+        })
+
+        // brum
+        this.anims.create({
+            key:'walking_brum',
+            frames: this.anims.generateFrameNumbers('player_brum_walking', { start: 0, end: 5 }),
+            frameRate: 24,
+            repeat: -1
+        })
+        this.anims.create({
+            key:'static_brum',
+            frames: this.anims.generateFrameNumbers('player_brum_static', { start: 0, end: 1 }),
+            frameRate: 3,
+            repeat: -1
+        })
+        this.anims.create({
+            key:'jumping_brum',
+            frames: this.anims.generateFrameNumbers('player_brum_jumping', { start: 0, end: 2 }),
+            frameRate: 6,
+            repeat: 0
+        })
+    /*
+        // insecte
+        this.anims.create({
+            key:'fly',
+            frames: this.anims.generateFrameNumbers('insects', { start: 0, end: 1 }),
+            frameRate: 6,
+            repeat: -1
+        })
+    */
+        this.anims.create({
+            key: 'rain_loop',
+            frames: this.anims.generateFrameNumbers('rain', { start: 0, end: 4 }),
+            frameRate: 24,
+            repeat: -1
+        });
+        
+        this.anims.create({
+            key:'receive_bread',
+            frames: this.anims.generateFrameNumbers('player_receive', { start: 0, end: 3 }),
+            frameRate: 6,
+            repeat: 0
+        })
+
         this.bg = this.add.tileSprite(0, 0, 1194, 834, 'intro').setOrigin(0, 0);
         this.logo = this.add.tileSprite(597, 150, 875, 113, 'logo').setOrigin(0.5, 0.5);
         this.perso = this.add.sprite(100, 712, 'player_bread_static');
@@ -156,13 +259,6 @@ class LoadingScene extends Phaser.Scene {
         });
 
         appuyA.setOrigin(0.5, 0.5);
-
-        this.anims.create({
-            key:'static_pain',
-            frames: this.anims.generateFrameNumbers('player_bread_static', { start: 0, end: 1 }),
-            frameRate: 3,
-            repeat: -1
-        })
 
         this.perso.play('static_pain');
 
@@ -450,95 +546,7 @@ class MainWorld extends Phaser.Scene {
             }
         }, null, this);
     
-        // animations
-        // base
-        this.anims.create({
-            key:'walking',
-            frames: this.anims.generateFrameNumbers('player_walking', { start: 0, end: 5 }),
-            frameRate: 24,
-            repeat: -1
-        })
-        this.anims.create({
-            key:'static',
-            frames: this.anims.generateFrameNumbers('player_static', { start: 0, end: 1 }),
-            frameRate: 3,
-            repeat: -1
-        })
-        this.anims.create({
-            key:'jumping',
-            frames: this.anims.generateFrameNumbers('player_jumping', { start: 0, end: 2 }),
-            frameRate: 6,
-            repeat: 0
-        })
-
-        // pain
-        this.anims.create({
-            key:'walking_pain',
-            frames: this.anims.generateFrameNumbers('player_bread_walking', { start: 0, end: 5 }),
-            frameRate: 24,
-            repeat: -1
-        })
-        this.anims.create({
-            key:'static_pain',
-            frames: this.anims.generateFrameNumbers('player_bread_static', { start: 0, end: 1 }),
-            frameRate: 3,
-            repeat: -1
-        })
-        this.anims.create({
-            key:'jumping_pain',
-            frames: this.anims.generateFrameNumbers('player_bread_jumping', { start: 0, end: 2 }),
-            frameRate: 6,
-            repeat: 0
-        })
-
-        // umbrella
-        this.anims.create({
-            key:'walking_umbrella',
-            frames: this.anims.generateFrameNumbers('player_umbrella_walking', { start: 0, end: 5 }),
-            frameRate: 24,
-            repeat: -1
-        })
-        this.anims.create({
-            key:'static_umbrella',
-            frames: this.anims.generateFrameNumbers('player_umbrella_static', { start: 0, end: 1 }),
-            frameRate: 3,
-            repeat: -1
-        })
-        this.anims.create({
-            key:'jumping_umbrella',
-            frames: this.anims.generateFrameNumbers('player_umbrella_jumping', { start: 0, end: 2 }),
-            frameRate: 6,
-            repeat: 0
-        })
-
-        // brum
-        this.anims.create({
-            key:'walking_brum',
-            frames: this.anims.generateFrameNumbers('player_brum_walking', { start: 0, end: 5 }),
-            frameRate: 24,
-            repeat: -1
-        })
-        this.anims.create({
-            key:'static_brum',
-            frames: this.anims.generateFrameNumbers('player_brum_static', { start: 0, end: 1 }),
-            frameRate: 3,
-            repeat: -1
-        })
-        this.anims.create({
-            key:'jumping_brum',
-            frames: this.anims.generateFrameNumbers('player_brum_jumping', { start: 0, end: 2 }),
-            frameRate: 6,
-            repeat: 0
-        })
-    /*
-        // insecte
-        this.anims.create({
-            key:'fly',
-            frames: this.anims.generateFrameNumbers('insects', { start: 0, end: 1 }),
-            frameRate: 6,
-            repeat: -1
-        })
-    */
+        
         // caméra
         this.cameras.main.setBounds(0, 0, 14050, 0);
         this.cameras.main.startFollow(player, true, 0.1, 0.1, 0, 245);
@@ -576,12 +584,7 @@ class MainWorld extends Phaser.Scene {
         this.rain.setVisible(false);
         this.rain.displayWidth = this.sys.game.config.width;
         this.rain.displayHeight = this.sys.game.config.height;
-        this.anims.create({
-            key: 'rain_loop',
-            frames: this.anims.generateFrameNumbers('rain', { start: 0, end: 4 }),
-            frameRate: 24,
-            repeat: -1
-        });
+
         const startRainFor = (ms) => {
             this.rain.setVisible(true);
             this.rain.play('rain_loop', true);
@@ -969,13 +972,6 @@ class BakeryScene extends Phaser.Scene {
         this.keyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
 
         this.pain = this.physics.add.image(945, 648, 'pain');
-
-        this.anims.create({
-            key:'receive_bread',
-            frames: this.anims.generateFrameNumbers('player_receive', { start: 0, end: 3 }),
-            frameRate: 6,
-            repeat: 0
-        })
 
         // Achat du pain: -5 pièces si possible, MAJ HUD
         this.physics.add.overlap(player, this.pain, () => {
