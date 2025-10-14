@@ -122,6 +122,14 @@ class LoadingScene extends Phaser.Scene {
             frameWidth: 144,
             frameHeight: 144,
         })
+        this.load.spritesheet("player_receive", "assets/player/obtentionPain.png", {
+            frameWidth: 144,
+            frameHeight: 144,
+        })
+        this.load.spritesheet("rain", "assets/objects/pluie.png", {
+            frameWidth: 2048,
+            frameHeight: 1024,
+        })
     /*
         //insectes
         this.load.spritesheet("insects", "assets/obstacles/insectes.png", {
@@ -885,7 +893,7 @@ class BakeryScene extends Phaser.Scene {
 
     preload() {
         this.load.image("interieur_bakery", "assets/bg/interieur_bakery.png");
-        this.load.image("pain", "assets/objects/pain.png")
+        this.load.image("pain", "assets/objects/pain.png");
     }
 
     create(data) {
@@ -949,6 +957,13 @@ class BakeryScene extends Phaser.Scene {
             }
         });
 
+        this.anims.create({
+            key:'receive_bread',
+            frames: this.anims.generateFrameNumbers('player_receive', { start: 0, end: 3 }),
+            frameRate: 6,
+            repeat: 0
+        })
+
     }
 
     update() {
@@ -997,6 +1012,10 @@ class BakeryScene extends Phaser.Scene {
             player.anims.play('walking' + prefix, true);
         } else {
             player.anims.play('static' + prefix, true);
+        }
+
+        if (playerHasBread) {
+            player.anims.play('receive_bread', true);
         }
 
         // Murs gauche et droite
