@@ -337,7 +337,7 @@ class MainWorld extends Phaser.Scene {
                 .setSize(92, 48)
                 .setVisible(false);
 
-            this.physics.add.overlap(player, zoneEau, () => {
+            this.physics.add.overlap(player, zoneEau, () => { // gère la zone d'eau rivière avec bateau
                 if (!overlayEau) {
                     overlayEau = this.add.image(0, 0, "eau_vue").setOrigin(0, 0);
                     overlayEau.displayWidth  = this.sys.game.config.width;
@@ -369,7 +369,7 @@ class MainWorld extends Phaser.Scene {
                 .setSize(92, 48)
                 .setVisible(false);
 
-            this.physics.add.overlap(player, zoneBoue, () => {
+            this.physics.add.overlap(player, zoneBoue, () => { // gère la zone de boue
                 if (!overlayBoue) {
                     overlayBoue = this.add.image(0, 0, "boue_vue").setOrigin(0, 0);
                     overlayBoue.displayWidth  = this.sys.game.config.width;
@@ -628,7 +628,7 @@ class MainWorld extends Phaser.Scene {
             .setSize(90, 48)
             .setVisible(false);
 
-        this.physics.add.overlap(player, eau, () => {
+        this.physics.add.overlap(player, eau, () => { // gère la flaque d'eau
             if (!overlayEau) {
                 overlayEau = this.add.image(0, 0, "eau_vue").setOrigin(0, 0);
                 overlayEau.displayWidth  = this.sys.game.config.width;
@@ -646,7 +646,7 @@ class MainWorld extends Phaser.Scene {
             .setSize(718, 48)
             .setVisible(false);
 
-        this.physics.add.overlap(player, boue, () => {
+        this.physics.add.overlap(player, boue, () => { // gère la flaque de boue
             if (!overlayBoue) {
                 overlayBoue = this.add.image(0, 0, "boue_vue").setOrigin(0, 0);
                 overlayBoue.displayWidth  = this.sys.game.config.width;
