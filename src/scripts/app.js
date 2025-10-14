@@ -62,12 +62,15 @@ class LoadingScene extends Phaser.Scene {
         this.load.image("mouchoirs", "assets/objects/bac_mouchoir.png");
         this.load.image("shop", "assets/bg/shop.png");
         this.load.image("merde", "assets/objects/merde_ecran.png");
-        this.load.image("bird", "assets/obstacles/bird.png");
         this.load.image("caca", "assets/obstacles/caca.png");
 
         //effects
         this.load.image("eau_vue", "assets/objects/vue_eau.png");
         this.load.image("boue_vue", "assets/objects/boue_vue.png");
+
+        // bakery
+        this.load.image("interieur_bakery", "assets/bg/interieur_bakery.png");
+        this.load.image("pain", "assets/objects/pain.png");
         
         // walking
         this.load.spritesheet("player_walking", "assets/player/henriwalking.png",{
@@ -132,6 +135,12 @@ class LoadingScene extends Phaser.Scene {
             frameWidth: 2048,
             frameHeight: 1024,
         })
+
+        //bird
+        this.load.spritesheet("bird", "assets/obstacles/bird.png", {
+            frameWidth: 64,
+            frameHeight: 64,
+        });
         
     /*
         //insectes
@@ -237,13 +246,20 @@ class LoadingScene extends Phaser.Scene {
             frames: this.anims.generateFrameNumbers('rain', { start: 0, end: 4 }),
             frameRate: 24,
             repeat: -1
-        });
+        })
         
         this.anims.create({
             key:'receive_bread',
             frames: this.anims.generateFrameNumbers('player_receive', { start: 0, end: 3 }),
             frameRate: 6,
             repeat: 0
+        })
+
+        this.anims.create({
+            key:'bird_fly',
+            frames: this.anims.generateFrameNumbers('bird', { start: 0, end: 5 }),
+            frameRate: 10,
+            repeat: -1
         })
 
         this.bg = this.add.tileSprite(0, 0, 1194, 834, 'intro').setOrigin(0, 0);
@@ -335,9 +351,10 @@ class MainWorld extends Phaser.Scene {
         const rightEdge = 14050 + 300; //largeur map (plus large pour masquer demitour)
         const baseMs    = 30000; //durée base
 
-        const bird = this.add.image(leftEdge, 210, 'bird');
+        const bird = this.add.sprite(leftEdge, 210, 'bird');
         bird.setDepth(940);
         bird.setFlipX(true);
+        bird.anims.play('bird_fly', true);
 
         this.tweens.add({
         targets: bird,
@@ -929,8 +946,6 @@ class BakeryScene extends Phaser.Scene {
     }
 
     preload() {
-        this.load.image("interieur_bakery", "assets/bg/interieur_bakery.png");
-        this.load.image("pain", "assets/objects/pain.png");
     }
 
     create(data) {
@@ -1070,7 +1085,6 @@ class ShopScene extends Phaser.Scene {
     }
 
     preload() {
-
     }
 
     create(data) {
