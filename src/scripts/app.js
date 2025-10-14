@@ -303,7 +303,6 @@ class MainWorld extends Phaser.Scene {
             overlayCaca = this.add.image(0, 0, "merde").setOrigin(0, 0);
             overlayCaca.setScrollFactor(0);
             overlayCaca.setDepth(2000);
-            overlayCaca.setAlpha(0.99);
 
             overlayStack.push(overlayCaca);
         });
@@ -372,7 +371,6 @@ class MainWorld extends Phaser.Scene {
                     overlayBoue = this.add.image(0, 0, "boue_vue").setOrigin(0, 0);
                     overlayBoue.displayWidth  = this.sys.game.config.width;
                     overlayBoue.displayHeight = this.sys.game.config.height;
-                    overlayBoue.setAlpha(0.9);
                     overlayBoue.setScrollFactor(0);
                     overlayBoue.setDepth(999);
                     overlayStack.push(overlayBoue);
