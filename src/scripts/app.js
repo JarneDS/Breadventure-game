@@ -27,7 +27,7 @@ let shopTextShown = false;
 let shopText = null;
 //let insects;
 let playerOnBoat;
-let playerOnPlat
+let playerOnPlat;
 let playerHasBread = false;
 
 class LoadingScene extends Phaser.Scene {
@@ -171,7 +171,6 @@ class MainWorld extends Phaser.Scene {
     }
 
     preload(){ // permet de ne pas recharger images
-        
     }
     
     create(data){
