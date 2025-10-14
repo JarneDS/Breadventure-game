@@ -568,6 +568,32 @@ class MainWorld extends Phaser.Scene {
 
         this.mouchoirText = this.add.text(400, 10, 'Mouchoirs : ' + mouchoirs, { fontSize: '28px' });
         this.mouchoirText.setScrollFactor(0);
+
+        // pluie
+        this.rain = this.add.sprite(0, 0, 'rain', 0).setOrigin(0, 0);
+        this.rain.setScrollFactor(0);
+        this.rain.setDepth(940);
+        this.rain.setVisible(false);
+        this.rain.displayWidth = this.sys.game.config.width;
+        this.rain.displayHeight = this.sys.game.config.height;
+
+        const startRainFor = (ms) => {
+        this.rain.setVisible(true);
+        this.rain.play('rain_loop', true);
+        this.time.delayedCall(ms, () => {
+        this.rain.stop();
+        this.rain.setVisible(false);
+        scheduleNextRain();
+        });
+        };
+
+        const scheduleNextRain = () => {
+        const waitMs = Phaser.Math.Between(5000, 20000);
+        this.time.delayedCall(waitMs, () => {
+            const rainMs = Phaser.Math.Between(6000, 15000);
+            startRainFor(rainMs);
+        });
+        };
     
         // animation bateau
         this.tweens.add({
