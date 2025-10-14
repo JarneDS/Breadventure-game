@@ -576,24 +576,31 @@ class MainWorld extends Phaser.Scene {
         this.rain.setVisible(false);
         this.rain.displayWidth = this.sys.game.config.width;
         this.rain.displayHeight = this.sys.game.config.height;
-
-        const startRainFor = (ms) => {
-        this.rain.setVisible(true);
-        this.rain.play('rain_loop', true);
-        this.time.delayedCall(ms, () => {
-        this.rain.stop();
-        this.rain.setVisible(false);
-        scheduleNextRain();
+        this.anims.create({
+            key: 'rain_loop',
+            frames: this.anims.generateFrameNumbers('rain', { start: 0, end: 4 }),
+            frameRate: 24,
+            repeat: -1
         });
+        const startRainFor = (ms) => {
+            this.rain.setVisible(true);
+            this.rain.play('rain_loop', true);
+            this.time.delayedCall(ms, () => {
+                this.rain.stop();
+                this.rain.setVisible(false);
+                scheduleNextRain();
+            });
         };
 
         const scheduleNextRain = () => {
-        const waitMs = Phaser.Math.Between(5000, 20000);
-        this.time.delayedCall(waitMs, () => {
-            const rainMs = Phaser.Math.Between(6000, 15000);
-            startRainFor(rainMs);
-        });
+            const waitMs = Phaser.Math.Between(5000, 20000);
+            this.time.delayedCall(waitMs, () => {
+                const rainMs = Phaser.Math.Between(6000, 15000);
+                startRainFor(rainMs);
+            });
         };
+
+        scheduleNextRain();
     
         // animation bateau
         this.tweens.add({
