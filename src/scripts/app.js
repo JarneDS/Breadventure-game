@@ -126,10 +126,13 @@ class LoadingScene extends Phaser.Scene {
             frameWidth: 144,
             frameHeight: 144,
         })
+
+        // pluie
         this.load.spritesheet("rain", "assets/objects/pluie.png", {
             frameWidth: 2048,
             frameHeight: 1024,
         })
+        
     /*
         //insectes
         this.load.spritesheet("insects", "assets/obstacles/insectes.png", {
