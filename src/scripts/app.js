@@ -358,7 +358,7 @@ class MainWorld extends Phaser.Scene {
                     overlayBoue = this.add.image(0, 0, "boue_vue").setOrigin(0, 0);
                     overlayBoue.displayWidth  = this.sys.game.config.width;
                     overlayBoue.displayHeight = this.sys.game.config.height;
-                    overlayBoue.setAlpha(0.6);
+                    overlayBoue.setAlpha(0.9);
                     overlayBoue.setScrollFactor(0);
                     overlayBoue.setDepth(999);
                     overlayStack.push(overlayBoue);
