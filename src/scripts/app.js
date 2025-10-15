@@ -120,6 +120,7 @@ class LoadingScene extends Phaser.Scene {
         this.load.image("parc_se", "assets/bg/parc_se.png");
         this.load.image("bakery", "assets/bg/bakery.png");
         this.load.image("cielVille", "assets/bg/cielle_ville.png");
+        this.load.image("cielVille2", "assets/bg/cielle_ville2.png");
         this.load.image("cielleParc", "assets/bg/cielle_parc.png");
         this.load.image("cielleParc_se", "assets/bg/cielle_parc_se.png");
         this.load.image("mouchoirs", "assets/objects/bac_mouchoir.png");
@@ -328,10 +329,9 @@ class MainWorld extends Phaser.Scene {
 
         // ciel + décors
         this.cielle1 = this.add.tileSprite(-140, -286, 4396, 1940, 'cielVille').setOrigin(0, 0);
-        this.cielle2 = this.add.tileSprite(4056, -200, 2048, 924, 'cielleParc').setOrigin(0, 0);
-        this.cielle3 = this.add.tileSprite(6090, -200, 880, 924, 'cielleParc_se').setOrigin(0, 0).setFlipX(1);
         this.cielle2 = this.add.tileSprite(4056, -286, 2048, 1024, 'cielleParc').setOrigin(0, 0);
         this.cielle3 = this.add.tileSprite(6090, -286, 880, 1024, 'cielleParc_se').setOrigin(0, 0).setFlipX(1);
+        this.cielle4 = this.add.tileSprite(6970, -286, 7080, 1024, 'cielVille2').setOrigin(0, 0);
 
         // exec quand le jeu est chargé une premiere fois
         this.house = this.add.tileSprite(-40, 226, 4096, 512, 'background2').setOrigin(0, 0);
