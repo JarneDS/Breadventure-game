@@ -270,6 +270,7 @@ class LoadingScene extends Phaser.Scene {
             fontSize: '28px',
             fill: '#000'
         });
+        
         const appuyA = this.add.text(597, 700, 'Appuyer sur A pour commencer le jeu', {
             fontSize: '36px',
             fill: '#000'
@@ -278,6 +279,12 @@ class LoadingScene extends Phaser.Scene {
         appuyA.setOrigin(0.5, 0.5);
 
         this.perso.play('static_pain');
+
+        const startButton = this.add.text(597, 417, 'START', { fontSize: '36px', fill: '#000'}).setOrigin(0.5, 0.5);
+        startButton.setInteractive();
+
+        const selectPlayer = this.add.text(597, 500, 'Henri', { fontSize: '36px', fill: '#000'}).setOrigin(0.5, 0.5);
+        selectPlayer.setInteractive();
 
         // Ajout d'une touche A
         this.keyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
@@ -434,12 +441,12 @@ class MainWorld extends Phaser.Scene {
 
         //flaques d'eau à différentes positions x
         const positionsFlaques = [ 
-            { x: 1000, y: 736 },
-            { x: 2500, y: 736 },
-            { x: 3900, y: 736 },
-            { x: 6200, y: 736 },
-            { x: 11200, y: 736 },
-            { x: 13000, y: 736 },
+            { x: 1000, y: 735 },
+            { x: 2500, y: 735 },
+            { x: 3900, y: 735 },
+            { x: 6200, y: 735 },
+            { x: 11200, y: 735 },
+            { x: 13000, y: 735 },
         ];
         this.flaquesEau = [];
 
@@ -466,12 +473,12 @@ class MainWorld extends Phaser.Scene {
 
         //flaques de boue à différentes positions x
         const positionsFlaques2 = [ 
-            { x: 1500, y: 736 },
-            { x: 3000, y: 736 },
-            { x: 3500, y: 736 },
-            { x: 6550, y: 736 },
-            { x: 10680, y: 736 },
-            { x: 12600, y: 736 },
+            { x: 1500, y: 735 },
+            { x: 3000, y: 735 },
+            { x: 3500, y: 735 },
+            { x: 6550, y: 735 },
+            { x: 10680, y: 735 },
+            { x: 12600, y: 735 },
         ];
         this.flaquesBoue = [];
 
@@ -705,7 +712,6 @@ class MainWorld extends Phaser.Scene {
                 overlayBoue = this.add.image(0, 0, "boue_vue").setOrigin(0, 0);
                 overlayBoue.displayWidth  = this.sys.game.config.width;
                 overlayBoue.displayHeight = this.sys.game.config.height;
-                overlayBoue.setAlpha(0.8);
                 overlayBoue.setScrollFactor(0);
                 overlayBoue.setDepth(1000);
 
@@ -967,7 +973,7 @@ class BakeryScene extends Phaser.Scene {
         this.moneyText.setScrollFactor(0);
 
         let exitBakery = this.physics.add.staticImage(159, 685, null).setSize(58, 100).setVisible(false);
-        
+
         let rightWall = this.physics.add.staticImage(775, 600, null).setSize(10, 300).setVisible(false);
         this.physics.add.collider(player, rightWall);
 
