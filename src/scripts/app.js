@@ -30,8 +30,60 @@ let playerOnBoat;
 let playerOnPlat;
 let playerHasBread = false;
 
-let selectedCharacter = "juliette";
+let selectedCharacter = 'henri';
 
+function loadCharacterSprites(character) {
+  // crée un préfixe de clé unique
+  const p = character; // 'juliette' ou 'henri'
+
+  // walking
+  this.load.spritesheet(`player_walking_${p}`, `assets/player/${p}walking.png`, {
+    frameWidth: 144, frameHeight: 144
+  });
+  this.load.spritesheet(`player_umbrella_walking_${p}`, `assets/player/${p}umbrellawalking.png`, {
+    frameWidth: 144, frameHeight: 144
+  });
+  this.load.spritesheet(`player_bread_walking_${p}`, `assets/player/${p}breadwalking.png`, {
+    frameWidth: 144, frameHeight: 144
+  });
+  this.load.spritesheet(`player_brum_walking_${p}`, `assets/player/${p}brumwalking.png`, {
+    frameWidth: 144, frameHeight: 144
+  });
+
+  // static
+  this.load.spritesheet(`player_static_${p}`, `assets/player/${p}static.png`, {
+    frameWidth: 144, frameHeight: 144
+  });
+  this.load.spritesheet(`player_umbrella_static_${p}`, `assets/player/${p}umbrella.png`, {
+    frameWidth: 144, frameHeight: 144
+  });
+  this.load.spritesheet(`player_bread_static_${p}`, `assets/player/${p}bread.png`, {
+    frameWidth: 144, frameHeight: 144
+  });
+  this.load.spritesheet(`player_brum_static_${p}`, `assets/player/${p}brum.png`, {
+    frameWidth: 144, frameHeight: 144
+  });
+
+  // jumping
+  this.load.spritesheet(`player_jumping_${p}`, `assets/player/${p}jumping.png`, {
+    frameWidth: 144, frameHeight: 144
+  });
+  this.load.spritesheet(`player_umbrella_jumping_${p}`, `assets/player/${p}umbrellajumping.png`, {
+    frameWidth: 144, frameHeight: 144
+  });
+  this.load.spritesheet(`player_bread_jumping_${p}`, `assets/player/${p}breadjumping.png`, {
+    frameWidth: 144, frameHeight: 144
+  });
+  this.load.spritesheet(`player_brum_jumping_${p}`, `assets/player/${p}brumjumping.png`, {
+    frameWidth: 144, frameHeight: 144
+  });
+
+  // receive
+  this.load.spritesheet(`player_receive_${p}`, `assets/player/${p}obtentionPain.png`, {
+    frameWidth: 144, frameHeight: 144
+  });
+}
+/*
 function loadCharacterSprites(character) {
     // walking
     this.load.spritesheet("player_walking", `assets/player/${character}walking.png`,{
@@ -90,7 +142,7 @@ function loadCharacterSprites(character) {
         frameWidth: 144,
         frameHeight: 144,
     })
-}
+}*/
 
 class LoadingScene extends Phaser.Scene {
     constructor() {
@@ -289,11 +341,49 @@ class LoadingScene extends Phaser.Scene {
 
         this.perso.play('static_pain');
 
-        const selectPlayer = this.add.sprite(517, 450, 'Henri')
-        selectPlayer.setInteractive();
+    
+        // --- Variables accessibles à toute la scène ---
+        this.selectedIndex = 0;
+        this.charactersNames = ['henri', 'juliette'];
 
-        const selectPlayer2 = this.add.sprite(677, 450, 'Juliette')
-        selectPlayer2.setInteractive();
+        // --- Sprites pour chaque personnage ---
+        this.selectPlayer = this.add.sprite(517, 450, 'Henri');
+        this.selectPlayer2 = this.add.sprite(677, 450, 'Juliette');
+
+        this.characters = [this.selectPlayer, this.selectPlayer2];
+
+        // --- Fonction pour mettre à jour la sélection ---
+        const updateSelection = () => {
+            const p = this.charactersNames[this.selectedIndex]; // 'henri' ou 'juliette'
+
+            // si tu utilises un seul sprite et changes l'anim
+            this.selectPlayer.anims.play(`static_${p}`, true);
+
+            // si tu as des vignettes, tu peux toujours changer leur texture
+            this.characters.forEach((char, index) => {
+                char.setAlpha(index === this.selectedIndex ? 1 : 0.5);
+            });
+
+            selectedCharacter = p;
+            console.log('Personnage sélectionné :', selectedCharacter);
+        };
+
+        // --- Clavier ---
+        this.cursors = this.input.keyboard.createCursorKeys();
+
+        this.input.keyboard.on('keydown-LEFT', () => {
+            this.selectedIndex = (this.selectedIndex - 1 + this.characters.length) % this.characters.length;
+            updateSelection();
+        });
+
+        this.input.keyboard.on('keydown-RIGHT', () => {
+            this.selectedIndex = (this.selectedIndex + 1) % this.characters.length;
+            updateSelection();
+        });
+
+        // --- Initialise la sélection ---
+        updateSelection();
+
 
         cursors = this.input.keyboard.createCursorKeys();
 
