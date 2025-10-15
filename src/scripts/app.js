@@ -70,7 +70,8 @@ class LoadingScene extends Phaser.Scene {
 
         // bakery
         this.load.image("interieur_bakery", "assets/bg/interieur_bakery.png");
-        this.load.image("pain", "assets/objects/pain.png");
+        //this.load.image("pain", "assets/objects/pain.png");
+        this.load.image("pain", "assets/objects/painV2.png");
         
         // walking
         this.load.spritesheet("player_walking", "assets/player/henriwalking.png",{
@@ -955,7 +956,7 @@ class BakeryScene extends Phaser.Scene {
         this.returnY = data.returnY;
         
         this.interiorBakery = this.add.tileSprite(0, -190, 1194, 1024, 'interieur_bakery').setOrigin(0, 0);
-        player = this.physics.add.sprite(184, 736, "player");
+        player = this.physics.add.sprite(161, 736, "player");
         player.setOrigin(0.5, 1);
         player.setSize(42, 90);
         player.setOffset((144 - 42) / 2, 144 - 90);
@@ -965,7 +966,10 @@ class BakeryScene extends Phaser.Scene {
         this.moneyText = this.add.text(10, 10, 'Argent : ' + money + '$', { fontSize: '28px' });
         this.moneyText.setScrollFactor(0);
 
-        let exitBakery = this.physics.add.staticImage(183, 685, null).setSize(70, 100).setVisible(false);
+        let exitBakery = this.physics.add.staticImage(159, 685, null).setSize(58, 100).setVisible(false);
+        
+        let rightWall = this.physics.add.staticImage(775, 600, null).setSize(10, 300).setVisible(false);
+        this.physics.add.collider(player, rightWall);
 
         this.physics.add.overlap(player, exitBakery, () => {
             if (!bakeryTextShown2) {
@@ -986,7 +990,7 @@ class BakeryScene extends Phaser.Scene {
         
         this.keyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
 
-        this.pain = this.physics.add.image(945, 648, 'pain');
+        this.pain = this.physics.add.image(583, 668, 'pain');
 
         // Achat du pain: -5 pièces si possible, MAJ HUD
         this.physics.add.overlap(player, this.pain, () => {
@@ -1038,7 +1042,7 @@ class BakeryScene extends Phaser.Scene {
         }
 
         if (bakeryTextShown2) {
-            const distance = Phaser.Math.Distance.Between(player.x, player.y, 183, 685);
+            const distance = Phaser.Math.Distance.Between(player.x, player.y, 159, 685);
             if (distance > 80) {
                 if (bakeryText2) bakeryText2.destroy();
                 bakeryText2 = null;
@@ -1076,6 +1080,7 @@ class BakeryScene extends Phaser.Scene {
 
         // Murs gauche et droite
         player.x = Phaser.Math.Clamp(player.x, 0, 1194);
+        console.log(player.x)
     }
 }
 
