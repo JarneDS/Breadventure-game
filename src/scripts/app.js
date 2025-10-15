@@ -888,25 +888,24 @@ class MainWorld extends Phaser.Scene {
             splash.setAlpha(0.95);
         });
 
-        //effacer overlays avec E
-        keyObjectE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.E);
-
         this.input.keyboard.on("keydown-E", () => {
-        if (mouchoirs <= 0) return;
-        if (overlayStack.length === 0) return;
+            if (mouchoirs <= 0) return;
+            if (overlayStack.length === 0) return;
 
-        const lastOverlay = overlayStack.pop();
+            // Détruire tout ce qui est dans la pile
+            while (overlayStack.length > 0) {
+                const overlay = overlayStack.pop();
+                if (overlay) overlay.destroy();
+            }
 
-        if (lastOverlay) {
-            lastOverlay.destroy();
-            if (lastOverlay === overlayEau) overlayEau = null;
-            if (lastOverlay === overlayBoue) overlayBoue = null;
-            if (lastOverlay === overlayCaca) overlayCaca = null;
-        }
+            overlayEau = null;
+            overlayBoue = null;
+            overlayCaca = null;
 
-        mouchoirs -= 1;
-        this.mouchoirText.setText("Mouchoirs : " + mouchoirs);
+            mouchoirs -= 1;
+            this.mouchoirText.setText("Mouchoirs : " + mouchoirs);
         });
+        
         // this.physics.world.createDebugGraphic();
 
     }
