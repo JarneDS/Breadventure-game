@@ -30,7 +30,7 @@ let playerOnBoat;
 let playerOnPlat;
 let playerHasBread = false;
 
-let selectedCharacter = "henri";
+let selectedCharacter = "juliette";
 
 function loadCharacterSprites(character) {
     // walking
@@ -86,7 +86,7 @@ function loadCharacterSprites(character) {
         frameWidth: 144,
         frameHeight: 144,
     })
-    this.load.spritesheet("player_receive", `assets/player/obtentionPain.png`, {
+    this.load.spritesheet("player_receive", `assets/player/${character}obtentionPain.png`, {
         frameWidth: 144,
         frameHeight: 144,
     })
