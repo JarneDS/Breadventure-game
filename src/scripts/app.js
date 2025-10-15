@@ -31,7 +31,7 @@ let playerOnPlat;
 let playerHasBread = false;
 
 let selectedCharacter = 'henri';
-
+/*
 function loadCharacterSprites(character) {
   // crée un préfixe de clé unique
   const p = character; // 'juliette' ou 'henri'
@@ -82,8 +82,8 @@ function loadCharacterSprites(character) {
   this.load.spritesheet(`player_receive_${p}`, `assets/player/${p}obtentionPain.png`, {
     frameWidth: 144, frameHeight: 144
   });
-}
-/*
+}*/
+
 function loadCharacterSprites(character) {
     // walking
     this.load.spritesheet("player_walking", `assets/player/${character}walking.png`,{
@@ -142,7 +142,7 @@ function loadCharacterSprites(character) {
         frameWidth: 144,
         frameHeight: 144,
     })
-}*/
+}
 
 class LoadingScene extends Phaser.Scene {
     constructor() {
@@ -200,6 +200,11 @@ class LoadingScene extends Phaser.Scene {
             frameWidth: 64,
             frameHeight: 64,
         });
+
+        this.load.spritesheet("lunettes", "assets/objects/anim_lunette.png", {
+            frameWidth: 1194,
+            frameHeight: 1024,
+        })
         
     /*
         //insectes
@@ -322,6 +327,13 @@ class LoadingScene extends Phaser.Scene {
             repeat: -1
         })
 
+        this.anims.create({
+            key:'glasses',
+            frames: this.anims.generateFrameNumbers('lunettes', { start: 0, end: 10 }),
+            frameRate: 12,
+            repeat: 0
+        })
+
         this.bg = this.add.tileSprite(0, 0, 1194, 834, 'intro').setOrigin(0, 0);
         this.logo = this.add.tileSprite(597, 150, 873, 105, 'logo').setOrigin(0.5, 0.5);
         this.perso = this.add.sprite(100, 712, 'player_bread_static');
@@ -342,47 +354,52 @@ class LoadingScene extends Phaser.Scene {
         this.perso.play('static_pain');
 
     
-        // --- Variables accessibles à toute la scène ---
-        this.selectedIndex = 0;
-        this.charactersNames = ['henri', 'juliette'];
+        let selectedIndex = 0; // 0 = Henri, 1 = Juliette
+        let selectedCharacter = null;
 
-        // --- Sprites pour chaque personnage ---
-        this.selectPlayer = this.add.sprite(517, 450, 'Henri');
-        this.selectPlayer2 = this.add.sprite(677, 450, 'Juliette');
+        const selectPlayer = this.add.sprite(517, 450, 'Henri');
+        const selectPlayer2 = this.add.sprite(677, 450, 'Juliette');
 
-        this.characters = [this.selectPlayer, this.selectPlayer2];
+        // Tableau des personnages pour simplifier la navigation
+        const characters = [selectPlayer, selectPlayer2];
+        const names = ['Henri', 'Juliette'];
 
-        // --- Fonction pour mettre à jour la sélection ---
-        const updateSelection = () => {
-            const p = this.charactersNames[this.selectedIndex]; // 'henri' ou 'juliette'
+        // Ajoute le clavier
+        const keyE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.E);
 
-            // si tu utilises un seul sprite et changes l'anim
-            this.selectPlayer.anims.play(`static_${p}`, true);
-
-            // si tu as des vignettes, tu peux toujours changer leur texture
-            this.characters.forEach((char, index) => {
-                char.setAlpha(index === this.selectedIndex ? 1 : 0.5);
+        // Fonction pour mettre à jour la surbrillance visuelle
+        function updateSelection() {
+            characters.forEach((char, index) => {
+                if (index === selectedIndex) {
+                    char.setTint(0xffa500); // Orange pour le personnage sélectionné
+                } else {
+                    char.clearTint();
+                }
             });
+        }
 
-            selectedCharacter = p;
-            console.log('Personnage sélectionné :', selectedCharacter);
-        };
+        // Initialisation de la surbrillance
+        updateSelection();
 
-        // --- Clavier ---
-        this.cursors = this.input.keyboard.createCursorKeys();
-
+        // Gestion des entrées clavier dans la méthode update()
         this.input.keyboard.on('keydown-LEFT', () => {
-            this.selectedIndex = (this.selectedIndex - 1 + this.characters.length) % this.characters.length;
+            selectedIndex = (selectedIndex - 1 + characters.length) % characters.length;
             updateSelection();
         });
 
         this.input.keyboard.on('keydown-RIGHT', () => {
-            this.selectedIndex = (this.selectedIndex + 1) % this.characters.length;
+            selectedIndex = (selectedIndex + 1) % characters.length;
             updateSelection();
         });
 
-        // --- Initialise la sélection ---
-        updateSelection();
+        this.input.keyboard.on('keydown-E', () => {
+            selectedCharacter = names[selectedIndex];
+            console.log('Personnage sélectionné :', selectedCharacter);
+
+            // Par exemple, passer à la scène suivante :
+            // this.scene.start('GameScene', { character: selectedCharacter });
+        });
+
 
 
         cursors = this.input.keyboard.createCursorKeys();
@@ -392,8 +409,34 @@ class LoadingScene extends Phaser.Scene {
 
         // Attendre que l'utilisateur appuie sur A
         this.input.keyboard.on('keydown-A', () => {
+            this.scene.start('Glasses');
+        });
+    }
+}
+
+class Glasses extends Phaser.Scene {
+    constructor() {
+        super('Glasses');
+    }
+
+    preload(){
+    }
+
+    create(){
+        this.scale.width
+        this.scale.height
+
+        this.bg = this.add.tileSprite(0, 0, 1194, 834, 'intro').setOrigin(0, 0);
+
+        const lunettes = this.add.sprite(this.scale.width /2 , this.scale.height / 2    , 'lunettes');
+        lunettes.anims.play('glasses', true);
+
+        lunettes.on('animationcomplete', () => {
             this.scene.start('MainWorld');
         });
+    }
+    
+    update(){
     }
 }
 
@@ -432,7 +475,7 @@ class MainWorld extends Phaser.Scene {
         this.house2 = this.add.tileSprite(9400, 226, 2048, 512, 'background2').setOrigin(0, 0);
         this.house3 = this.add.tileSprite(11448, 226, 2048, 512, 'background').setOrigin(0, 0);
         this.bakery = this.add.tileSprite(13496, -286, 2048, 1024, 'bakery').setOrigin(0, 0);
-    
+
         // bateau
         bateau = this.physics.add.image(4456, 610, 'bateau');
         bateau.setSize(256, 40);
@@ -1238,7 +1281,7 @@ const config = {
         arcade: { gravity: { y: 0 }, debug: true }
     },
     render: { pixelArt: true, antialias: false }, // ajout pour une image nette (eau)
-    scene: [LoadingScene, MainWorld, BakeryScene, ShopScene]
+    scene: [LoadingScene, Glasses, MainWorld, BakeryScene, ShopScene]
 };
 
 const game = new Phaser.Game(config);
