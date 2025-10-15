@@ -270,14 +270,16 @@ class LoadingScene extends Phaser.Scene {
         })
 
         this.bg = this.add.tileSprite(0, 0, 1194, 834, 'intro').setOrigin(0, 0);
-        this.logo = this.add.tileSprite(597, 150, 875, 113, 'logo').setOrigin(0.5, 0.5);
+        this.logo = this.add.tileSprite(597, 150, 873, 105, 'logo').setOrigin(0.5, 0.5);
         this.perso = this.add.sprite(100, 712, 'player_bread_static');
-        const textExplication = this.add.text(10, 50, '', {
+        const textExplication = this.add.text(597, 350, 'Veuillez sélectionner votre joueur', {
             fontSize: '28px',
             fill: '#000'
         });
 
-        const appuyA = this.add.text(597, 700, 'Appuyer sur A pour commencer le jeu', {
+        textExplication.setOrigin(0.5, 0.5);
+
+        const appuyA = this.add.text(597, 600, 'Appuyer sur A pour commencer le jeu', {
             fontSize: '36px',
             fill: '#000'
         });
@@ -286,13 +288,10 @@ class LoadingScene extends Phaser.Scene {
 
         this.perso.play('static_pain');
 
-        const startButton = this.add.text(597, 417, 'START', { fontSize: '36px', fill: '#000'}).setOrigin(0.5, 0.5);
-        startButton.setInteractive();
-
-        const selectPlayer = this.add.sprite(517, 550, 'Henri')
+        const selectPlayer = this.add.sprite(517, 450, 'Henri')
         selectPlayer.setInteractive();
 
-        const selectPlayer2 = this.add.sprite(677, 550, 'Juliette')
+        const selectPlayer2 = this.add.sprite(677, 450, 'Juliette')
         selectPlayer2.setInteractive();
 
         cursors = this.input.keyboard.createCursorKeys();
