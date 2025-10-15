@@ -30,6 +30,68 @@ let playerOnBoat;
 let playerOnPlat;
 let playerHasBread = false;
 
+let selectedCharacter = "henri";
+
+function loadCharacterSprites(character) {
+    // walking
+    this.load.spritesheet("player_walking", `assets/player/${character}walking.png`,{
+        frameWidth: 144,
+        frameHeight: 144,
+    })
+    this.load.spritesheet("player_umbrella_walking", `assets/player/${character}umbrellawalking.png`, {
+        frameWidth: 144,
+        frameHeight: 144,
+    })
+    this.load.spritesheet("player_bread_walking", `assets/player/${character}breadwalking.png`, {
+        frameWidth: 144,
+        frameHeight: 144,
+    })
+    this.load.spritesheet("player_brum_walking", `assets/player/${character}brumwalking.png`, {
+        frameWidth: 144,
+        frameHeight: 144,
+    })
+
+    // static
+    this.load.spritesheet("player_static", `assets/player/${character}static.png`,{
+        frameWidth: 144,
+        frameHeight: 144,
+    })
+    this.load.spritesheet("player_umbrella_static", `assets/player/${character}umbrella.png`, {
+        frameWidth: 144,
+        frameHeight: 144,
+    })
+    this.load.spritesheet("player_bread_static", `assets/player/${character}bread.png`, {
+        frameWidth: 144,
+        frameHeight: 144,
+    })
+    this.load.spritesheet("player_brum_static", `assets/player/${character}brum.png`, {
+        frameWidth: 144,
+        frameHeight: 144,
+    })
+
+    // jumping
+    this.load.spritesheet("player_jumping", `assets/player/${character}jumping.png`, {
+        frameWidth: 144,
+        frameHeight: 144,
+    })
+    this.load.spritesheet("player_umbrella_jumping", `assets/player/${character}umbrellajumping.png`, {
+        frameWidth: 144,
+        frameHeight: 144,
+    })
+    this.load.spritesheet("player_bread_jumping", `assets/player/${character}breadjumping.png`, {
+        frameWidth: 144,
+        frameHeight: 144,
+    })
+    this.load.spritesheet("player_brum_jumping", `assets/player/${character}brumjumping.png`, {
+        frameWidth: 144,
+        frameHeight: 144,
+    })
+    this.load.spritesheet("player_receive", `assets/player/obtentionPain.png`, {
+        frameWidth: 144,
+        frameHeight: 144,
+    })
+}
+
 class LoadingScene extends Phaser.Scene {
     constructor() {
         super('LoadingScene');
@@ -73,64 +135,6 @@ class LoadingScene extends Phaser.Scene {
         this.load.image("interieur_bakery", "assets/bg/interieur_bakery.png");
         //this.load.image("pain", "assets/objects/pain.png");
         this.load.image("pain", "assets/objects/painV2.png");
-        
-        // walking
-        this.load.spritesheet("player_walking", "assets/player/henriwalking.png",{
-            frameWidth: 144,
-            frameHeight: 144,
-        })
-        this.load.spritesheet("player_umbrella_walking", "assets/player/henriumbrellawalking.png", {
-            frameWidth: 144,
-            frameHeight: 144,
-        })
-        this.load.spritesheet("player_bread_walking", "assets/player/henribreadwalking.png", {
-            frameWidth: 144,
-            frameHeight: 144,
-        })
-        this.load.spritesheet("player_brum_walking", "assets/player/henribrumwalking.png", {
-            frameWidth: 144,
-            frameHeight: 144,
-        })
-    
-        // static
-        this.load.spritesheet("player_static", "assets/player/henristatic.png",{
-            frameWidth: 144,
-            frameHeight: 144,
-        })
-        this.load.spritesheet("player_umbrella_static", "assets/player/henriumbrella.png", {
-            frameWidth: 144,
-            frameHeight: 144,
-        })
-        this.load.spritesheet("player_bread_static", "assets/player/henribread.png", {
-            frameWidth: 144,
-            frameHeight: 144,
-        })
-        this.load.spritesheet("player_brum_static", "assets/player/henribrum.png", {
-            frameWidth: 144,
-            frameHeight: 144,
-        })
-    
-        // jumping
-        this.load.spritesheet("player_jumping", "assets/player/henrijumping.png", {
-            frameWidth: 144,
-            frameHeight: 144,
-        })
-        this.load.spritesheet("player_umbrella_jumping", "assets/player/henriumbrellajumping.png", {
-            frameWidth: 144,
-            frameHeight: 144,
-        })
-        this.load.spritesheet("player_bread_jumping", "assets/player/henribreadjumping.png", {
-            frameWidth: 144,
-            frameHeight: 144,
-        })
-        this.load.spritesheet("player_brum_jumping", "assets/player/henribrumjumping.png", {
-            frameWidth: 144,
-            frameHeight: 144,
-        })
-        this.load.spritesheet("player_receive", "assets/player/obtentionPain.png", {
-            frameWidth: 144,
-            frameHeight: 144,
-        })
 
         // pluie
         this.load.spritesheet("rain", "assets/objects/pluie.png", {
@@ -151,6 +155,7 @@ class LoadingScene extends Phaser.Scene {
             frameHeight: 42,
         })
     */
+        loadCharacterSprites.call(this, selectedCharacter);
     }
 
     create() {
