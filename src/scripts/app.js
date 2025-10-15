@@ -39,7 +39,8 @@ class LoadingScene extends Phaser.Scene {
         this.load.image("logo", "assets/logo/logo.png");
         this.load.image("intro", "assets/bg/intro.png");
         // assets
-        this.load.image("player","assets/player/henri.png");
+        this.load.image("Henri","assets/player/henri.png");
+        this.load.image("Juliette","assets/player/juliette.png");
         this.load.image("background","assets/bg/bg1.png");
         this.load.image("background2","assets/bg/bg2.png");
         this.load.image("background1","assets/bg/bg_parc.png");
@@ -270,7 +271,7 @@ class LoadingScene extends Phaser.Scene {
             fontSize: '28px',
             fill: '#000'
         });
-        
+
         const appuyA = this.add.text(597, 700, 'Appuyer sur A pour commencer le jeu', {
             fontSize: '36px',
             fill: '#000'
@@ -283,8 +284,13 @@ class LoadingScene extends Phaser.Scene {
         const startButton = this.add.text(597, 417, 'START', { fontSize: '36px', fill: '#000'}).setOrigin(0.5, 0.5);
         startButton.setInteractive();
 
-        const selectPlayer = this.add.text(597, 500, 'Henri', { fontSize: '36px', fill: '#000'}).setOrigin(0.5, 0.5);
+        const selectPlayer = this.add.sprite(517, 550, 'Henri')
         selectPlayer.setInteractive();
+
+        const selectPlayer2 = this.add.sprite(677, 550, 'Juliette')
+        selectPlayer2.setInteractive();
+
+        cursors = this.input.keyboard.createCursorKeys();
 
         // Ajout d'une touche A
         this.keyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
@@ -307,6 +313,8 @@ class MainWorld extends Phaser.Scene {
     create(data){
         keyObject = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
         Phaser.Input.Keyboard.JustDown(keyObject);
+
+        cursors = this.input.keyboard.createCursorKeys();
 
         // permet fonctionnement des flaques après sortie bakery
         overlayEau = null;
@@ -575,8 +583,6 @@ class MainWorld extends Phaser.Scene {
         // caméra
         this.cameras.main.setBounds(0, 0, 14050, 0);
         this.cameras.main.startFollow(player, true, 0.1, 0.1, 0, 245);
-    
-        cursors = this.input.keyboard.createCursorKeys();
     
         // argent
         // argent (ne génère qu'une pièce à la fois)
