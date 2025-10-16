@@ -251,6 +251,12 @@ class LoadingScene extends Phaser.Scene {
                 frameRate: 6,
                 repeat: 0
             })
+            this.anims.create({
+                key:`receive_bread_${char}`,
+                frames: this.anims.generateFrameNumbers(`player_receive_${char}`, { start: 0, end: 3 }),
+                frameRate: 6,
+                repeat: 0
+            })
         })
     /*
         // insecte
@@ -266,13 +272,6 @@ class LoadingScene extends Phaser.Scene {
             frames: this.anims.generateFrameNumbers('rain', { start: 0, end: 4 }),
             frameRate: 24,
             repeat: -1
-        })
-        
-        this.anims.create({
-            key:'receive_bread',
-            frames: this.anims.generateFrameNumbers('player_receive', { start: 0, end: 3 }),
-            frameRate: 6,
-            repeat: 0
         })
 
         this.anims.create({
@@ -405,7 +404,7 @@ class MainWorld extends Phaser.Scene {
     
     create(data){
         console.log(data);
-         selectedCharacter = (data && data.character) ? data.character : 'henri';
+        selectedCharacter = (data && data.character) ? data.character : 'henri';
 
         keyObject = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
         Phaser.Input.Keyboard.JustDown(keyObject);
@@ -1111,15 +1110,15 @@ class BakeryScene extends Phaser.Scene {
                 playerHasBread = true;
                 this.pain.disableBody(true, true);
                 money -= 5;
-
+                const prefix = playerHasBread ? '_pain' : '';
                 if (playerHasBread) {
-                    player.anims.play('receive_bread'); // joue l’animation
+                    player.anims.play('receive_bread_' + selectedCharacter, true);
                     player.setVelocity(0, 0);
                     player.body.moves = false;
                     this.time.delayedCall(2000, () => player.body.moves = true);
                     this.time.delayedCall(2000, () => {
                         // Après 1 seconde, revenir à une animation normale
-                        player.anims.play('static_pain');
+                        player.anims.play('static' + prefix + '_' + selectedCharacter, true);
                     });
                 }
 
@@ -1184,17 +1183,16 @@ class BakeryScene extends Phaser.Scene {
         // Animation (avec ou sans pain)
         const prefix = playerHasBread ? '_pain' : '';
         if (!player.body.onFloor()) {
-            player.anims.play('jumping' + prefix, true);
+            player.anims.play('jumping' + prefix + '_' + selectedCharacter, true);
             player.setFrame(2);
         } else if (player.body.velocity.x !== 0) {
-            player.anims.play('walking' + prefix, true);
+            player.anims.play('walking' + prefix + '_' + selectedCharacter, true);
         } else {
-            player.anims.play('static' + prefix, true);
+            player.anims.play('static' + prefix + '_' + selectedCharacter, true);
         }
 
         // Murs gauche et droite
         player.x = Phaser.Math.Clamp(player.x, 0, 1194);
-        console.log(player.x)
     }
 }
 
