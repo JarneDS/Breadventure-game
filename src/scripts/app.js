@@ -1055,7 +1055,8 @@ class BakeryScene extends Phaser.Scene {
     }
 
     preload(data) {
-        loadCharacterSprites.call(this, data.character || 'henri');
+        const character = (data && data.character) ? data.character : 'henri';
+        loadCharacterSprites.call(this, character);
 
     }
 
@@ -1203,7 +1204,8 @@ class ShopScene extends Phaser.Scene {
     }
 
     preload(data) {
-        loadCharacterSprites.call(this, data.character || 'henri');
+        const character = (data && data.character) ? data.character : 'henri';
+        loadCharacterSprites.call(this, character);
     }
 
     create(data) {
