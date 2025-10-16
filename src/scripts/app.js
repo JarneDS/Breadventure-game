@@ -31,7 +31,9 @@ let playerOnPlat;
 let playerHasBread = false;
 
 let selectedCharacter = 'henri';
-let character;
+let character
+let isPlayerhenri;
+let perso;
 /*
 function loadCharacterSprites(character) {
   // crée un préfixe de clé unique
@@ -87,59 +89,59 @@ function loadCharacterSprites(character) {
 
 function loadCharacterSprites(character) {
     // walking
-    this.load.spritesheet("player_walking", `assets/player/${character}walking.png`,{
+    this.load.spritesheet(`player_walking_${character}`, `assets/player/${character}walking.png`,{
         frameWidth: 144,
         frameHeight: 144,
     })
-    this.load.spritesheet("player_umbrella_walking", `assets/player/${character}umbrellawalking.png`, {
+    this.load.spritesheet(`player_umbrella_walking_${character}`, `assets/player/${character}umbrellawalking.png`, {
         frameWidth: 144,
         frameHeight: 144,
     })
-    this.load.spritesheet("player_bread_walking", `assets/player/${character}breadwalking.png`, {
+    this.load.spritesheet(`player_bread_walking_${character}`, `assets/player/${character}breadwalking.png`, {
         frameWidth: 144,
         frameHeight: 144,
     })
-    this.load.spritesheet("player_brum_walking", `assets/player/${character}brumwalking.png`, {
+    this.load.spritesheet(`player_brum_walking_${character}`, `assets/player/${character}brumwalking.png`, {
         frameWidth: 144,
         frameHeight: 144,
     })
 
     // static
-    this.load.spritesheet("player_static", `assets/player/${character}static.png`,{
+    this.load.spritesheet(`player_static_${character}`, `assets/player/${character}static.png`,{
         frameWidth: 144,
         frameHeight: 144,
     })
-    this.load.spritesheet("player_umbrella_static", `assets/player/${character}umbrella.png`, {
+    this.load.spritesheet(`player_umbrella_static_${character}`, `assets/player/${character}umbrella.png`, {
         frameWidth: 144,
         frameHeight: 144,
     })
-    this.load.spritesheet("player_bread_static", `assets/player/${character}bread.png`, {
+    this.load.spritesheet(`player_bread_static_${character}`, `assets/player/${character}bread.png`, {
         frameWidth: 144,
         frameHeight: 144,
     })
-    this.load.spritesheet("player_brum_static", `assets/player/${character}brum.png`, {
+    this.load.spritesheet(`player_brum_static_${character}`, `assets/player/${character}brum.png`, {
         frameWidth: 144,
         frameHeight: 144,
     })
 
     // jumping
-    this.load.spritesheet("player_jumping", `assets/player/${character}jumping.png`, {
+    this.load.spritesheet(`player_jumping_${character}`, `assets/player/${character}jumping.png`, {
         frameWidth: 144,
         frameHeight: 144,
     })
-    this.load.spritesheet("player_umbrella_jumping", `assets/player/${character}umbrellajumping.png`, {
+    this.load.spritesheet(`player_umbrella_jumping_${character}`, `assets/player/${character}umbrellajumping.png`, {
         frameWidth: 144,
         frameHeight: 144,
     })
-    this.load.spritesheet("player_bread_jumping", `assets/player/${character}breadjumping.png`, {
+    this.load.spritesheet(`player_bread_jumping_${character}`, `assets/player/${character}breadjumping.png`, {
         frameWidth: 144,
         frameHeight: 144,
     })
-    this.load.spritesheet("player_brum_jumping", `assets/player/${character}brumjumping.png`, {
+    this.load.spritesheet(`player_brum_jumping_${character}`, `assets/player/${character}brumjumping.png`, {
         frameWidth: 144,
         frameHeight: 144,
     })
-    this.load.spritesheet("player_receive", `assets/player/${character}obtentionPain.png`, {
+    this.load.spritesheet(`player_receive_${character}`, `assets/player/${character}obtentionPain.png`, {
         frameWidth: 144,
         frameHeight: 144,
     })
@@ -154,8 +156,8 @@ class LoadingScene extends Phaser.Scene {
         this.load.image("logo", "assets/logo/logo.png");
         this.load.image("intro", "assets/bg/intro.png");
         // assets
-        this.load.image("Henri","assets/player/henri.png");
-        this.load.image("Juliette","assets/player/juliette.png");
+        this.load.image("henri","assets/player/henri.png");
+        this.load.image("juliette","assets/player/juliette.png");
         this.load.image("background","assets/bg/bg1.png");
         this.load.image("background2","assets/bg/bg2.png");
         this.load.image("background1","assets/bg/bg_parc.png");
@@ -189,7 +191,7 @@ class LoadingScene extends Phaser.Scene {
         this.load.image("interieur_bakery", "assets/bg/interieur_bakery.png");
         //this.load.image("pain", "assets/objects/pain.png");
         this.load.image("pain", "assets/objects/painV2.png");
-
+ 
         // pluie
         this.load.spritesheet("rain", "assets/objects/pluie.png", {
             frameWidth: 2048,
@@ -214,89 +216,93 @@ class LoadingScene extends Phaser.Scene {
             frameHeight: 42,
         })
     */
-        loadCharacterSprites.call(this, selectedCharacter);
+        loadCharacterSprites.call(this, 'henri');
+        loadCharacterSprites.call(this, 'juliette');
     }
 
     create() {
         // animations
         // base
-        this.anims.create({
-            key:'walking',
-            frames: this.anims.generateFrameNumbers('player_walking', { start: 0, end: 5 }),
-            frameRate: 24,
-            repeat: -1
-        })
-        this.anims.create({
-            key:'static',
-            frames: this.anims.generateFrameNumbers('player_static', { start: 0, end: 1 }),
-            frameRate: 3,
-            repeat: -1
-        })
-        this.anims.create({
-            key:'jumping',
-            frames: this.anims.generateFrameNumbers('player_jumping', { start: 0, end: 2 }),
-            frameRate: 6,
-            repeat: 0
-        })
+        let characters = ['henri', 'juliette'];
+        characters.forEach((char) => {
+            this.anims.create({
+                key:`walking_${char}`,
+                frames: this.anims.generateFrameNumbers(`player_walking_${char}`, { start: 0, end: 5 }),
+                frameRate: 24,
+                repeat: -1
+            })
+            this.anims.create({
+                key:`static_${char}`,
+                frames: this.anims.generateFrameNumbers(`player_static_${char}`, { start: 0, end: 1 }),
+                frameRate: 3,
+                repeat: -1
+            })
+            this.anims.create({
+                key:`jumping_${char}`,
+                frames: this.anims.generateFrameNumbers(`player_jumping_${char}`, { start: 0, end: 2 }),
+                frameRate: 6,
+                repeat: 0
+            })
 
-        // pain
-        this.anims.create({
-            key:'walking_pain',
-            frames: this.anims.generateFrameNumbers('player_bread_walking', { start: 0, end: 5 }),
-            frameRate: 24,
-            repeat: -1
-        })
-        this.anims.create({
-            key:'static_pain',
-            frames: this.anims.generateFrameNumbers('player_bread_static', { start: 0, end: 1 }),
-            frameRate: 3,
-            repeat: -1
-        })
-        this.anims.create({
-            key:'jumping_pain',
-            frames: this.anims.generateFrameNumbers('player_bread_jumping', { start: 0, end: 2 }),
-            frameRate: 6,
-            repeat: 0
-        })
+            // pain
+            this.anims.create({
+                key:`walking_pain_${char}`,
+                frames: this.anims.generateFrameNumbers(`player_bread_walking_${char}`, { start: 0, end: 5 }),
+                frameRate: 24,
+                repeat: -1
+            })
+            this.anims.create({
+                key:`static_pain_${char}`,
+                frames: this.anims.generateFrameNumbers(`player_bread_static_${char}`, { start: 0, end: 1 }),
+                frameRate: 3,
+                repeat: -1
+            })
+            this.anims.create({
+                key:`jumping_pain_${char}`,
+                frames: this.anims.generateFrameNumbers(`player_bread_jumping_${char}`, { start: 0, end: 2 }),
+                frameRate: 6,
+                repeat: 0
+            })
 
-        // umbrella
-        this.anims.create({
-            key:'walking_umbrella',
-            frames: this.anims.generateFrameNumbers('player_umbrella_walking', { start: 0, end: 5 }),
-            frameRate: 24,
-            repeat: -1
-        })
-        this.anims.create({
-            key:'static_umbrella',
-            frames: this.anims.generateFrameNumbers('player_umbrella_static', { start: 0, end: 1 }),
-            frameRate: 3,
-            repeat: -1
-        })
-        this.anims.create({
-            key:'jumping_umbrella',
-            frames: this.anims.generateFrameNumbers('player_umbrella_jumping', { start: 0, end: 2 }),
-            frameRate: 6,
-            repeat: 0
-        })
+            // umbrella
+            this.anims.create({
+                key:`walking_umbrella_${char}`,
+                frames: this.anims.generateFrameNumbers(`player_umbrella_walking_${char}`, { start: 0, end: 5 }),
+                frameRate: 24,
+                repeat: -1
+            })
+            this.anims.create({
+                key:`static_umbrella_${char}`,
+                frames: this.anims.generateFrameNumbers(`player_umbrella_static_${char}`, { start: 0, end: 1 }),
+                frameRate: 3,
+                repeat: -1
+            })
+            this.anims.create({
+                key:`jumping_umbrella_${char}`,
+                frames: this.anims.generateFrameNumbers(`player_umbrella_jumping_${char}`, { start: 0, end: 2 }),
+                frameRate: 6,
+                repeat: 0
+            })
 
-        // brum
-        this.anims.create({
-            key:'walking_brum',
-            frames: this.anims.generateFrameNumbers('player_brum_walking', { start: 0, end: 5 }),
-            frameRate: 24,
-            repeat: -1
-        })
-        this.anims.create({
-            key:'static_brum',
-            frames: this.anims.generateFrameNumbers('player_brum_static', { start: 0, end: 1 }),
-            frameRate: 3,
-            repeat: -1
-        })
-        this.anims.create({
-            key:'jumping_brum',
-            frames: this.anims.generateFrameNumbers('player_brum_jumping', { start: 0, end: 2 }),
-            frameRate: 6,
-            repeat: 0
+            // brum
+            this.anims.create({
+                key:`walking_brum_${char}`,
+                frames: this.anims.generateFrameNumbers(`player_brum_walking_${char}`, { start: 0, end: 5 }),
+                frameRate: 24,
+                repeat: -1
+            })
+            this.anims.create({
+                key:`static_brum_${char}`,
+                frames: this.anims.generateFrameNumbers(`player_brum_static_${char}`, { start: 0, end: 1 }),
+                frameRate: 3,
+                repeat: -1
+            })
+            this.anims.create({
+                key:`jumping_brum_${char}`,
+                frames: this.anims.generateFrameNumbers(`player_brum_jumping_${char}`, { start: 0, end: 2 }),
+                frameRate: 6,
+                repeat: 0
+            })
         })
     /*
         // insecte
@@ -337,7 +343,7 @@ class LoadingScene extends Phaser.Scene {
 
         this.bg = this.add.tileSprite(0, 0, 1194, 834, 'intro').setOrigin(0, 0);
         this.logo = this.add.tileSprite(597, 150, 873, 105, 'logo').setOrigin(0.5, 0.5);
-        this.perso = this.add.sprite(100, 712, 'player_bread_static');
+        perso = this.add.sprite(100, 712, 'player_bread_static_henri');
         const textExplication = this.add.text(597, 350, 'Veuillez sélectionner votre joueur', {
             fontSize: '28px',
             fill: '#000'
@@ -352,17 +358,20 @@ class LoadingScene extends Phaser.Scene {
 
         appuyA.setOrigin(0.5, 0.5);
 
-        this.perso.play('static_pain');
+        perso.play('static_pain_henri');
 
     
-        let selectedIndex = 0; // 0 = Henri, 1 = Juliette
+        let selectedIndex = 0; // 0 = henri, 1 = juliette
 
-        const selectPlayer = this.add.sprite(517, 450, 'Henri');
-        const selectPlayer2 = this.add.sprite(677, 450, 'Juliette');
+        const selectPlayer = this.add.sprite(517, 450, 'henri');
+        selectPlayer.name = 'henri';
+        const selectPlayer2 = this.add.sprite(677, 450, 'juliette');
+        selectPlayer2.name = 'juliette';
+        console.log(selectPlayer);
 
         // Tableau des personnages pour simplifier la navigation
         const character = [selectPlayer, selectPlayer2];
-        const names = ['Henri', 'Juliette'];
+        const names = ['henri', 'juliette'];
 
         // Ajoute le clavier
         const keyE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.E);
@@ -371,11 +380,15 @@ class LoadingScene extends Phaser.Scene {
         function updateSelection() {
             character.forEach((char, index) => {
                 if (index === selectedIndex) {
+                    console.log(char.name);
+                    selectedCharacter = char.name;
+                    perso.play(`static_pain_${char.name}`);
                     char.setTint(0xffa500); // Orange pour le personnage sélectionné
                 } else {
                     char.clearTint();
                 }
             });
+            perso.play(`static_pain_${selectedCharacter}`);
         }
 
         // Initialisation de la surbrillance
@@ -391,15 +404,6 @@ class LoadingScene extends Phaser.Scene {
             selectedIndex = (selectedIndex + 1) % character.length;
             updateSelection();
         });
-
-        this.input.keyboard.on('keydown-E', () => {
-            selectedCharacter = names[selectedIndex].toLowerCase(); // "henri" ou "juliette"
-            console.log('Personnage sélectionné :', selectedCharacter);
-            updateSelection();           
-        });
-
-
-
 
         cursors = this.input.keyboard.createCursorKeys();
 
@@ -423,7 +427,7 @@ class Glasses extends Phaser.Scene {
     }
 
    create(data){
-        this.selectedCharacter = (data && data.character) ? data.character : 'henri';
+        selectedCharacter = (data && data.character) ? data.character : 'henri';
 
         this.bg = this.add.tileSprite(0, 0, 1194, 834, 'intro').setOrigin(0, 0);
 
@@ -431,7 +435,7 @@ class Glasses extends Phaser.Scene {
         lunettes.anims.play('glasses', true);
 
         lunettes.on('animationcomplete', () => {
-            this.scene.start('MainWorld', { character: this.selectedCharacter });
+            this.scene.start('MainWorld', { character: selectedCharacter });
         });
     }
 
@@ -452,7 +456,8 @@ class MainWorld extends Phaser.Scene {
 
     
     create(data){
-         this.selectedCharacter = (data && data.character) ? data.character : 'henri';
+        console.log(data);
+         selectedCharacter = (data && data.character) ? data.character : 'henri';
 
         keyObject = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
         Phaser.Input.Keyboard.JustDown(keyObject);
@@ -558,7 +563,7 @@ class MainWorld extends Phaser.Scene {
         const spawnX = (data && data.playerX !== undefined) ? data.playerX : 100;
         const spawnY = (data && data.playerY !== undefined) ? data.playerY : 736;
 
-        player = this.physics.add.sprite(spawnX, spawnY, "player");
+        player = this.physics.add.sprite(spawnX, spawnY, `player_${selectedCharacter.name}`);
         player.setOrigin(0.5, 1);
         player.setSize(42, 90);
         player.setOffset((144 - 42) / 2, 144 - 90);
@@ -977,12 +982,12 @@ class MainWorld extends Phaser.Scene {
         // Animations selon possession du pain
         const prefix = playerHasBread ? '_pain' : '';
         if (!player.body.onFloor()) {
-            player.anims.play('jumping' + prefix, true);
+            player.anims.play('jumping' + prefix + '_' + selectedCharacter, true);
             player.setFrame(2);
         } else if (player.body.velocity.x !== 0) {
-            player.anims.play('walking' + prefix, true);
+            player.anims.play('walking' + prefix + '_' + selectedCharacter, true);
         } else {
-            player.anims.play('static' + prefix, true);
+            player.anims.play('static' + prefix + '_' + selectedCharacter, true);
         }
     
         if (player.x < 0) player.x = 0;
@@ -1043,7 +1048,7 @@ class MainWorld extends Phaser.Scene {
                 returnY: player.y,
                 money: money,
                 playerHasBread,
-                character: this.selectedCharacter
+                character: selectedCharacter
             });  
         }
 
@@ -1054,7 +1059,7 @@ class MainWorld extends Phaser.Scene {
                 returnY: player.y,
                 money: money,
                 playerHasBread,
-                character: this.selectedCharacter
+                character: selectedCharacter
             });  
         }
 
@@ -1107,7 +1112,7 @@ class BakeryScene extends Phaser.Scene {
     }
 
     create(data) {
-        this.selectedCharacter = (data && data.character) ? data.character : 'henri';
+        selectedCharacter = (data && data.character) ? data.character : 'henri';
 
         cursors = this.input.keyboard.createCursorKeys();
         
@@ -1197,7 +1202,7 @@ class BakeryScene extends Phaser.Scene {
                 playerY: this.returnY,
                 money: money,
                 playerHasBread,
-                character: this.selectedCharacter
+                character: selectedCharacter
             });
         }
 
@@ -1254,7 +1259,7 @@ class ShopScene extends Phaser.Scene {
     }
 
     create(data) {
-        this.selectedCharacter = (data && data.character) ? data.character : 'henri';
+        selectedCharacter = (data && data.character) ? data.character : 'henri';
 
         this.returnX = data.returnX;
         this.returnY = data.returnY;
@@ -1282,7 +1287,7 @@ class ShopScene extends Phaser.Scene {
                 playerY: this.returnY,
                 money: money,
                 playerHasBread,
-                character: this.selectedCharacter
+                character: selectedCharacter
             });
         }
     }
