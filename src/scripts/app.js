@@ -291,14 +291,15 @@ class LoadingScene extends Phaser.Scene {
         this.bg = this.add.tileSprite(0, 0, 1194, 834, 'intro').setOrigin(0, 0);
         this.logo = this.add.tileSprite(597, 150, 873, 105, 'logo').setOrigin(0.5, 0.5);
         perso = this.add.sprite(100, 712, 'player_bread_static_henri');
-        const textExplication = this.add.text(597, 350, 'Veuillez sélectionner votre joueur', {
+
+        const textExplication = this.add.text(597, 340, 'Veuillez utiliser <- et -> pour changer de personnage', {
             fontSize: '28px',
             fill: '#000'
         });
 
         textExplication.setOrigin(0.5, 0.5);
 
-        const appuyA = this.add.text(597, 600, 'Appuyer sur A pour commencer le jeu', {
+        const appuyA = this.add.text(597, 600, 'Appuyer sur A pour commencer le jeu avec ' + selectedCharacter, {
             fontSize: '36px',
             fill: '#000'
         });
@@ -314,7 +315,6 @@ class LoadingScene extends Phaser.Scene {
         selectPlayer.name = 'henri';
         const selectPlayer2 = this.add.sprite(677, 450, 'juliette');
         selectPlayer2.name = 'juliette';
-        console.log(selectPlayer);
 
         // Tableau des personnages pour simplifier la navigation
         const character = [selectPlayer, selectPlayer2];
@@ -327,15 +327,16 @@ class LoadingScene extends Phaser.Scene {
         function updateSelection() {
             character.forEach((char, index) => {
                 if (index === selectedIndex) {
-                    console.log(char.name);
                     selectedCharacter = char.name;
                     perso.play(`static_pain_${char.name}`);
-                    char.setTint(0xffa500); // Orange pour le personnage sélectionné
+                    char.setAlpha(1);
                 } else {
-                    char.clearTint();
+                    char.setAlpha(0.7);
                 }
             });
             perso.play(`static_pain_${selectedCharacter}`);
+
+            appuyA.setText('Appuyer sur A pour commencer le jeu avec ' + selectedCharacter.charAt(0).toUpperCase() + selectedCharacter.slice(1));
         }
 
         // Initialisation de la surbrillance
@@ -403,7 +404,6 @@ class MainWorld extends Phaser.Scene {
 
     
     create(data){
-        console.log(data);
         selectedCharacter = (data && data.character) ? data.character : 'henri';
 
         keyObject = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
