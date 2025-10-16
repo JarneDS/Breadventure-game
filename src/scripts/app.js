@@ -19,6 +19,7 @@ let keyObjectE;
 let overlayEau = null; //flaque eau
 let overlayBoue = null; //flaque boue
 let overlayCaca = null; //caca bird
+let glassesRain = null;
 
 let overlayStack = []; //pile des overlays -> utile pour effacer le denier apparu
 
@@ -417,6 +418,7 @@ class MainWorld extends Phaser.Scene {
         overlayEau = null;
         overlayBoue = null;
         overlayCaca = null;
+        glassesRain = null;
         overlayStack = [];
 
         // ciel + décors
@@ -712,16 +714,22 @@ class MainWorld extends Phaser.Scene {
         this.rain.displayWidth = this.sys.game.config.width;
         this.rain.displayHeight = this.sys.game.config.height;
 
-        this.glassesRain = this.add.image(0, 0, "glassesRain").setOrigin(0, 0);
-        this.glassesRain.setScrollFactor(0);
-        this.glassesRain.setVisible(false);
-        this.glassesRain.setDepth(950);
-        overlayStack.push(this.glassesRain);
+        glassesRain = this.add.image(0, 0, "glassesRain").setOrigin(0, 0);
+        glassesRain.setScrollFactor(0);
+        glassesRain.setVisible(false);
+        glassesRain.setDepth(950);
+        overlayStack.push(glassesRain);
 
         const startRainFor = (ms) => {
             this.rain.setVisible(true);
             this.rain.play('rain_loop', true);
-            this.glassesRain.setVisible(true);
+            if (!glassesRain) {
+                glassesRain = this.add.image(0, 0, "glassesRain").setOrigin(0, 0);
+                glassesRain.setScrollFactor(0);
+                glassesRain.setVisible(true);
+                glassesRain.setDepth(950);
+                overlayStack.push(glassesRain);
+            };
             this.time.delayedCall(ms, () => {
                 this.rain.stop();
                 this.rain.setVisible(false);
@@ -910,7 +918,7 @@ class MainWorld extends Phaser.Scene {
             overlayEau = null;
             overlayBoue = null;
             overlayCaca = null;
-            this.glassesRain.setVisible(false);
+            glassesRain = null;
 
             mouchoirs -= 1;
             this.mouchoirText.setText("Mouchoirs : " + mouchoirs);
