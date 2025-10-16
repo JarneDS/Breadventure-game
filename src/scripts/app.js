@@ -34,58 +34,6 @@ let selectedCharacter = 'henri';
 let character
 let isPlayerhenri;
 let perso;
-/*
-function loadCharacterSprites(character) {
-  // crée un préfixe de clé unique
-  const p = character; // 'juliette' ou 'henri'
-
-  // walking
-  this.load.spritesheet(`player_walking_${p}`, `assets/player/${p}walking.png`, {
-    frameWidth: 144, frameHeight: 144
-  });
-  this.load.spritesheet(`player_umbrella_walking_${p}`, `assets/player/${p}umbrellawalking.png`, {
-    frameWidth: 144, frameHeight: 144
-  });
-  this.load.spritesheet(`player_bread_walking_${p}`, `assets/player/${p}breadwalking.png`, {
-    frameWidth: 144, frameHeight: 144
-  });
-  this.load.spritesheet(`player_brum_walking_${p}`, `assets/player/${p}brumwalking.png`, {
-    frameWidth: 144, frameHeight: 144
-  });
-
-  // static
-  this.load.spritesheet(`player_static_${p}`, `assets/player/${p}static.png`, {
-    frameWidth: 144, frameHeight: 144
-  });
-  this.load.spritesheet(`player_umbrella_static_${p}`, `assets/player/${p}umbrella.png`, {
-    frameWidth: 144, frameHeight: 144
-  });
-  this.load.spritesheet(`player_bread_static_${p}`, `assets/player/${p}bread.png`, {
-    frameWidth: 144, frameHeight: 144
-  });
-  this.load.spritesheet(`player_brum_static_${p}`, `assets/player/${p}brum.png`, {
-    frameWidth: 144, frameHeight: 144
-  });
-
-  // jumping
-  this.load.spritesheet(`player_jumping_${p}`, `assets/player/${p}jumping.png`, {
-    frameWidth: 144, frameHeight: 144
-  });
-  this.load.spritesheet(`player_umbrella_jumping_${p}`, `assets/player/${p}umbrellajumping.png`, {
-    frameWidth: 144, frameHeight: 144
-  });
-  this.load.spritesheet(`player_bread_jumping_${p}`, `assets/player/${p}breadjumping.png`, {
-    frameWidth: 144, frameHeight: 144
-  });
-  this.load.spritesheet(`player_brum_jumping_${p}`, `assets/player/${p}brumjumping.png`, {
-    frameWidth: 144, frameHeight: 144
-  });
-
-  // receive
-  this.load.spritesheet(`player_receive_${p}`, `assets/player/${p}obtentionPain.png`, {
-    frameWidth: 144, frameHeight: 144
-  });
-}*/
 
 function loadCharacterSprites(character) {
     // walking
