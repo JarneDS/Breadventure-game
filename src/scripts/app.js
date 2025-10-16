@@ -134,6 +134,7 @@ class LoadingScene extends Phaser.Scene {
         //effects
         this.load.image("eau_vue", "assets/objects/vue_eau.png");
         this.load.image("boue_vue", "assets/objects/boue_vue.png");
+        this.load.image("glassesRain", "assets/objects/pluie_lunettes.png")
 
         // bakery
         this.load.image("interieur_bakery", "assets/bg/interieur_bakery.png");
@@ -376,9 +377,10 @@ class Glasses extends Phaser.Scene {
 
    create(data){
         selectedCharacter = (data && data.character) ? data.character : 'henri';
+        this.cameras.main.postFX.addBlur(8);
 
         this.bg = this.add.tileSprite(0, 0, 1194, 834, 'intro').setOrigin(0, 0);
-
+        
         const lunettes = this.add.sprite(this.scale.width / 2, this.scale.height / 2, 'lunettes');
         lunettes.anims.play('glasses', true);
 
@@ -710,9 +712,16 @@ class MainWorld extends Phaser.Scene {
         this.rain.displayWidth = this.sys.game.config.width;
         this.rain.displayHeight = this.sys.game.config.height;
 
+        this.glassesRain = this.add.image(0, 0, "glassesRain").setOrigin(0, 0);
+        this.glassesRain.setScrollFactor(0);
+        this.glassesRain.setVisible(false);
+        this.glassesRain.setDepth(950);
+        overlayStack.push(this.glassesRain);
+
         const startRainFor = (ms) => {
             this.rain.setVisible(true);
             this.rain.play('rain_loop', true);
+            this.glassesRain.setVisible(true);
             this.time.delayedCall(ms, () => {
                 this.rain.stop();
                 this.rain.setVisible(false);
@@ -901,10 +910,11 @@ class MainWorld extends Phaser.Scene {
             overlayEau = null;
             overlayBoue = null;
             overlayCaca = null;
+            this.glassesRain.setVisible(false);
 
             mouchoirs -= 1;
             this.mouchoirText.setText("Mouchoirs : " + mouchoirs);
-        });
+        }, this);
         
         // this.physics.world.createDebugGraphic();
 
