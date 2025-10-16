@@ -20,6 +20,7 @@ let overlayEau = null; //flaque eau
 let overlayBoue = null; //flaque boue
 let overlayCaca = null; //caca bird
 let glassesRain = null;
+let blurRain = null; //pluie blur lunettes
 
 let overlayStack = []; //pile des overlays -> utile pour effacer le denier apparu
 
@@ -419,6 +420,7 @@ class MainWorld extends Phaser.Scene {
         overlayBoue = null;
         overlayCaca = null;
         glassesRain = null;
+        blurRain = null; //pluie blur lunettes
         overlayStack = [];
 
         // ciel + décors
@@ -723,6 +725,22 @@ class MainWorld extends Phaser.Scene {
         const startRainFor = (ms) => {
             this.rain.setVisible(true);
             this.rain.play('rain_loop', true);
+
+            //Gestion blur pluie
+            if (!blurRain) {
+                const blur = this.cameras.main.postFX.addBlur(4);
+                blurRain = blur;
+
+                overlayStack.push({
+                    destroy: () => {
+                    if (blurRain) {
+                        this.cameras.main.postFX.remove(blurRain);
+                        blurRain = null;
+                    }
+                    }
+                });
+            }
+
             if (!glassesRain) {
                 glassesRain = this.add.image(0, 0, "glassesRain").setOrigin(0, 0);
                 glassesRain.setScrollFactor(0);
@@ -919,6 +937,7 @@ class MainWorld extends Phaser.Scene {
             overlayBoue = null;
             overlayCaca = null;
             glassesRain = null;
+            blurRain = null;
 
             mouchoirs -= 1;
             this.mouchoirText.setText("Mouchoirs : " + mouchoirs);
