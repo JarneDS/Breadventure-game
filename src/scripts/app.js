@@ -1056,7 +1056,6 @@ class BakeryScene extends Phaser.Scene {
 
     preload(data) {
         loadCharacterSprites.call(this, data.character || 'henri');
-
     }
 
     create(data) {
