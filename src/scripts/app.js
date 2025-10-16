@@ -31,6 +31,7 @@ let playerOnPlat;
 let playerHasBread = false;
 
 let selectedCharacter = 'henri';
+let character;
 /*
 function loadCharacterSprites(character) {
   // crée un préfixe de clé unique
@@ -355,13 +356,12 @@ class LoadingScene extends Phaser.Scene {
 
     
         let selectedIndex = 0; // 0 = Henri, 1 = Juliette
-        let selectedCharacter = null;
 
         const selectPlayer = this.add.sprite(517, 450, 'Henri');
         const selectPlayer2 = this.add.sprite(677, 450, 'Juliette');
 
         // Tableau des personnages pour simplifier la navigation
-        const characters = [selectPlayer, selectPlayer2];
+        const character = [selectPlayer, selectPlayer2];
         const names = ['Henri', 'Juliette'];
 
         // Ajoute le clavier
@@ -369,7 +369,7 @@ class LoadingScene extends Phaser.Scene {
 
         // Fonction pour mettre à jour la surbrillance visuelle
         function updateSelection() {
-            characters.forEach((char, index) => {
+            character.forEach((char, index) => {
                 if (index === selectedIndex) {
                     char.setTint(0xffa500); // Orange pour le personnage sélectionné
                 } else {
@@ -383,22 +383,21 @@ class LoadingScene extends Phaser.Scene {
 
         // Gestion des entrées clavier dans la méthode update()
         this.input.keyboard.on('keydown-LEFT', () => {
-            selectedIndex = (selectedIndex - 1 + characters.length) % characters.length;
+            selectedIndex = (selectedIndex - 1 + character.length) % character.length;
             updateSelection();
         });
 
         this.input.keyboard.on('keydown-RIGHT', () => {
-            selectedIndex = (selectedIndex + 1) % characters.length;
+            selectedIndex = (selectedIndex + 1) % character.length;
             updateSelection();
         });
 
         this.input.keyboard.on('keydown-E', () => {
-            selectedCharacter = names[selectedIndex];
+            selectedCharacter = names[selectedIndex].toLowerCase(); // "henri" ou "juliette"
             console.log('Personnage sélectionné :', selectedCharacter);
-
-            // Par exemple, passer à la scène suivante :
-            // this.scene.start('GameScene', { character: selectedCharacter });
+            updateSelection();           
         });
+
 
 
 
@@ -409,7 +408,8 @@ class LoadingScene extends Phaser.Scene {
 
         // Attendre que l'utilisateur appuie sur A
         this.input.keyboard.on('keydown-A', () => {
-            this.scene.start('Glasses');
+            const charToSend = selectedCharacter || 'henri';
+            this.scene.start('Glasses', { character: charToSend });
         });
     }
 }
@@ -422,19 +422,19 @@ class Glasses extends Phaser.Scene {
     preload(){
     }
 
-    create(){
-        this.scale.width
-        this.scale.height
+   create(data){
+        this.selectedCharacter = (data && data.character) ? data.character : 'henri';
 
         this.bg = this.add.tileSprite(0, 0, 1194, 834, 'intro').setOrigin(0, 0);
 
-        const lunettes = this.add.sprite(this.scale.width /2 , this.scale.height / 2    , 'lunettes');
+        const lunettes = this.add.sprite(this.scale.width / 2, this.scale.height / 2, 'lunettes');
         lunettes.anims.play('glasses', true);
 
         lunettes.on('animationcomplete', () => {
-            this.scene.start('MainWorld');
+            this.scene.start('MainWorld', { character: this.selectedCharacter });
         });
     }
+
     
     update(){
     }
@@ -445,10 +445,15 @@ class MainWorld extends Phaser.Scene {
         super('MainWorld');
     }
 
-    preload(){ // permet de ne pas recharger images
+    preload(data){
+        const character = (data && data.character) ? data.character : 'henri';
+        loadCharacterSprites.call(this, character);
     }
+
     
     create(data){
+         this.selectedCharacter = (data && data.character) ? data.character : 'henri';
+
         keyObject = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
         Phaser.Input.Keyboard.JustDown(keyObject);
 
@@ -1037,7 +1042,8 @@ class MainWorld extends Phaser.Scene {
                 returnX: player.x,
                 returnY: player.y,
                 money: money,
-                playerHasBread
+                playerHasBread,
+                character: this.selectedCharacter
             });  
         }
 
@@ -1047,7 +1053,8 @@ class MainWorld extends Phaser.Scene {
                 returnX: player.x,
                 returnY: player.y,
                 money: money,
-                playerHasBread
+                playerHasBread,
+                character: this.selectedCharacter
             });  
         }
 
@@ -1094,10 +1101,14 @@ class BakeryScene extends Phaser.Scene {
         super('BakeryScene');
     }
 
-    preload() {
+    preload(data) {
+        loadCharacterSprites.call(this, data.character || 'henri');
+
     }
 
     create(data) {
+        this.selectedCharacter = (data && data.character) ? data.character : 'henri';
+
         cursors = this.input.keyboard.createCursorKeys();
         
         this.returnX = data.returnX;
@@ -1185,7 +1196,8 @@ class BakeryScene extends Phaser.Scene {
                 playerX: this.returnX,
                 playerY: this.returnY,
                 money: money,
-                playerHasBread
+                playerHasBread,
+                character: this.selectedCharacter
             });
         }
 
@@ -1237,10 +1249,13 @@ class ShopScene extends Phaser.Scene {
         super('ShopScene');
     }
 
-    preload() {
+    preload(data) {
+        loadCharacterSprites.call(this, data.character || 'henri');
     }
 
     create(data) {
+        this.selectedCharacter = (data && data.character) ? data.character : 'henri';
+
         this.returnX = data.returnX;
         this.returnY = data.returnY;
 
@@ -1266,7 +1281,8 @@ class ShopScene extends Phaser.Scene {
                 playerX: this.returnX,
                 playerY: this.returnY,
                 money: money,
-                playerHasBread
+                playerHasBread,
+                character: this.selectedCharacter
             });
         }
     }
