@@ -744,10 +744,10 @@ class MainWorld extends Phaser.Scene {
             if (!glassesRain) {
                 glassesRain = this.add.image(0, 0, "glassesRain").setOrigin(0, 0);
                 glassesRain.setScrollFactor(0);
-                glassesRain.setVisible(true);
                 glassesRain.setDepth(950);
                 overlayStack.push(glassesRain);
-            };
+            }
+            glassesRain.setVisible(true);
             this.time.delayedCall(ms, () => {
                 this.rain.stop();
                 this.rain.setVisible(false);
