@@ -664,6 +664,7 @@ class MainWorld extends Phaser.Scene {
                 });
                 bakeryText.setScrollFactor(0);
                 bakeryTextShown = true;
+                bakeryText.setDepth(950);
             }
         }, null, this);
 
@@ -676,6 +677,7 @@ class MainWorld extends Phaser.Scene {
                 });
                 shopText.setScrollFactor(0);
                 shopTextShown = true;
+                shopText.setDepth(950);
             }
         }, null, this);
     
@@ -702,11 +704,26 @@ class MainWorld extends Phaser.Scene {
 
     
         // HUD argent
+        this.uiLayer = this.add.layer().setDepth(10000);
+
         this.scoreText = this.add.text(10, 10, 'Argent : ' + money + '$', {fontSize: '28px'});
         this.scoreText.setScrollFactor(0);
 
-        this.mouchoirText = this.add.text(400, 10, 'Mouchoirs : ' + mouchoirs, { fontSize: '28px' });
+        // HUD mouchoirs
+        this.mouchoirText = this.add.text(400, 10, 'Mouchoirs : ' + mouchoirs, {fontSize: '28px'});
         this.mouchoirText.setScrollFactor(0);
+
+        /*this.uiLayer.add([this.scoreText, this.mouchoirText]);
+
+        const gameCam = this.cameras.main;
+        const uiCam   = this.cameras.add(0, 0, this.scale.width, this.scale.height);
+        uiCam.setScroll(0, 0);
+
+        // Caméra jeu -> gère pas l'affichage du HUD
+        gameCam.ignore(this.uiLayer);
+
+        // Gère uniquement le HUD
+        uiCam.ignore(this.children.list.filter(obj => obj !== this.uiLayer));*/
 
         // pluie
         this.rain = this.add.sprite(0, 0, 'rain', 0).setOrigin(0, 0);
@@ -719,7 +736,6 @@ class MainWorld extends Phaser.Scene {
         glassesRain = this.add.image(0, 0, "glassesRain").setOrigin(0, 0);
         glassesRain.setScrollFactor(0);
         glassesRain.setVisible(false);
-        glassesRain.setDepth(950);
         overlayStack.push(glassesRain);
 
         const startRainFor = (ms) => {
