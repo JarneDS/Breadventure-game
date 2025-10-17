@@ -660,7 +660,7 @@ class MainWorld extends Phaser.Scene {
             if (!bakeryTextShown) {
                 bakeryText = this.add.text(10, 50, 'Appuyer sur A pour entrer dans la boulangerie', {
                     fontSize: '28px',
-                    fill: '#fff'
+                    fill: '#000F05'
                 });
                 bakeryText.setScrollFactor(0);
                 bakeryTextShown = true;
@@ -673,7 +673,7 @@ class MainWorld extends Phaser.Scene {
             if (!shopTextShown) {
                 shopText = this.add.text(10, 50, 'Appuyer sur A pour entrer dans la boutique', {
                     fontSize: '28px',
-                    fill: '#fff'
+                    fill: '#000F05'
                 });
                 shopText.setScrollFactor(0);
                 shopTextShown = true;
@@ -706,11 +706,17 @@ class MainWorld extends Phaser.Scene {
         // HUD argent
         this.uiLayer = this.add.layer().setDepth(10000);
 
-        this.scoreText = this.add.text(10, 10, 'Argent : ' + money + '$', {fontSize: '28px'});
+        this.scoreText = this.add.text(10, 10, 'Argent : ' + money + '$', {
+            fontSize: '28px',
+            fill: '#000F05'
+        });
         this.scoreText.setScrollFactor(0);
 
         // HUD mouchoirs
-        this.mouchoirText = this.add.text(400, 10, 'Mouchoirs : ' + mouchoirs, {fontSize: '28px'});
+        this.mouchoirText = this.add.text(400, 10, 'Mouchoirs : ' + mouchoirs, {
+            fontSize: '28px',
+            fill: '#000F05'
+        });
         this.mouchoirText.setScrollFactor(0);
 
         /*this.uiLayer.add([this.scoreText, this.mouchoirText]);
@@ -1017,7 +1023,7 @@ class MainWorld extends Phaser.Scene {
             if (!painPrisShown && distance2 <= 100) {
                 painPris = this.add.text(10, 50, 'Vous avez déjà un pain...', {
                     fontSize: '28px',
-                    fill: '#fff'
+                    fill: '#000F05'
                 });
                 painPris.setScrollFactor(0);
                 painPrisShown = true;
@@ -1140,7 +1146,7 @@ class BakeryScene extends Phaser.Scene {
             if (!bakeryTextShown2) {
                 bakeryText2 = this.add.text(10, 50, 'Appuyer sur A pour sortir', {
                     fontSize: '28px',
-                    fill: '#fff'
+                    fill: '#000F05'
                 });
                 bakeryText2.setScrollFactor(0);
                 bakeryTextShown2 = true;
