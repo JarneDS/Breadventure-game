@@ -1204,7 +1204,6 @@ class BakeryScene extends Phaser.Scene {
                     this.time.delayedCall(2000, () => {
                         player.body.moves = true;
                         playerHasBread = true;
-                        const prefix = playerHasBread ? '_pain' : '';
                         player.anims.play('static' + prefix + '_' + selectedCharacter, true);
                     });
                 }
@@ -1222,9 +1221,6 @@ class BakeryScene extends Phaser.Scene {
                 this.time.delayedCall(1500, () => warn.destroy());
             }
         });
-        const test = this.add.image(500, 400, 'player_receiveBread_henri_sheet', 3)
-            .setScrollFactor(0)
-            .setDepth(2000);
     }
 
     update() {
@@ -1338,7 +1334,6 @@ class ShopScene extends Phaser.Scene {
                     this.time.delayedCall(1000, () => {
                         player.body.moves = true;
                         playerHasUmbrella = true;
-                        const prefix = playerHasUmbrella ? '_umbrella' : '';
                         player.anims.play('static' + prefix + '_' + selectedCharacter, true);
                     });
                 }
