@@ -36,8 +36,6 @@ let playerHasBread = false;
 
 let playerHasUmbrella = false;
 
-let playerHasMouchoirs = false;
-
 let selectedCharacter = 'henri';
 let character;
 let perso;
@@ -96,11 +94,11 @@ function loadCharacterSprites(character) {
         frameWidth: 144,
         frameHeight: 144,
     })
-    this.load.spritesheet(`player_receiveBread_${character}`, `assets/player/${character}obtentionPain.png`, {
+    this.load.spritesheet(`player_receiveBread_${character}_sheet`, `assets/player/${character}obtentionPain.png`, {
         frameWidth: 144,
         frameHeight: 144,
     })
-    this.load.spritesheet(`player_receiveUmbrella_${character}`, `assets/player/${character}obtentionParapluie.png`, {
+    this.load.spritesheet(`player_receiveUmbrella_${character}_sheet`, `assets/player/${character}obtentionParapluie.png`, {
         frameWidth: 144,
         frameHeight: 144,
     })
@@ -266,18 +264,24 @@ class LoadingScene extends Phaser.Scene {
                 frameRate: 6,
                 repeat: 0
             })
+            // Supprime d’éventuelles anciennes versions d’animations
+            this.anims.remove(`receive_bread_${char}`);
+            this.anims.remove(`receive_umbrella_${char}`);
+
+            // Crée les animations à partir des bons spritesheets (_sheet)
             this.anims.create({
                 key:`receive_bread_${char}`,
-                frames: this.anims.generateFrameNumbers(`player_receiveBread_${char}`, { start: 0, end: 3 }),
+                frames: this.anims.generateFrameNumbers(`player_receiveBread_${char}_sheet`, { start: 0, end: 3 }),
                 frameRate: 6,
                 repeat: 0
-            })
+            });
+
             this.anims.create({
                 key:`receive_umbrella_${char}`,
-                frames: this.anims.generateFrameNumbers(`player_receiveUmbrella_${char}`, { start: 0, end: 3 }),
+                frames: this.anims.generateFrameNumbers(`player_receiveUmbrella_${char}_sheet`, { start: 0, end: 3 }),
                 frameRate: 6,
                 repeat: 0
-            })
+            });
         })
     /*
         // insecte
@@ -1036,7 +1040,7 @@ class MainWorld extends Phaser.Scene {
         }
 
         if (playerHasBread) {
-            const distance2 = Phaser.Math.Distance.Between(player.x, player.y, 13564, 699);
+            const distance2 = Phaser.Math.Distance.Between(player.x, player.y, 13760, 699);
 
             if (!painPrisShown && distance2 <= 100) {
                 painPris = this.add.text(10, 50, 'Vous avez déjà un pain...', {
@@ -1072,6 +1076,7 @@ class MainWorld extends Phaser.Scene {
                 returnY: player.y,
                 money: money,
                 playerHasBread,
+                playerHasUmbrella,
                 character: selectedCharacter
             });  
         }
@@ -1083,6 +1088,7 @@ class MainWorld extends Phaser.Scene {
                 returnY: player.y,
                 money: money,
                 playerHasBread,
+                playerHasUmbrella,
                 character: selectedCharacter
             });  
         }
@@ -1192,9 +1198,13 @@ class BakeryScene extends Phaser.Scene {
                     player.anims.play('receive_bread_' + selectedCharacter, true);
                     player.setVelocity(0, 0);
                     player.body.moves = false;
-                    this.time.delayedCall(2000, () => player.body.moves = true);
+                    playerHasBread = false;
+
+                    // Durée réelle de l’animation (4 frames à 6 fps ≈ 666 ms)
                     this.time.delayedCall(2000, () => {
-                        // Après 1 seconde, revenir à une animation normale
+                        player.body.moves = true;
+                        playerHasBread = true;
+                        const prefix = playerHasBread ? '_pain' : '';
                         player.anims.play('static' + prefix + '_' + selectedCharacter, true);
                     });
                 }
@@ -1212,6 +1222,9 @@ class BakeryScene extends Phaser.Scene {
                 this.time.delayedCall(1500, () => warn.destroy());
             }
         });
+        const test = this.add.image(500, 400, 'player_receiveBread_henri_sheet', 3)
+            .setScrollFactor(0)
+            .setDepth(2000);
     }
 
     update() {
@@ -1227,6 +1240,7 @@ class BakeryScene extends Phaser.Scene {
                 playerY: this.returnY,
                 money: money,
                 playerHasBread,
+                playerHasUmbrella,
                 character: selectedCharacter
             });
         }
@@ -1314,14 +1328,17 @@ class ShopScene extends Phaser.Scene {
                 playerHasUmbrella = true;
                 this.parapluie.disableBody(true, true);
                 money -= 4;
-                const prefix = playerHasUmbrella ? '_umbrella' : '';
+                const prefix = playerHasUmbrella ? '_umbrella': '';
                 if (playerHasUmbrella) {
                     player.anims.play('receive_umbrella_' + selectedCharacter, true);
                     player.setVelocity(0, 0);
                     player.body.moves = false;
-                    this.time.delayedCall(2000, () => player.body.moves = true);
-                    this.time.delayedCall(2000, () => {
-                        // Après 1 seconde, revenir à une animation normale
+                    playerHasUmbrella = false;
+
+                    this.time.delayedCall(1000, () => {
+                        player.body.moves = true;
+                        playerHasUmbrella = true;
+                        const prefix = playerHasUmbrella ? '_umbrella' : '';
                         player.anims.play('static' + prefix + '_' + selectedCharacter, true);
                     });
                 }
@@ -1404,6 +1421,7 @@ class ShopScene extends Phaser.Scene {
                 playerY: this.returnY,
                 money: money,
                 playerHasBread,
+                playerHasUmbrella,
                 character: selectedCharacter
             });
         }
@@ -1435,7 +1453,7 @@ class ShopScene extends Phaser.Scene {
         }
 
         // Animation (avec ou sans pain)
-        const prefix = playerHasBread ? '_pain' : '';
+        const prefix = playerHasUmbrella ? '_umbrella' : '';
         if (!player.body.onFloor()) {
             player.anims.play('jumping' + prefix + '_' + selectedCharacter, true);
             player.setFrame(2);
