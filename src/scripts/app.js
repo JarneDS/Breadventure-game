@@ -11,6 +11,8 @@ let bakeryTextShown = false;
 let bakeryText = null;
 let bakeryTextShown2 = false;
 let bakeryText2 = null;
+let shopTextShown2 = false;
+let shopText2 = null;
 let painPrisShown = false;
 let painPris = null;
 let keyObject;
@@ -33,8 +35,7 @@ let playerOnPlat;
 let playerHasBread = false;
 
 let selectedCharacter = 'henri';
-let character
-let isPlayerhenri;
+let character;
 let perso;
 
 function loadCharacterSprites(character) {
@@ -128,7 +129,6 @@ class LoadingScene extends Phaser.Scene {
         this.load.image("cielVille2", "assets/bg/ciel_ville2.png");
         this.load.image("cielParc", "assets/bg/ciel_parc.png");
         this.load.image("cielParc_se", "assets/bg/ciel_parc_se.png");
-        this.load.image("mouchoirs", "assets/objects/bac_mouchoir.png");
         this.load.image("shop", "assets/bg/shop.png");
         this.load.image("merde", "assets/objects/merde_ecran.png");
         this.load.image("caca", "assets/obstacles/caca.png");
@@ -140,8 +140,12 @@ class LoadingScene extends Phaser.Scene {
 
         // bakery
         this.load.image("interieur_bakery", "assets/bg/interieur_bakery.png");
-        //this.load.image("pain", "assets/objects/pain.png");
-        this.load.image("pain", "assets/objects/painV2.png");
+        this.load.image("pain", "assets/objects/pain.png");
+
+         // shop
+        this.load.image("interieur_shop", "assets/bg/interieur_shop.png");
+        this.load.image("parapluie", "assets/objects/parapluie.png");
+        this.load.image("mouchoirs", "assets/objects/mouchoirs.png");
  
         // pluie
         this.load.spritesheet("rain", "assets/objects/pluie.png", {
@@ -620,7 +624,7 @@ class MainWorld extends Phaser.Scene {
         let groundColliderExtra1 = this.physics.add.staticImage(4327, 786, null).setSize(34, 30).setVisible(false);
         let groundColliderExtra2 = this.physics.add.staticImage(5185, 786, null).setSize(32, 30).setVisible(false);
         let enterBakery = this.physics.add.staticImage(13760, 699, null).setSize(52, 79).setVisible(false); //entrée boulangerie
-        let enterShop = this.physics.add.staticImage(7036, 699, null).setSize(51, 79).setVisible(false); //entrée shop
+        let enterShop = this.physics.add.staticImage(7140, 699, null).setSize(51, 79).setVisible(false); //entrée shop
         let bac = this.physics.add.staticImage(7955, 716, null).setSize(150, 50).setVisible(false); //chantier - bac camion
         let truck = this.physics.add.staticImage(8155, 718, null).setSize(148, 48).setVisible(false); //chantier - camion 
         let bar1 = this.physics.add.staticImage(7868, 718, null).setSize(20, 20).setVisible(false); //chantier - bar gauche 
@@ -1037,7 +1041,7 @@ class MainWorld extends Phaser.Scene {
         }
 
         if (shopTextShown) {
-            const distance = Phaser.Math.Distance.Between(player.x, player.y, 7036, 699);
+            const distance = Phaser.Math.Distance.Between(player.x, player.y, 7140, 699);
             if (distance > 100) {
                 if (shopText) {
                     shopText.destroy();
@@ -1268,10 +1272,13 @@ class ShopScene extends Phaser.Scene {
     create(data) {
         selectedCharacter = (data && data.character) ? data.character : 'henri';
 
+        cursors = this.input.keyboard.createCursorKeys();
+
         this.returnX = data.returnX;
         this.returnY = data.returnY;
 
-        player = this.physics.add.sprite(100, 736, "player");
+        this.interiorShop = this.add.tileSprite(0, -190, 1194, 1024, 'interieur_shop').setOrigin(0, 0);
+        player = this.physics.add.sprite(586, 736, "player");
         player.setOrigin(0.5, 1);
         player.setSize(42, 90);
         player.setOffset((144 - 42) / 2, 144 - 90);
@@ -1279,6 +1286,30 @@ class ShopScene extends Phaser.Scene {
 
         let groundColliderShop = this.physics.add.staticImage(600, 784, null).setSize(1200, 100).setVisible(false);
         this.physics.add.collider(player, groundColliderShop);
+
+        this.parapluie = this.physics.add.image(382, 662, 'parapluie');
+
+        this.mouchoirs = this.physics.add.image(784, 660, 'mouchoirs');
+
+        let exitShop = this.physics.add.staticImage(585, 685, null).setSize(57, 100).setVisible(false);
+
+        this.physics.add.overlap(player, exitShop, () => {
+            if (!shopTextShown2) {
+                shopText2 = this.add.text(10, 50, 'Appuyer sur A pour sortir', {
+                    fontSize: '28px',
+                    //fill: '#000F05'
+                    fill: '#FFF'
+                });
+                shopText2.setScrollFactor(0);
+                shopTextShown2 = true;
+            }
+        }, null, this);
+
+        let rightWall = this.physics.add.staticImage(976, 600, null).setSize(10, 300).setVisible(false);
+        this.physics.add.collider(player, rightWall);
+
+        let leftWall = this.physics.add.staticImage(196, 600, null).setSize(10, 300).setVisible(false);
+        this.physics.add.collider(player, leftWall);
         
         this.keyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
 
@@ -1288,7 +1319,7 @@ class ShopScene extends Phaser.Scene {
 
     update() {
         // sortir du shop
-        if (Phaser.Input.Keyboard.JustDown(this.keyA)) {
+        if (Phaser.Input.Keyboard.JustDown(this.keyA) && shopTextShown2) {
             this.scene.start('MainWorld', {
                 playerX: this.returnX,
                 playerY: this.returnY,
@@ -1297,6 +1328,47 @@ class ShopScene extends Phaser.Scene {
                 character: selectedCharacter
             });
         }
+
+        if (shopTextShown2) {
+            const distance = Phaser.Math.Distance.Between(player.x, player.y, 586, 685);
+            if (distance > 80) {
+                if (shopText2) shopText2.destroy();
+                shopText2 = null;
+                shopTextShown2 = false;
+            }
+        }
+
+        // Mouvement
+        player.setVelocityX(0);
+
+        // Saut
+        if (Phaser.Input.Keyboard.JustDown(cursors.up) && player.body.onFloor()) {
+            player.setVelocityY(-200);
+        }
+
+        // Gauche / Droite
+        if (cursors.left.isDown) {
+            player.setVelocityX(-230);
+            player.setFlipX(true);
+        } else if (cursors.right.isDown) {
+            player.setVelocityX(230);
+            player.setFlipX(false);
+        }
+
+        // Animation (avec ou sans pain)
+        const prefix = playerHasBread ? '_pain' : '';
+        if (!player.body.onFloor()) {
+            player.anims.play('jumping' + prefix + '_' + selectedCharacter, true);
+            player.setFrame(2);
+        } else if (player.body.velocity.x !== 0) {
+            player.anims.play('walking' + prefix + '_' + selectedCharacter, true);
+        } else {
+            player.anims.play('static' + prefix + '_' + selectedCharacter, true);
+        }
+
+        // Murs gauche et droite
+        player.x = Phaser.Math.Clamp(player.x, 0, 1194);
+        console.log(player.x);
     }
 }
 
