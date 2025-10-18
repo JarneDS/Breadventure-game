@@ -1438,7 +1438,6 @@ class ShopScene extends Phaser.Scene {
 
         // Murs gauche et droite
         player.x = Phaser.Math.Clamp(player.x, 0, 1194);
-        console.log(player.x);
     }
 }
 
