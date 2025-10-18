@@ -589,7 +589,7 @@ class MainWorld extends Phaser.Scene {
                     overlayEau = this.add.image(0, 0, "eau_vue").setOrigin(0, 0);
                     overlayEau.displayWidth  = this.sys.game.config.width;
                     overlayEau.displayHeight = this.sys.game.config.height;
-                    overlayEau.setAlpha(0.6);
+                    overlayEau.setAlpha(0.8);
                     overlayEau.setScrollFactor(0);
                     overlayEau.setDepth(999);
                     overlayStack.push(overlayEau);
