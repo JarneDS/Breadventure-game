@@ -1340,15 +1340,24 @@ class ShopScene extends Phaser.Scene {
             }
         });
 
+        this.mouchoirText = this.add.text(400, 10, 'Mouchoirs : ' + mouchoirs, {
+            fontSize: '28px',
+            //fill: '#000F05'
+            fill: '#FFF'
+        });
+        this.mouchoirText.setScrollFactor(0);
+
         // Achat de mouchoir: -2 pièces si possible, MAJ HUD
         this.physics.add.overlap(player, this.mouchoirs, () => {
             if (!playerHasMouchoirs && money >= 2) {
                 playerHasMouchoirs = true;
                 this.mouchoirs.disableBody(true, true);
                 money -= 2;
+                mouchoirs += 1;
 
                 // MAJ texte argent
-                if (this.moneyText) this.moneyText.setText('Argent : ' + money + '$');
+                if (this.moneyText) {this.moneyText.setText('Argent : ' + money + '$')};
+                this.mouchoirText.setText("Mouchoirs : " + mouchoirs);
 
                 // Achat -> -2$ +texte pour user
                 const txt = this.add.text(10, 50, '-2$', { fontSize: '28px', fill: '#ff5555' });
