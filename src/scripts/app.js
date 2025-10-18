@@ -34,6 +34,10 @@ let playerOnBoat;
 let playerOnPlat;
 let playerHasBread = false;
 
+let playerHasUmbrella = false;
+
+let playerHasMouchoirs = false;
+
 let selectedCharacter = 'henri';
 let character;
 let perso;
@@ -92,7 +96,11 @@ function loadCharacterSprites(character) {
         frameWidth: 144,
         frameHeight: 144,
     })
-    this.load.spritesheet(`player_receive_${character}`, `assets/player/${character}obtentionPain.png`, {
+    this.load.spritesheet(`player_receiveBread_${character}`, `assets/player/${character}obtentionPain.png`, {
+        frameWidth: 144,
+        frameHeight: 144,
+    })
+    this.load.spritesheet(`player_receiveUmbrella_${character}`, `assets/player/${character}obtentionParapluie.png`, {
         frameWidth: 144,
         frameHeight: 144,
     })
@@ -260,7 +268,13 @@ class LoadingScene extends Phaser.Scene {
             })
             this.anims.create({
                 key:`receive_bread_${char}`,
-                frames: this.anims.generateFrameNumbers(`player_receive_${char}`, { start: 0, end: 3 }),
+                frames: this.anims.generateFrameNumbers(`player_receiveBread_${char}`, { start: 0, end: 3 }),
+                frameRate: 6,
+                repeat: 0
+            })
+            this.anims.create({
+                key:`receive_umbrella_${char}`,
+                frames: this.anims.generateFrameNumbers(`player_receiveUmbrella_${char}`, { start: 0, end: 3 }),
                 frameRate: 6,
                 repeat: 0
             })
@@ -1290,6 +1304,62 @@ class ShopScene extends Phaser.Scene {
         this.parapluie = this.physics.add.image(382, 662, 'parapluie');
 
         this.mouchoirs = this.physics.add.image(784, 660, 'mouchoirs');
+
+        this.moneyText = this.add.text(10, 10, 'Argent : ' + money + '$', { fontSize: '28px' });
+        this.moneyText.setScrollFactor(0);
+
+        // Achat du parapluie: -4 pièces si possible, MAJ HUD
+        this.physics.add.overlap(player, this.parapluie, () => {
+            if (!playerHasUmbrella && money >= 4) {
+                playerHasUmbrella = true;
+                this.parapluie.disableBody(true, true);
+                money -= 4;
+                const prefix = playerHasUmbrella ? '_umbrella' : '';
+                if (playerHasUmbrella) {
+                    player.anims.play('receive_umbrella_' + selectedCharacter, true);
+                    player.setVelocity(0, 0);
+                    player.body.moves = false;
+                    this.time.delayedCall(2000, () => player.body.moves = true);
+                    this.time.delayedCall(2000, () => {
+                        // Après 1 seconde, revenir à une animation normale
+                        player.anims.play('static' + prefix + '_' + selectedCharacter, true);
+                    });
+                }
+
+                // MAJ texte argent
+                if (this.moneyText) this.moneyText.setText('Argent : ' + money + '$');
+
+                // Achat -> -4$ +texte pour user
+                const txt = this.add.text(10, 50, '-4$', { fontSize: '28px', fill: '#ff5555' });
+                txt.setScrollFactor(0);
+                this.time.delayedCall(1200, () => txt.destroy());
+            } else if (money < 4) { //Alerte argent pas suffisant (pas 4$ dispo)
+                const warn = this.add.text(10, 50, 'Pas assez d\'argent !', { fontSize: '28px', fill: '#ff0000' });
+                warn.setScrollFactor(0);
+                this.time.delayedCall(1500, () => warn.destroy());
+            }
+        });
+
+        // Achat de mouchoir: -2 pièces si possible, MAJ HUD
+        this.physics.add.overlap(player, this.mouchoirs, () => {
+            if (!playerHasMouchoirs && money >= 2) {
+                playerHasMouchoirs = true;
+                this.mouchoirs.disableBody(true, true);
+                money -= 2;
+
+                // MAJ texte argent
+                if (this.moneyText) this.moneyText.setText('Argent : ' + money + '$');
+
+                // Achat -> -2$ +texte pour user
+                const txt = this.add.text(10, 50, '-2$', { fontSize: '28px', fill: '#ff5555' });
+                txt.setScrollFactor(0);
+                this.time.delayedCall(1200, () => txt.destroy());
+            } else if (money < 2) { //Alerte argent pas suffisant (pas 2$ dispo)
+                const warn = this.add.text(10, 50, 'Pas assez d\'argent !', { fontSize: '28px', fill: '#ff0000' });
+                warn.setScrollFactor(0);
+                this.time.delayedCall(1500, () => warn.destroy());
+            }
+        });
 
         let exitShop = this.physics.add.staticImage(585, 685, null).setSize(57, 100).setVisible(false);
 
