@@ -35,6 +35,7 @@ let playerOnPlat;
 let playerHasBread = false;
 
 let playerHasUmbrella = false;
+let playerHasMouchoirs = false;
 
 let selectedCharacter = 'henri';
 let character;
