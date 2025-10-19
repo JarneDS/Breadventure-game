@@ -19,7 +19,7 @@ let painPris = null;
 let keyObject;
 let keyObjectE;
 
-// timer
+//timer
 let runTimerActive = false;
 let runTimerStart = 0;
 let runTimerText = null;
@@ -790,7 +790,7 @@ class MainWorld extends Phaser.Scene {
         });
         this.mouchoirText.setScrollFactor(0);
 
-        //Timer
+        //timer
         runTimerActive = false;
         runTimerStart = 0;
         runTimerText = this.add.text(16, 40, "00:00.000", {
@@ -1173,7 +1173,7 @@ class MainWorld extends Phaser.Scene {
             });  
         }
 
-        //Timer
+        //timer
         if (keyObject.isDown && houseTextShown) {
             if (runTimerActive) {
                 runTimerActive = false;
