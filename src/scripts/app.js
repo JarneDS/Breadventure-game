@@ -19,6 +19,23 @@ let painPris = null;
 let keyObject;
 let keyObjectE;
 
+// timer
+let runTimerActive = false;
+let runTimerStart = 0;
+let runTimerText = null;
+let lastRunTimeMs = 0;
+
+function formatElapsed(ms) {
+    const totalSeconds = Math.floor(ms / 1000);
+    const minutes = Math.floor(totalSeconds / 60);
+    const seconds = totalSeconds % 60;
+    const millis  = ms % 1000;
+    const mm = String(minutes).padStart(2, "0");
+    const ss = String(seconds).padStart(2, "0");
+    const mmm = String(millis).padStart(3, "0");
+    return `${mm}:${ss}.${mmm}`;
+}
+
 let overlayEau = null; //flaque eau
 let overlayBoue = null; //flaque boue
 let overlayCaca = null; //caca bird
@@ -773,6 +790,17 @@ class MainWorld extends Phaser.Scene {
         });
         this.mouchoirText.setScrollFactor(0);
 
+        //Timer
+        runTimerActive = false;
+        runTimerStart = 0;
+        runTimerText = this.add.text(16, 40, "00:00.000", {
+            fontSize: "16px",
+            fontFamily: "monospace",
+            color: "#000F05",
+            backgroundColor: "rgba(255,255,255,0.4)",
+            padding: { x: 6, y: 3 }
+        }).setScrollFactor(0).setDepth(10001);
+
         /*this.uiLayer.add([this.scoreText, this.mouchoirText]);
 
         const gameCam = this.cameras.main;
@@ -1029,6 +1057,16 @@ class MainWorld extends Phaser.Scene {
         if (Phaser.Input.Keyboard.JustDown(cursors.up) && player.body.onFloor()) {
             player.setVelocityY(-230);
         }
+
+        if (!runTimerActive && (Phaser.Input.Keyboard.JustDown(cursors.left) || Phaser.Input.Keyboard.JustDown(cursors.right))) {
+            runTimerActive = true;
+            runTimerStart = this.time.now;
+        }
+
+        if (runTimerActive && runTimerText) {
+            const elapsed = this.time.now - runTimerStart;
+            runTimerText.setText(formatElapsed(elapsed));
+        }
     
         // Déplacements X (perso ralenti soi contact obstacle et que overlay actif)
         const overlayActif = overlayEau || overlayBoue || overlayCaca || blurRain || (glassesRain && glassesRain.visible);
@@ -1135,7 +1173,13 @@ class MainWorld extends Phaser.Scene {
             });  
         }
 
-        if (keyObject.isDown && houseTextShown){
+        //Timer
+        if (keyObject.isDown && houseTextShown) {
+            if (runTimerActive) {
+                runTimerActive = false;
+                lastRunTimeMs = this.time.now - runTimerStart;
+                if (runTimerText) runTimerText.setText("FIN: " + formatElapsed(lastRunTimeMs));
+            }
             this.scene.start('EndScene', {
                 returnX: player.x,
                 returnY: player.y,
@@ -1143,7 +1187,7 @@ class MainWorld extends Phaser.Scene {
                 playerHasBread,
                 playerHasUmbrella,
                 character: selectedCharacter
-            });  
+            });
         }
 
         // bateau: suivi du mouvement
@@ -1527,7 +1571,12 @@ class EndScene extends Phaser.Scene {
     }
 
     create(data) {
-
+        if (typeof lastRunTimeMs === "number" && lastRunTimeMs > 0) {
+            this.add.text(400, 300, "Votre temps : " + formatElapsed(lastRunTimeMs), {
+                fontSize: "28px",
+                color: "#000"
+            });
+        }
     }
 
     update() {
