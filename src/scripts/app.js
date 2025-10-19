@@ -711,9 +711,24 @@ class MainWorld extends Phaser.Scene {
     
         // argent
         // argent (ne génère qu'une pièce à la fois)
-        if (obstacles.length === 0) {
+        if (obstacles.length === 0) { // mise en place zone interdite pour éviter spawn money dans zones inaccessibles
+            const zonesInterdites = [
+                { min: 4300, max: 5200 }, // zone bateau
+                { min: 7800, max: 9300 }, // chantier
+                { min: 13700, max: 14000 }, // bakery
+                { min: 7100, max: 7300 }, // shop
+            ];
+
+            const isInZonesInterdites = (x) => {
+                return zonesInterdites.some(zone => x >= zone.min && x <= zone.max);
+            };
+
             for (let i = 0; i < 5; i++) {
-                let randomX = Phaser.Math.Between(1200, 10000);
+                let randomX;
+                do {
+                    randomX = Phaser.Math.Between(1200, 10000);
+                } while (isInZonesInterdites(randomX));
+
                 let obstacle = this.physics.add.staticImage(randomX, 695, 'money');
                 obstacles.push(obstacle);
 
@@ -725,7 +740,6 @@ class MainWorld extends Phaser.Scene {
             }
         }
 
-    
         // HUD argent
         this.uiLayer = this.add.layer().setDepth(10000);
 
