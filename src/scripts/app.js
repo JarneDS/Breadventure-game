@@ -709,8 +709,8 @@ class MainWorld extends Phaser.Scene {
         }, null, this);
 
         // entrer dans maison
-        this.physics.add.overlap(player, enterShop, () => {
-            if (!houseTextShown) {
+        this.physics.add.overlap(player, enterHouse, () => {
+            if (!houseTextShown && playerHasBread) {
                 houseText = this.add.text(10, 50, 'Appuyer sur A pour rentrer chez vous', {
                     fontSize: '28px',
                     fill: '#000F05'
@@ -1125,6 +1125,17 @@ class MainWorld extends Phaser.Scene {
             });  
         }
 
+        if (keyObject.isDown && houseTextShown){
+            this.scene.start('EndScene', {
+                returnX: player.x,
+                returnY: player.y,
+                money: money,
+                playerHasBread,
+                playerHasUmbrella,
+                character: selectedCharacter
+            });  
+        }
+
         // bateau: suivi du mouvement
         playerOnBoat = (
             player.body.touching.down &&
@@ -1495,6 +1506,25 @@ class ShopScene extends Phaser.Scene {
     }
 }
 
+class EndScene extends Phaser.Scene {
+    constructor() {
+        super('EndScene');
+    }
+
+    preload(data) {
+        const character = (data && data.character) ? data.character : 'henri';
+        loadCharacterSprites.call(this, character);
+    }
+
+    create(data) {
+
+    }
+
+    update() {
+
+    }
+}
+
 const config = {
     type: Phaser.AUTO,
     width: 1194,
@@ -1504,7 +1534,7 @@ const config = {
         arcade: { gravity: { y: 0 }, debug: true }
     },
     render: { pixelArt: true, antialias: false }, // ajout pour une image nette (eau)
-    scene: [LoadingScene, Glasses, MainWorld, BakeryScene, ShopScene]
+    scene: [LoadingScene, Glasses, MainWorld, BakeryScene, ShopScene, EndScene]
 };
 
 const game = new Phaser.Game(config);
