@@ -1030,12 +1030,22 @@ class MainWorld extends Phaser.Scene {
             player.setVelocityY(-230);
         }
     
-        // Déplacements
-        if (cursors.left.isDown) {
-            player.setVelocityX(-230);
+        // Déplacements X (perso ralenti soi contact obstacle et que overlay actif)
+        const overlayActif = overlayEau || overlayBoue || overlayCaca || blurRain || (glassesRain && glassesRain.visible);
+
+            const speedLeft  = overlayActif ? -200 : -250; // gauche
+            const speedRight = overlayActif ?  200 :  800; // droite
+
+            // Saut
+            if (Phaser.Input.Keyboard.JustDown(cursors.up) && player.body.onFloor()) {
+            player.setVelocityY(-230);
+            }
+
+            if (cursors.left.isDown) {
+            player.setVelocityX(speedLeft);
             player.setFlipX(true);
-        } else if (cursors.right.isDown) {
-            player.setVelocityX(800);
+            } else if (cursors.right.isDown) {
+            player.setVelocityX(speedRight);
             player.setFlipX(false);
         }
     
