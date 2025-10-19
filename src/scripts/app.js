@@ -8,6 +8,7 @@ let bateau;
 let smallPlat;
 let bigPlat;
 let bakeryTextShown = false;
+let houseTextShown = false; //texte maison
 let bakeryText = null;
 let bakeryTextShown2 = false;
 let bakeryText2 = null;
@@ -29,6 +30,8 @@ let overlayStack = []; //pile des overlays -> utile pour effacer le denier appar
 let mouchoirs = 10; //valeur par défaut - valeur TEST -> à modifier
 let shopTextShown = false;
 let shopText = null;
+let houseText = null;
+
 //let insects;
 let playerOnBoat;
 let playerOnPlat;
@@ -644,6 +647,7 @@ class MainWorld extends Phaser.Scene {
         let groundColliderExtra2 = this.physics.add.staticImage(5185, 786, null).setSize(32, 30).setVisible(false);
         let enterBakery = this.physics.add.staticImage(13760, 699, null).setSize(52, 79).setVisible(false); //entrée boulangerie
         let enterShop = this.physics.add.staticImage(7140, 699, null).setSize(51, 79).setVisible(false); //entrée shop
+        let enterHouse= this.physics.add.staticImage(353, 699, null).setSize(51, 79).setVisible(false); //entrée maison
         let bac = this.physics.add.staticImage(7955, 716, null).setSize(150, 50).setVisible(false); //chantier - bac camion
         let truck = this.physics.add.staticImage(8155, 718, null).setSize(148, 48).setVisible(false); //chantier - camion 
         let bar1 = this.physics.add.staticImage(7868, 718, null).setSize(20, 20).setVisible(false); //chantier - bar gauche 
@@ -701,6 +705,19 @@ class MainWorld extends Phaser.Scene {
                 shopText.setScrollFactor(0);
                 shopTextShown = true;
                 shopText.setDepth(950);
+            }
+        }, null, this);
+
+        // entrer dans maison
+        this.physics.add.overlap(player, enterShop, () => {
+            if (!houseTextShown) {
+                houseText = this.add.text(10, 50, 'Appuyer sur A pour rentrer chez vous', {
+                    fontSize: '28px',
+                    fill: '#000F05'
+                });
+                houseText.setScrollFactor(0);
+                houseTextShown = true;
+                houseText.setDepth(950);
             }
         }, null, this);
     
@@ -1185,7 +1202,7 @@ class BakeryScene extends Phaser.Scene {
             if (!bakeryTextShown2) {
                 bakeryText2 = this.add.text(10, 50, 'Appuyer sur A pour sortir', {
                     fontSize: '28px',
-                    fill: '#000F05'
+                    fill: '#fafafa'
                 });
                 bakeryText2.setScrollFactor(0);
                 bakeryTextShown2 = true;
