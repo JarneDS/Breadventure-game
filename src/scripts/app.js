@@ -868,7 +868,7 @@ class MainWorld extends Phaser.Scene {
                 overlayStack.push({
                     destroy: () => {
                     if (blurRain) {
-                        this.cameras.main.postFX.remove(blurRain);
+                        this.gameSpritesLayers.postFX.remove(blurRain);
                         blurRain = null;
                     }
                     }
@@ -1216,7 +1216,6 @@ class MainWorld extends Phaser.Scene {
                 playerHasBread,
                 playerHasUmbrella,
                 character: selectedCharacter,
-                lastRunTimeMs
             });
         }
 
