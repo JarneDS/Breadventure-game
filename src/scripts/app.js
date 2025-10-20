@@ -1183,16 +1183,6 @@ class MainWorld extends Phaser.Scene {
         } else {
             this.player.anims.play('static' + prefix + '_' + selectedCharacter, true);
         }
-
-        if (player.body.onFloor()) {
-            hasJumped = false;
-        }
-
-
-        // Quand le joueur retombe au sol, on réinitialise
-        if (player.body.onFloor()) {
-            hasJumped = false;
-        } 
     
         if (this.player.x < 0) this.player.x = 0;
         if (this.player.x > 14040) this.player.x = 14040;
