@@ -62,6 +62,8 @@ let character;
 let perso;
 let gameSpritesLayers;
 
+let hasJumped = false;
+
 function loadCharacterSprites(character) {
     // walking
     this.load.spritesheet(`player_walking_${character}`, `assets/player/${character}walking.png`,{
@@ -229,6 +231,9 @@ class LoadingScene extends Phaser.Scene {
     }
 
     create() {
+        // son
+        const loadingSceneSon = this.sound.add('loadingScene');
+        loadingSceneSon.play({ loop: true });
         // animations
         // base
         let characters = ['henri', 'juliette'];
@@ -434,6 +439,7 @@ class LoadingScene extends Phaser.Scene {
         this.input.keyboard.on('keydown-A', () => {
             const charToSend = selectedCharacter || 'henri';
             this.scene.start('Glasses', { character: charToSend });
+            loadingSceneSon.stop();
         });
     }
 }
@@ -510,6 +516,27 @@ class MainWorld extends Phaser.Scene {
         this.house3 = this.add.tileSprite(11448, 226, 2048, 512, 'background').setOrigin(0, 0);
         this.bakery = this.add.tileSprite(13496, -286, 2048, 1024, 'bakery').setOrigin(0, 0);
 
+        // sons
+        const bateauSon = this.sound.add('bateau');
+        const boueSon = this.sound.add('boue');
+        const checkoutSon = this.sound.add('checkout');
+        const constructionSon = this.sound.add('construction');
+        const eauSon = this.sound.add('eau');
+        const insectesSon = this.sound.add('insectes');
+        const marcheBoueSon = this.sound.add('marcheBoue');
+        const marcheEauFlaqueSon = this.sound.add('marcheEauFlaque');
+        const marcheRiviereSon = this.sound.add('marcheRiviere');
+        const merdePigeonSon = this.sound.add('merdePigeon');
+        const moneySon = this.sound.add('money');
+        const obtentionItemSon = this.sound.add('obtentionItem');
+        const parcSon = this.sound.add('parc');
+        const pigeonSon = this.sound.add('pigeon');
+        const pluieSon = this.sound.add('pluie');
+        const porteFermeSon = this.sound.add('porteFerme');
+        const porteOuvreSon = this.sound.add('porteOuvre');
+        const villeSon = this.sound.add('ville');
+        this.marcheSon = this.sound.add('marche', { loop: true });
+        
         // bateau
         bateau = this.physics.add.image(4456, 610, 'bateau');
         bateau.setSize(256, 40);
@@ -1116,17 +1143,45 @@ class MainWorld extends Phaser.Scene {
             player.setVelocityX(speedRight);
             player.setFlipX(false);
         }
-    
+        
+        const jumpSon = this.sound.add('jump');
+
         // Animations selon possession du pain
         const prefix = playerHasBread ? '_pain' : '';
+
         if (!player.body.onFloor()) {
             player.anims.play('jumping' + prefix + '_' + selectedCharacter, true);
             player.setFrame(2);
+
+            if (!hasJumped) {
+                jumpSon.play();
+                hasJumped = true;
+            }
+
         } else if (player.body.velocity.x !== 0) {
             player.anims.play('walking' + prefix + '_' + selectedCharacter, true);
+
+            if (!this.marcheSon.isPlaying) {
+                this.marcheSon.play();
+            }
+
         } else {
             player.anims.play('static' + prefix + '_' + selectedCharacter, true);
+
+            if (this.marcheSon.isPlaying) {
+                this.marcheSon.stop();
+            }
         }
+
+        if (player.body.onFloor()) {
+            hasJumped = false;
+        }
+
+
+        // Quand le joueur retombe au sol, on réinitialise
+        if (player.body.onFloor()) {
+            hasJumped = false;
+        } 
     
         if (player.x < 0) player.x = 0;
         if (player.x > 14040) player.x = 14040;
