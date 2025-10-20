@@ -120,7 +120,7 @@ function loadCharacterSprites(character) {
         frameWidth: 144,
         frameHeight: 144,
     })
-    this.load.spritesheet(`player_receiveUmbrella_${character}_sheet`, `assets/player/${character}obtentionParapluie.png`, {
+    this.load.spritesheet(`player_receiveUmbrella_${character}`, `assets/player/${character}obtentionParapluie.png`, {
         frameWidth: 144,
         frameHeight: 144,
     })
@@ -290,7 +290,7 @@ class LoadingScene extends Phaser.Scene {
             this.anims.remove(`receive_bread_${char}`);
             this.anims.remove(`receive_umbrella_${char}`);
 
-            // Crée les animations à partir des bons spritesheets (_sheet)
+            // Crée les animations à partir des bons spritesheets
             this.anims.create({
                 key:`receive_bread_${char}`,
                 frames: this.anims.generateFrameNumbers(`player_receiveBread_${char}_sheet`, { start: 0, end: 3 }),
@@ -300,7 +300,7 @@ class LoadingScene extends Phaser.Scene {
 
             this.anims.create({
                 key:`receive_umbrella_${char}`,
-                frames: this.anims.generateFrameNumbers(`player_receiveUmbrella_${char}_sheet`, { start: 0, end: 3 }),
+                frames: this.anims.generateFrameNumbers(`player_receiveUmbrella_${char}`, { start: 0, end: 3 }),
                 frameRate: 6,
                 repeat: 0
             });
