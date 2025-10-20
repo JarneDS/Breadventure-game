@@ -1,12 +1,7 @@
 import "phaser";
 
-let player;
 let cursors;
-let obstacles = [];
 let money = 7; // valeur par défaut
-let bateau;
-let smallPlat;
-let bigPlat;
 let bakeryTextShown = false;
 let houseTextShown = false; //texte maison
 let bakeryText = null;
@@ -131,6 +126,7 @@ function loadCharacterSprites(character) {
 class LoadingScene extends Phaser.Scene {
     constructor() {
         super('LoadingScene');
+        this.player;
     }
 
     preload() {
@@ -472,13 +468,17 @@ class Glasses extends Phaser.Scene {
 }
 
 class MainWorld extends Phaser.Scene {
-
+    
     constructor() {
         super('MainWorld');
+        this.bigPlat;
+        this.smallPlat;
+        this.bateau;
     }
 
     preload(data){
         const character = (data && data.character) ? data.character : 'henri';
+        this.obstacles = [];
         loadCharacterSprites.call(this, character);
     }
 
@@ -486,6 +486,7 @@ class MainWorld extends Phaser.Scene {
     create(data){
         selectedCharacter = (data && data.character) ? data.character : 'henri';
         gameSpritesLayers = this.add.layer(); // On déclare la variable à l'avance pour éviter une erreur de référence
+        this.player = data.player;
 
         keyObject = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
         Phaser.Input.Keyboard.JustDown(keyObject);
@@ -538,52 +539,52 @@ class MainWorld extends Phaser.Scene {
         this.marcheSon = this.sound.add('marche', { loop: true });
         
         // bateau
-        bateau = this.physics.add.image(4456, 610, 'bateau');
-        bateau.setSize(256, 40);
-        bateau.setOffset(0, 216);
-        bateau.flipX = true;
-        bateau.body.setImmovable(true);
-        bateau.body.allowGravity = false;
-        bateau.prevX = bateau.x;
+        this.bateau = this.physics.add.image(4456, 610, 'bateau');
+        this.bateau.setSize(256, 40);
+        this.bateau.setOffset(0, 216);
+        this.bateau.flipX = true;
+        this.bateau.body.setImmovable(true);
+        this.bateau.body.allowGravity = false;
+        this.bateau.prevX = this.bateau.x;
 
         // Small Platform
-        smallPlat = this.physics.add.image(8832, 445, 'smallPlat');
-        smallPlat.setSize(100, 26);
-        smallPlat.setOffset(-2, 263)
-        smallPlat.body.setImmovable(true);
-        smallPlat.body.allowGravity = false;
+        this.smallPlat = this.physics.add.image(8832, 445, 'smallPlat');
+        this.smallPlat.setSize(100, 26);
+        this.smallPlat.setOffset(-2, 263)
+        this.smallPlat.body.setImmovable(true);
+        this.smallPlat.body.allowGravity = false;
 
         // Big Platform
-        bigPlat = this.physics.add.image(8392, 365, 'bigPlat');
-        bigPlat.setSize(100, 26);
-        bigPlat.setOffset(-2, 470)
-        bigPlat.body.setImmovable(true);
-        bigPlat.body.allowGravity = false;
+        this.bigPlat = this.physics.add.image(8392, 365, 'bigPlat');
+        this.bigPlat.setSize(100, 26);
+        this.bigPlat.setOffset(-2, 470)
+        this.bigPlat.body.setImmovable(true);
+        this.bigPlat.body.allowGravity = false;
 
         // bird
         const leftEdge  = -300; //Negatif pour masquer demitour
         const rightEdge = 14050 + 300; //largeur map (plus large pour masquer demitour)
         const baseMs    = 30000; //durée base
 
-        const bird = this.add.sprite(leftEdge, 210, 'bird');
-        bird.setDepth(940);
-        bird.setFlipX(true);
-        bird.anims.play('bird_fly', true);
+        this.bird = this.add.sprite(leftEdge, 210, 'bird');
+        this.bird.setDepth(940);
+        this.bird.setFlipX(true);
+        this.bird.anims.play('bird_fly', true);
 
         this.tweens.add({
-        targets: bird,
+        targets: this.bird,
         x: rightEdge,
         duration: baseMs,
         yoyo: true,
         repeat: -1,
         // inverse direction + random temps
         onYoyo: (tween) => {
-            bird.setFlipX(!bird.flipX);
+            this.bird.setFlipX(!this.bird.flipX);
             tween.timeScale = Phaser.Math.FloatBetween(0.95, 1.10);
         },
         // repetition à chaque boucle
         onRepeat: (tween) => {
-            bird.setFlipX(!bird.flipX);
+            this.bird.setFlipX(!this.bird.flipX);
             tween.timeScale = Phaser.Math.FloatBetween(0.95, 1.10);
         }
         });
@@ -594,7 +595,7 @@ class MainWorld extends Phaser.Scene {
         });
         
         const dropPoop = () => {
-            const p = this.poops.create(bird.x, bird.y + 10, "caca");
+            const p = this.poops.create(this.bird.x, this.bird.y + 10, "caca");
             p.setDepth(1200);
             p.setVelocityX(Phaser.Math.Between(-20, 20)); //drift x
             p.setVelocityY(Phaser.Math.Between(40, 120)); //chute verticale
@@ -614,15 +615,15 @@ class MainWorld extends Phaser.Scene {
         const spawnX = (data && data.playerX !== undefined) ? data.playerX : 100;
         const spawnY = (data && data.playerY !== undefined) ? data.playerY : 736;
 
-        player = this.physics.add.sprite(spawnX, spawnY, `player_${selectedCharacter.name}`);
-        player.setOrigin(0.5, 1);
-        player.setSize(42, 90);
-        player.setOffset((144 - 42) / 2, 144 - 90);
-        player.body.gravity.y = 400;
-        player.money = money;
+        this.player = this.physics.add.sprite(spawnX, spawnY, `player_${selectedCharacter.name}`);
+        this.player.setOrigin(0.5, 1);
+        this.player.setSize(42, 90);
+        this.player.setOffset((144 - 42) / 2, 144 - 90);
+        this.player.body.gravity.y = 400;
+        this.player.money = money;
 
         //Overlay caca
-        this.physics.add.overlap(player, this.poops, (_player, poop) => {
+        this.physics.add.overlap(this.player, this.poops, (_player, poop) => {
             poop.destroy();
 
             if (overlayCaca) {
@@ -664,7 +665,7 @@ class MainWorld extends Phaser.Scene {
                 .setSize(92, 48)
                 .setVisible(false);
 
-            this.physics.add.overlap(player, zoneEau, () => { // gère la zone d'eau rivière avec bateau
+            this.physics.add.overlap(this.player, zoneEau, () => { // gère la zone d'eau rivière avec bateau
                 if (!overlayEau) {
                     overlayEau = this.add.image(0, 0, "eau_vue").setOrigin(0, 0);
                     overlayEau.displayWidth  = this.sys.game.config.width;
@@ -696,7 +697,7 @@ class MainWorld extends Phaser.Scene {
                 .setSize(92, 48)
                 .setVisible(false);
 
-            this.physics.add.overlap(player, zoneBoue, () => { // gère la zone de boue
+            this.physics.add.overlap(this.player, zoneBoue, () => { // gère la zone de boue
                 if (!overlayBoue) {
                     overlayBoue = this.add.image(0, 0, "boue_vue").setOrigin(0, 0);
                     overlayBoue.displayWidth  = this.sys.game.config.width;
@@ -733,29 +734,29 @@ class MainWorld extends Phaser.Scene {
         let container = this.physics.add.staticImage(9156, 672, null).setSize(106, 100).setVisible(false); //chantier - container
     
         // colliders
-        this.physics.add.collider(player, groundCollider);
-        this.physics.add.collider(player, this.cone);
-        this.physics.add.collider(player, waterGroundCollider);//sol riviere
-        this.physics.add.collider(player, groundCollider2);
-        this.physics.add.collider(player, groundColliderExtra1);
-        this.physics.add.collider(player, groundColliderExtra2);
-        this.physics.add.collider(player, bac); //chantier - bac camion 
-        this.physics.add.collider(player, truck); //chantier - bac camion 
-        this.physics.add.collider(player, bar1); //chantier - bar gauche
-        this.physics.add.collider(player, bar2); //chantier - bar droite
-        this.physics.add.collider(player, cabh); //chantier - camion cabine haut
-        this.physics.add.collider(player, cabg); //chantier - camion cabine gauche
-        this.physics.add.collider(player, camiona); //chantier - camion avant
-        this.physics.add.collider(player, plot1); //chantier - plot camion
-        this.physics.add.collider(player, plot2); //chantier - plot gauche container
-        this.physics.add.collider(player, plot3); //chantier - plot droite container
-        this.physics.add.collider(player, container); //chantier - container
-        this.physics.add.collider(player, bateau);
-        this.physics.add.collider(player, smallPlat); //Chantier plat petite grue
-        this.physics.add.collider(player, bigPlat); //Chantier plat grande grue
+        this.physics.add.collider(this.player, groundCollider);
+        this.physics.add.collider(this.player, this.cone);
+        this.physics.add.collider(this.player, waterGroundCollider);//sol riviere
+        this.physics.add.collider(this.player, groundCollider2);
+        this.physics.add.collider(this.player, groundColliderExtra1);
+        this.physics.add.collider(this.player, groundColliderExtra2);
+        this.physics.add.collider(this.player, bac); //chantier - bac camion 
+        this.physics.add.collider(this.player, truck); //chantier - bac camion 
+        this.physics.add.collider(this.player, bar1); //chantier - bar gauche
+        this.physics.add.collider(this.player, bar2); //chantier - bar droite
+        this.physics.add.collider(this.player, cabh); //chantier - camion cabine haut
+        this.physics.add.collider(this.player, cabg); //chantier - camion cabine gauche
+        this.physics.add.collider(this.player, camiona); //chantier - camion avant
+        this.physics.add.collider(this.player, plot1); //chantier - plot camion
+        this.physics.add.collider(this.player, plot2); //chantier - plot gauche container
+        this.physics.add.collider(this.player, plot3); //chantier - plot droite container
+        this.physics.add.collider(this.player, container); //chantier - container
+        this.physics.add.collider(this.player, this.bateau);
+        this.physics.add.collider(this.player, this.smallPlat); //Chantier plat petite grue
+        this.physics.add.collider(this.player, this.bigPlat); //Chantier plat grande grue
         
         // entrer dans la boulangerie (message)
-        this.physics.add.overlap(player, enterBakery, () => {
+        this.physics.add.overlap(this.player, enterBakery, () => {
             if (!bakeryTextShown) {
                 bakeryText = this.add.text(10, 50, 'Appuyer sur A pour entrer dans la boulangerie', {
                     fontSize: '28px',
@@ -768,7 +769,7 @@ class MainWorld extends Phaser.Scene {
         }, null, this);
 
         // entrer dans le shop (message)
-        this.physics.add.overlap(player, enterShop, () => {
+        this.physics.add.overlap(this.player, enterShop, () => {
             if (!shopTextShown) {
                 shopText = this.add.text(10, 50, 'Appuyer sur A pour entrer dans la boutique', {
                     fontSize: '28px',
@@ -781,7 +782,7 @@ class MainWorld extends Phaser.Scene {
         }, null, this);
 
         // entrer dans maison
-        this.physics.add.overlap(player, enterHouse, () => {
+        this.physics.add.overlap(this.player, enterHouse, () => {
             if (!houseTextShown && playerHasBread) {
                 houseText = this.add.text(10, 50, 'Appuyer sur A pour rentrer chez vous', {
                     fontSize: '28px',
@@ -796,11 +797,11 @@ class MainWorld extends Phaser.Scene {
         
         // caméra
         this.cameras.main.setBounds(0, 0, 14050, 0);
-        this.cameras.main.startFollow(player, true, 0.1, 0.1, 0, 245);
+        this.cameras.main.startFollow(this.player, true, 0.1, 0.1, 0, 245);
     
         // argent
         // argent (ne génère qu'une pièce à la fois)
-        if (obstacles.length === 0) { // mise en place zone interdite pour éviter spawn money dans zones inaccessibles
+        if (this.obstacles.length === 0) { // mise en place zone interdite pour éviter spawn money dans zones inaccessibles
             const zonesInterdites = [
                 { min: 4300, max: 5200 }, // zone bateau
                 { min: 7800, max: 9300 }, // chantier
@@ -819,9 +820,9 @@ class MainWorld extends Phaser.Scene {
                 } while (isInZonesInterdites(randomX));
 
                 let obstacle = this.physics.add.staticImage(randomX, 695, 'money');
-                obstacles.push(obstacle);
+                this.obstacles.push(obstacle);
 
-                this.physics.add.overlap(player, obstacle, () => {
+                this.physics.add.overlap(this.player, obstacle, () => {
                     obstacle.destroy();
                     money += 1;
                     this.scoreText.setText('Argent : ' + money + "$");
@@ -928,39 +929,39 @@ class MainWorld extends Phaser.Scene {
     
         // animation bateau
         this.tweens.add({
-            targets: bateau,
+            targets: this.bateau,
             x: 5058,
             duration: 3250,
             yoyo: true,
             repeat: -1,
-            onYoyo: () => bateau.flipX = !bateau.flipX,
-            onRepeat: () => bateau.flipX = !bateau.flipX,
+            onYoyo: () => this.bateau.flipX = !this.bateau.flipX,
+            onRepeat: () => this.bateau.flipX = !this.bateau.flipX,
         });
 
-        this.physics.add.collider(player, bateau, () => {
-            if (player.body.touching.down && bateau.body.touching.up) {
+        this.physics.add.collider(this.player, this.bateau, () => {
+            if (this.player.body.touching.down && this.bateau.body.touching.up) {
                 playerOnBoat = true;
             }
         }, null, this);
 
         // animation small platform
         this.tweens.add({
-            targets: smallPlat,
+            targets: this.smallPlat,
             x: 9036,
             duration: 3250,
             yoyo: true,
             repeat: -1,
         });
 
-        this.physics.add.collider(player, smallPlat, () => {
-            if (player.body.touching.down && smallPlat.body.touching.up) {
+        this.physics.add.collider(this.player, this.smallPlat, () => {
+            if (this.player.body.touching.down && this.smallPlat.body.touching.up) {
                 playerOnPlat = true;
             }
         }, null, this);
 
         // animation big platform
         this.tweens.add({
-            targets: bigPlat,
+            targets: this.bigPlat,
             x: 8678,
             duration: 3550,
             yoyo: true,
@@ -968,8 +969,8 @@ class MainWorld extends Phaser.Scene {
             delay: 1625, // = duration / 2
         });
 
-        this.physics.add.collider(player, bigPlat, () => {
-            if (player.body.touching.down && bigPlat.body.touching.up) {
+        this.physics.add.collider(this.player, this.bigPlat, () => {
+            if (this.player.body.touching.down && this.bigPlat.body.touching.up) {
                 playerOnPlat = true;
             }
         }, null, this);
@@ -985,7 +986,7 @@ class MainWorld extends Phaser.Scene {
             .setSize(90, 48)
             .setVisible(false);
 
-        this.physics.add.overlap(player, eau, () => { // gère la flaque d'eau
+        this.physics.add.overlap(this.player, eau, () => { // gère la flaque d'eau
             if (!overlayEau) {
                 overlayEau = this.add.image(0, 0, "eau_vue").setOrigin(0, 0);
                 overlayEau.displayWidth  = this.sys.game.config.width;
@@ -1003,7 +1004,7 @@ class MainWorld extends Phaser.Scene {
             .setSize(718, 48)
             .setVisible(false);
 
-        this.physics.add.overlap(player, boue, () => { // gère la flaque de boue
+        this.physics.add.overlap(this.player, boue, () => { // gère la flaque de boue
             if (!overlayBoue) {
                 overlayBoue = this.add.image(0, 0, "boue_vue").setOrigin(0, 0);
                 overlayBoue.displayWidth  = this.sys.game.config.width;
@@ -1023,7 +1024,7 @@ class MainWorld extends Phaser.Scene {
         let eauRiviere = this.add.zone(4756, 790, 891, 10);
         this.physics.add.existing(eauRiviere, true);
 
-        this.physics.add.overlap(player, eauRiviere, () => {
+        this.physics.add.overlap(this.player, eauRiviere, () => {
         if (!overlayVisible) {
             overlayVisible = true;
 
@@ -1049,7 +1050,7 @@ class MainWorld extends Phaser.Scene {
 
         this.events.on('update', () => {
         const isTouching = Phaser.Geom.Intersects.RectangleToRectangle(
-            player.getBounds(),
+            this.player.getBounds(),
             eauRiviere.getBounds()
         );
 
@@ -1076,7 +1077,7 @@ class MainWorld extends Phaser.Scene {
         }
         });
         
-        this.physics.add.overlap(player, this.poops, (_player, poop) => {
+        this.physics.add.overlap(this.player, this.poops, (_player, poop) => {
             poop.destroy();
             const splash = this.add.image(0, 0, "merde").setOrigin(0, 0);
             splash.setScrollFactor(0);
@@ -1105,14 +1106,40 @@ class MainWorld extends Phaser.Scene {
         }, this);
         
         // this.physics.world.createDebugGraphic();
-        this.gameSpritesLayers = this.add.layer([this.ciel1, this.ciel2, this.ciel3, this.ciel4, this.house, this.parc, this.chantier, this.parc2, this.shop, this.house2, this.house3, this.bakery, smallPlat, bigPlat, this.ground, this.ground2, this.parcGround, ...this.flaquesEau, ...this.flaquesBoue, ...obstacles, this.boueLong, bateau, bird, this.cone, player ]); // les ... sont pour décomposer les tableau pour que Phaser puisse appliquer l'effet sur tous les éléments du tableau
+        this.gameSpritesLayers = this.add.layer([
+            this.ciel1,
+            this.ciel2,
+            this.ciel3,
+            this.ciel4,
+            this.house,
+            this.parc,
+            this.chantier,
+            this.parc2,
+            this.shop,
+            this.house2,
+            this.house3,
+            this.bakery,
+            this.smallPlat,
+            this.bigPlat,
+            this.ground,
+            this.ground2,
+            this.parcGround,
+            ...this.flaquesEau,
+            ...this.flaquesBoue,
+            ...this.obstacles,
+            this.boueLong,
+            this.bateau,
+            this.bird,
+            this.cone,
+            this.player
+        ]); // les ... sont pour décomposer les tableau pour que Phaser puisse appliquer l'effet sur tous les éléments du tableau
     }
     
     update() {
-        player.setVelocityX(0);
+        this.player.setVelocityX(0);
         // Saut
-        if (Phaser.Input.Keyboard.JustDown(cursors.up) && player.body.onFloor()) {
-            player.setVelocityY(-230);
+        if (Phaser.Input.Keyboard.JustDown(cursors.up) && this.player.body.onFloor()) {
+            this.player.setVelocityY(-230);
         }
 
         if (!runTimerActive && (Phaser.Input.Keyboard.JustDown(cursors.left) || Phaser.Input.Keyboard.JustDown(cursors.right))) {
@@ -1132,45 +1159,29 @@ class MainWorld extends Phaser.Scene {
             const speedRight = overlayActif ?  200 :  800; // droite
 
             // Saut
-            if (Phaser.Input.Keyboard.JustDown(cursors.up) && player.body.onFloor()) {
-            player.setVelocityY(-230);
+            if (Phaser.Input.Keyboard.JustDown(cursors.up) && this.player.body.onFloor()) {
+            this.player.setVelocityY(-230);
             }
 
             if (cursors.left.isDown) {
-            player.setVelocityX(speedLeft);
-            player.setFlipX(true);
+            this.player.setVelocityX(speedLeft);
+            this.player.setFlipX(true);
             } else if (cursors.right.isDown) {
-            player.setVelocityX(speedRight);
-            player.setFlipX(false);
+            this.player.setVelocityX(speedRight);
+            this.player.setFlipX(false);
         }
         
         const jumpSon = this.sound.add('jump');
 
         // Animations selon possession du pain
         const prefix = playerHasBread ? '_pain' : '';
-
-        if (!player.body.onFloor()) {
-            player.anims.play('jumping' + prefix + '_' + selectedCharacter, true);
-            player.setFrame(2);
-
-            if (!hasJumped) {
-                jumpSon.play();
-                hasJumped = true;
-            }
-
-        } else if (player.body.velocity.x !== 0) {
-            player.anims.play('walking' + prefix + '_' + selectedCharacter, true);
-
-            if (!this.marcheSon.isPlaying) {
-                this.marcheSon.play();
-            }
-
+        if (!this.player.body.onFloor()) {
+            this.player.anims.play('jumping' + prefix + '_' + selectedCharacter, true);
+            this.player.setFrame(2);
+        } else if (this.player.body.velocity.x !== 0) {
+            this.player.anims.play('walking' + prefix + '_' + selectedCharacter, true);
         } else {
-            player.anims.play('static' + prefix + '_' + selectedCharacter, true);
-
-            if (this.marcheSon.isPlaying) {
-                this.marcheSon.stop();
-            }
+            this.player.anims.play('static' + prefix + '_' + selectedCharacter, true);
         }
 
         if (player.body.onFloor()) {
@@ -1183,12 +1194,12 @@ class MainWorld extends Phaser.Scene {
             hasJumped = false;
         } 
     
-        if (player.x < 0) player.x = 0;
-        if (player.x > 14040) player.x = 14040;
+        if (this.player.x < 0) this.player.x = 0;
+        if (this.player.x > 14040) this.player.x = 14040;
 
         // texte "entrer"
         if (bakeryTextShown) {
-            const distance = Phaser.Math.Distance.Between(player.x, player.y, 13760, 699);
+            const distance = Phaser.Math.Distance.Between(this.player.x, this.player.y, 13760, 699);
             if (distance > 100) {
                 if (bakeryText) {
                     bakeryText.destroy();
@@ -1205,7 +1216,7 @@ class MainWorld extends Phaser.Scene {
         }
 
         if (playerHasBread) {
-            const distance2 = Phaser.Math.Distance.Between(player.x, player.y, 13760, 699);
+            const distance2 = Phaser.Math.Distance.Between(this.player.x, this.player.y, 13760, 699);
 
             if (!painPrisShown && distance2 <= 100) {
                 painPris = this.add.text(10, 50, 'Vous avez déjà un pain...', {
@@ -1224,7 +1235,7 @@ class MainWorld extends Phaser.Scene {
         }
 
         if (shopTextShown) {
-            const distance = Phaser.Math.Distance.Between(player.x, player.y, 7140, 699);
+            const distance = Phaser.Math.Distance.Between(this.player.x, this.player.y, 7140, 699);
             if (distance > 100) {
                 if (shopText) {
                     shopText.destroy();
@@ -1237,9 +1248,10 @@ class MainWorld extends Phaser.Scene {
         // touche A pour entrer dans la boulangerie
         if (keyObject.isDown && bakeryTextShown && !playerHasBread){
             this.scene.start('BakeryScene', {
-                returnX: player.x,
-                returnY: player.y,
+                returnX: this.player.x,
+                returnY: this.player.y,
                 money: money,
+                player: this.player,
                 playerHasBread,
                 playerHasUmbrella,
                 character: selectedCharacter
@@ -1249,8 +1261,9 @@ class MainWorld extends Phaser.Scene {
         // touche A pour entrer dans le shop
         if (keyObject.isDown && shopTextShown){
             this.scene.start('ShopScene', {
-                returnX: player.x,
-                returnY: player.y,
+                returnX: this.player.x,
+                returnY: this.player.y,
+                player: this.player,
                 money: money,
                 playerHasBread,
                 playerHasUmbrella,
@@ -1269,6 +1282,7 @@ class MainWorld extends Phaser.Scene {
             this.scene.start('EndScene', {
                 money: money,
                 playerHasBread,
+                player: this.player,
                 playerHasUmbrella,
                 character: selectedCharacter,
             });
@@ -1276,39 +1290,39 @@ class MainWorld extends Phaser.Scene {
 
         // bateau: suivi du mouvement
         playerOnBoat = (
-            player.body.touching.down &&
-            bateau.body.touching.up &&
-            Phaser.Geom.Intersects.RectangleToRectangle(player.getBounds(), bateau.getBounds())
+            this.player.body.touching.down &&
+            this.bateau.body.touching.up &&
+            Phaser.Geom.Intersects.RectangleToRectangle(this.player.getBounds(), this.bateau.getBounds())
         );
         if (playerOnBoat) {
-            const deltaX = bateau.x - bateau.prevX;
-            player.x += deltaX;
+            const deltaX = this.bateau.x - this.bateau.prevX;
+            this.player.x += deltaX;
         }
-        bateau.prevX = bateau.x;
+        this.bateau.prevX = this.bateau.x;
 
         // Small PLatform
         let onSmallPlat =
-            player.body.touching.down &&
-            smallPlat.body.touching.up &&
-            Phaser.Geom.Intersects.RectangleToRectangle(player.getBounds(), smallPlat.getBounds());
+            this.player.body.touching.down &&
+            this.smallPlat.body.touching.up &&
+            Phaser.Geom.Intersects.RectangleToRectangle(this.player.getBounds(), this.smallPlat.getBounds());
 
         if (onSmallPlat) {
-            const deltaX = smallPlat.x - (smallPlat.prevX || smallPlat.x);
-            player.x += deltaX;
+            const deltaX = this.smallPlat.x - (this.smallPlat.prevX || this.smallPlat.x);
+            this.player.x += deltaX;
         }
-        smallPlat.prevX = smallPlat.x;
+        this.smallPlat.prevX = this.smallPlat.x;
 
         // Big Platform
         let onBigPlat =
-            player.body.touching.down &&
-            bigPlat.body.touching.up &&
-            Phaser.Geom.Intersects.RectangleToRectangle(player.getBounds(), bigPlat.getBounds());
+            this.player.body.touching.down &&
+            this.bigPlat.body.touching.up &&
+            Phaser.Geom.Intersects.RectangleToRectangle(this.player.getBounds(), this.bigPlat.getBounds());
 
         if (onBigPlat) {
-            const deltaX = bigPlat.x - (bigPlat.prevX || bigPlat.x);
-            player.x += deltaX;
+            const deltaX = this.bigPlat.x - (this.bigPlat.prevX || this.bigPlat.x);
+            this.player.x += deltaX;
         }
-        bigPlat.prevX = bigPlat.x;
+        this.bigPlat.prevX = this.bigPlat.x;
     }
 }
 
@@ -1325,6 +1339,7 @@ class BakeryScene extends Phaser.Scene {
 
     create(data) {
         selectedCharacter = (data && data.character) ? data.character : 'henri';
+        this.player = data.player;
 
         cursors = this.input.keyboard.createCursorKeys();
         
@@ -1332,11 +1347,11 @@ class BakeryScene extends Phaser.Scene {
         this.returnY = data.returnY;
         
         this.interiorBakery = this.add.tileSprite(0, -190, 1194, 1024, 'interieur_bakery').setOrigin(0, 0);
-        player = this.physics.add.sprite(161, 736, "player");
-        player.setOrigin(0.5, 1);
-        player.setSize(42, 90);
-        player.setOffset((144 - 42) / 2, 144 - 90);
-        player.body.gravity.y = 400;
+        this.player = this.physics.add.sprite(161, 736, "player");
+        this.player.setOrigin(0.5, 1);
+        this.player.setSize(42, 90);
+        this.player.setOffset((144 - 42) / 2, 144 - 90);
+        this.player.body.gravity.y = 400;
 
         // HUD argent dans la boulangerie
         this.moneyText = this.add.text(10, 10, 'Argent : ' + money + '$', { fontSize: '28px' });
@@ -1345,9 +1360,9 @@ class BakeryScene extends Phaser.Scene {
         let exitBakery = this.physics.add.staticImage(159, 685, null).setSize(58, 100).setVisible(false);
 
         let rightWall = this.physics.add.staticImage(775, 600, null).setSize(10, 300).setVisible(false);
-        this.physics.add.collider(player, rightWall);
+        this.physics.add.collider(this.player, rightWall);
 
-        this.physics.add.overlap(player, exitBakery, () => {
+        this.physics.add.overlap(this.player, exitBakery, () => {
             if (!bakeryTextShown2) {
                 bakeryText2 = this.add.text(10, 50, 'Appuyer sur A pour sortir', {
                     fontSize: '28px',
@@ -1359,7 +1374,7 @@ class BakeryScene extends Phaser.Scene {
         }, null, this);
 
         let groundColliderBakery = this.physics.add.staticImage(600, 784, null).setSize(1200, 100).setVisible(false);
-        this.physics.add.collider(player, groundColliderBakery);
+        this.physics.add.collider(this.player, groundColliderBakery);
 
         this.canExit = false;
         this.time.delayedCall(500, () => { this.canExit = true; });
@@ -1369,23 +1384,23 @@ class BakeryScene extends Phaser.Scene {
         this.pain = this.physics.add.image(583, 668, 'pain');
 
         // Achat du pain: -5 pièces si possible, MAJ HUD
-        this.physics.add.overlap(player, this.pain, () => {
+        this.physics.add.overlap(this.player, this.pain, () => {
             if (!playerHasBread && money >= 5) {
                 playerHasBread = true;
                 this.pain.disableBody(true, true);
                 money -= 5;
                 const prefix = playerHasBread ? '_pain' : '';
                 if (playerHasBread) {
-                    player.anims.play('receive_bread_' + selectedCharacter, true);
-                    player.setVelocity(0, 0);
-                    player.body.moves = false;
+                    this.player.anims.play('receive_bread_' + selectedCharacter, true);
+                    this.player.setVelocity(0, 0);
+                    this.player.body.moves = false;
                     playerHasBread = false;
 
                     // Durée réelle de l’animation (4 frames à 6 fps ≈ 666 ms)
                     this.time.delayedCall(2000, () => {
-                        player.body.moves = true;
+                        this.player.body.moves = true;
                         playerHasBread = true;
-                        player.anims.play('static' + prefix + '_' + selectedCharacter, true);
+                        this.player.anims.play('static' + prefix + '_' + selectedCharacter, true);
                     });
                 }
 
@@ -1405,7 +1420,7 @@ class BakeryScene extends Phaser.Scene {
     }
 
     update() {
-        if (player.anims.currentAnim && player.anims.currentAnim.key === `receive_bread_${selectedCharacter}`) {
+        if (this.player.anims.currentAnim && this.player.anims.currentAnim.key === `receive_bread_${selectedCharacter}`) {
             return; // Empêche update d'écraser l'animation pendant qu'elle joue
         }
 
@@ -1414,6 +1429,7 @@ class BakeryScene extends Phaser.Scene {
             this.scene.start('MainWorld', {
                 playerX: this.returnX,
                 playerY: this.returnY,
+                player: this.player,
                 money: money,
                 playerHasBread,
                 playerHasUmbrella,
@@ -1422,7 +1438,7 @@ class BakeryScene extends Phaser.Scene {
         }
 
         if (bakeryTextShown2) {
-            const distance = Phaser.Math.Distance.Between(player.x, player.y, 159, 685);
+            const distance = Phaser.Math.Distance.Between(this.player.x, this.player.y, 159, 685);
             if (distance > 80) {
                 if (bakeryText2) bakeryText2.destroy();
                 bakeryText2 = null;
@@ -1431,35 +1447,35 @@ class BakeryScene extends Phaser.Scene {
         }
 
         // Mouvement
-        player.setVelocityX(0);
+        this.player.setVelocityX(0);
 
         // Saut
-        if (Phaser.Input.Keyboard.JustDown(cursors.up) && player.body.onFloor()) {
-            player.setVelocityY(-200);
+        if (Phaser.Input.Keyboard.JustDown(cursors.up) && this.player.body.onFloor()) {
+            this.player.setVelocityY(-200);
         }
 
         // Gauche / Droite
         if (cursors.left.isDown) {
-            player.setVelocityX(-230);
-            player.setFlipX(true);
+            this.player.setVelocityX(-230);
+            this.player.setFlipX(true);
         } else if (cursors.right.isDown) {
-            player.setVelocityX(230);
-            player.setFlipX(false);
+            this.player.setVelocityX(230);
+            this.player.setFlipX(false);
         }
 
         // Animation (avec ou sans pain)
         const prefix = playerHasBread ? '_pain' : '';
-        if (!player.body.onFloor()) {
-            player.anims.play('jumping' + prefix + '_' + selectedCharacter, true);
-            player.setFrame(2);
-        } else if (player.body.velocity.x !== 0) {
-            player.anims.play('walking' + prefix + '_' + selectedCharacter, true);
+        if (!this.player.body.onFloor()) {
+            this.player.anims.play('jumping' + prefix + '_' + selectedCharacter, true);
+            this.player.setFrame(2);
+        } else if (this.player.body.velocity.x !== 0) {
+            this.player.anims.play('walking' + prefix + '_' + selectedCharacter, true);
         } else {
-            player.anims.play('static' + prefix + '_' + selectedCharacter, true);
+            this.player.anims.play('static' + prefix + '_' + selectedCharacter, true);
         }
 
         // Murs gauche et droite
-        player.x = Phaser.Math.Clamp(player.x, 0, 1194);
+        this.player.x = Phaser.Math.Clamp(this.player.x, 0, 1194);
     }
 }
 
@@ -1475,6 +1491,7 @@ class ShopScene extends Phaser.Scene {
 
     create(data) {
         selectedCharacter = (data && data.character) ? data.character : 'henri';
+        this.player = data.player;
 
         cursors = this.input.keyboard.createCursorKeys();
 
@@ -1482,14 +1499,14 @@ class ShopScene extends Phaser.Scene {
         this.returnY = data.returnY;
 
         this.interiorShop = this.add.tileSprite(0, -190, 1194, 1024, 'interieur_shop').setOrigin(0, 0);
-        player = this.physics.add.sprite(586, 736, "player");
-        player.setOrigin(0.5, 1);
-        player.setSize(42, 90);
-        player.setOffset((144 - 42) / 2, 144 - 90);
-        player.body.gravity.y = 400;
+        this.player = this.physics.add.sprite(586, 736, "player");
+        this.player.setOrigin(0.5, 1);
+        this.player.setSize(42, 90);
+        this.player.setOffset((144 - 42) / 2, 144 - 90);
+        this.player.body.gravity.y = 400;
 
         let groundColliderShop = this.physics.add.staticImage(600, 784, null).setSize(1200, 100).setVisible(false);
-        this.physics.add.collider(player, groundColliderShop);
+        this.physics.add.collider(this.player, groundColliderShop);
 
         this.parapluie = this.physics.add.image(382, 662, 'parapluie');
 
@@ -1499,22 +1516,22 @@ class ShopScene extends Phaser.Scene {
         this.moneyText.setScrollFactor(0);
 
         // Achat du parapluie: -4 pièces si possible, MAJ HUD
-        this.physics.add.overlap(player, this.parapluie, () => {
+        this.physics.add.overlap(this.player, this.parapluie, () => {
             if (!playerHasUmbrella && money >= 4) {
                 playerHasUmbrella = true;
                 this.parapluie.disableBody(true, true);
                 money -= 4;
                 const prefix = playerHasUmbrella ? '_umbrella': '';
                 if (playerHasUmbrella) {
-                    player.anims.play('receive_umbrella_' + selectedCharacter, true);
-                    player.setVelocity(0, 0);
-                    player.body.moves = false;
+                    this.player.anims.play('receive_umbrella_' + selectedCharacter, true);
+                    this.player.setVelocity(0, 0);
+                    this.player.body.moves = false;
                     playerHasUmbrella = false;
 
                     this.time.delayedCall(1000, () => {
-                        player.body.moves = true;
+                        this.player.body.moves = true;
                         playerHasUmbrella = true;
-                        player.anims.play('static' + prefix + '_' + selectedCharacter, true);
+                        this.player.anims.play('static' + prefix + '_' + selectedCharacter, true);
                     });
                 }
 
@@ -1540,7 +1557,7 @@ class ShopScene extends Phaser.Scene {
         this.mouchoirText.setScrollFactor(0);
 
         // Achat de mouchoir: -2 pièces si possible, MAJ HUD
-        this.physics.add.overlap(player, this.mouchoirs, () => {
+        this.physics.add.overlap(this.player, this.mouchoirs, () => {
             if (!playerHasMouchoirs && money >= 2) {
                 playerHasMouchoirs = true;
                 this.mouchoirs.disableBody(true, true);
@@ -1564,7 +1581,7 @@ class ShopScene extends Phaser.Scene {
 
         let exitShop = this.physics.add.staticImage(585, 685, null).setSize(57, 100).setVisible(false);
 
-        this.physics.add.overlap(player, exitShop, () => {
+        this.physics.add.overlap(this.player, exitShop, () => {
             if (!shopTextShown2) {
                 shopText2 = this.add.text(10, 50, 'Appuyer sur A pour sortir', {
                     fontSize: '28px',
@@ -1577,10 +1594,10 @@ class ShopScene extends Phaser.Scene {
         }, null, this);
 
         let rightWall = this.physics.add.staticImage(976, 600, null).setSize(10, 300).setVisible(false);
-        this.physics.add.collider(player, rightWall);
+        this.physics.add.collider(this.player, rightWall);
 
         let leftWall = this.physics.add.staticImage(196, 600, null).setSize(10, 300).setVisible(false);
-        this.physics.add.collider(player, leftWall);
+        this.physics.add.collider(this.player, leftWall);
         
         this.keyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
 
@@ -1590,7 +1607,7 @@ class ShopScene extends Phaser.Scene {
 
     update() {
 
-        if (player.anims.currentAnim && player.anims.currentAnim.key === `receive_umbrella_${selectedCharacter}`) {
+        if (this.player.anims.currentAnim && this.player.anims.currentAnim.key === `receive_umbrella_${selectedCharacter}`) {
             return; // Empêche update d'écraser l'animation pendant qu'elle joue
         }
         // sortir du shop
@@ -1598,6 +1615,7 @@ class ShopScene extends Phaser.Scene {
             this.scene.start('MainWorld', {
                 playerX: this.returnX,
                 playerY: this.returnY,
+                player: this.player,
                 money: money,
                 playerHasBread,
                 playerHasUmbrella,
@@ -1606,7 +1624,7 @@ class ShopScene extends Phaser.Scene {
         }
 
         if (shopTextShown2) {
-            const distance = Phaser.Math.Distance.Between(player.x, player.y, 586, 685);
+            const distance = Phaser.Math.Distance.Between(this.player.x, this.player.y, 586, 685);
             if (distance > 80) {
                 if (shopText2) shopText2.destroy();
                 shopText2 = null;
@@ -1615,35 +1633,35 @@ class ShopScene extends Phaser.Scene {
         }
 
         // Mouvement
-        player.setVelocityX(0);
+        this.player.setVelocityX(0);
 
         // Saut
-        if (Phaser.Input.Keyboard.JustDown(cursors.up) && player.body.onFloor()) {
-            player.setVelocityY(-200);
+        if (Phaser.Input.Keyboard.JustDown(cursors.up) && this.player.body.onFloor()) {
+            this.player.setVelocityY(-200);
         }
 
         // Gauche / Droite
         if (cursors.left.isDown) {
-            player.setVelocityX(-230);
-            player.setFlipX(true);
+            this.player.setVelocityX(-230);
+            this.player.setFlipX(true);
         } else if (cursors.right.isDown) {
-            player.setVelocityX(230);
-            player.setFlipX(false);
+            this.player.setVelocityX(230);
+            this.player.setFlipX(false);
         }
 
         // Animation (avec ou sans pain)
         const prefix = playerHasUmbrella ? '_umbrella' : '';
-        if (!player.body.onFloor()) {
-            player.anims.play('jumping' + prefix + '_' + selectedCharacter, true);
-            player.setFrame(2);
-        } else if (player.body.velocity.x !== 0) {
-            player.anims.play('walking' + prefix + '_' + selectedCharacter, true);
+        if (!this.player.body.onFloor()) {
+            this.player.anims.play('jumping' + prefix + '_' + selectedCharacter, true);
+            this.player.setFrame(2);
+        } else if (this.player.body.velocity.x !== 0) {
+            this.player.anims.play('walking' + prefix + '_' + selectedCharacter, true);
         } else {
-            player.anims.play('static' + prefix + '_' + selectedCharacter, true);
+            this.player.anims.play('static' + prefix + '_' + selectedCharacter, true);
         }
 
         // Murs gauche et droite
-        player.x = Phaser.Math.Clamp(player.x, 0, 1194);
+        this.player.x = Phaser.Math.Clamp(this.player.x, 0, 1194);
     }
 }
 
