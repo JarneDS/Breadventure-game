@@ -199,6 +199,31 @@ class LoadingScene extends Phaser.Scene {
             frameHeight: 42,
         })
     */
+
+        // sons
+        this.load.audio('bateau', 'assets/sounds/bateau.mp3');
+        this.load.audio('boue', 'assets/sounds/boue.mp3');
+        this.load.audio('checkout', 'assets/sounds/checkout.mp3');
+        this.load.audio('construction', 'assets/sounds/construction.mp3');
+        this.load.audio('eau', 'assets/sounds/eau.mp3');
+        this.load.audio('insectes', 'assets/sounds/insecte.mp3');
+        this.load.audio('jump', 'assets/sounds/jump.mp3');
+        this.load.audio('loadingScene', 'assets/sounds/loading2.mp3');
+        this.load.audio('marcheBoue', 'assets/sounds/marche_boue.mp3');
+        this.load.audio('marcheEauFlaque', 'assets/sounds/marche_flaque.mp3');
+        this.load.audio('marche', 'assets/sounds/marche.mp3');
+        this.load.audio('marcheRiviere', 'assets/sounds/marcheRiviere.mp3');
+        this.load.audio('merdePigeon', 'assets/sounds/merdePigeon.mp3');
+        this.load.audio('money', 'assets/sounds/money.mp3');
+        this.load.audio('obtentionItem', 'assets/sounds/obtentionItem.mp3');
+        this.load.audio('parc', 'assets/sounds/parc.mp3');
+        this.load.audio('pigeon', 'assets/sounds/pigeon.mp3');
+        this.load.audio('pluie', 'assets/sounds/pluie.mp3');
+        this.load.audio('porteFerme', 'assets/sounds/porteFerme.mp3');
+        this.load.audio('porteOuvre', 'assets/sounds/porteOuvre.mp3');
+        this.load.audio('ville', 'assets/sounds/ville.mp3');
+        // pas charger loading.mp3 , plouf_dans_riviere.mp3
+
         loadCharacterSprites.call(this, 'henri');
         loadCharacterSprites.call(this, 'juliette');
     }
