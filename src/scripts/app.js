@@ -20,10 +20,10 @@ let keyObject;
 let keyObjectE;
 
 //timer
-let runTimerActive = false;
-let runTimerStart = 0;
 let runTimerText = null;
 let lastRunTimeMs = 0;
+let runTimerActive = false;
+let runTimerStart = 0;
 
 function formatElapsed(ms) {
     const totalSeconds = Math.floor(ms / 1000);
@@ -791,15 +791,17 @@ class MainWorld extends Phaser.Scene {
         this.mouchoirText.setScrollFactor(0);
 
         //timer
-        runTimerActive = false;
-        runTimerStart = 0;
         runTimerText = this.add.text(16, 40, "00:00.000", {
-            fontSize: "16px",
+            fontSize: "21px",
             fontFamily: "monospace",
             color: "#000F05",
             backgroundColor: "rgba(255,255,255,0.4)",
             padding: { x: 6, y: 3 }
         }).setScrollFactor(0).setDepth(10001);
+
+        if (runTimerActive) {
+            runTimerText.setText(formatElapsed(Math.floor(Date.now() - runTimerStart)));
+        }
 
         /*this.uiLayer.add([this.scoreText, this.mouchoirText]);
 
@@ -1060,11 +1062,11 @@ class MainWorld extends Phaser.Scene {
 
         if (!runTimerActive && (Phaser.Input.Keyboard.JustDown(cursors.left) || Phaser.Input.Keyboard.JustDown(cursors.right))) {
             runTimerActive = true;
-            runTimerStart = this.time.now;
+            runTimerStart = Date.now();
         }
 
         if (runTimerActive && runTimerText) {
-            const elapsed = this.time.now - runTimerStart;
+            const elapsed = Math.floor(Date.now() - runTimerStart);
             runTimerText.setText(formatElapsed(elapsed));
         }
     
@@ -1177,9 +1179,10 @@ class MainWorld extends Phaser.Scene {
         if (keyObject.isDown && houseTextShown) {
             if (runTimerActive) {
                 runTimerActive = false;
-                lastRunTimeMs = this.time.now - runTimerStart;
+                lastRunTimeMs = Date.now() - runTimerStart;
                 if (runTimerText) runTimerText.setText("FIN: " + formatElapsed(lastRunTimeMs));
             }
+
             this.scene.start('EndScene', {
                 returnX: player.x,
                 returnY: player.y,
