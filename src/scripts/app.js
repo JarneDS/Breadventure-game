@@ -60,6 +60,7 @@ let playerHasMouchoirs = false;
 let selectedCharacter = 'henri';
 let character;
 let perso;
+let gameSpritesLayers;
 
 function loadCharacterSprites(character) {
     // walking
@@ -440,7 +441,6 @@ class Glasses extends Phaser.Scene {
 }
 
 class MainWorld extends Phaser.Scene {
-    gameSpritesLayers = this.add.layer(); // On déclare la variable à l'avance pour éviter une erreur de référence
 
     constructor() {
         super('MainWorld');
@@ -454,6 +454,7 @@ class MainWorld extends Phaser.Scene {
     
     create(data){
         selectedCharacter = (data && data.character) ? data.character : 'henri';
+        gameSpritesLayers = this.add.layer(); // On déclare la variable à l'avance pour éviter une erreur de référence
 
         keyObject = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
         Phaser.Input.Keyboard.JustDown(keyObject);
@@ -783,14 +784,14 @@ class MainWorld extends Phaser.Scene {
             fontSize: '28px',
             fill: '#000F05'
         });
-        this.scoreText.setScrollFactor(0);
+        this.scoreText.setScrollFactor(0).setDepth(10001);
 
         // HUD mouchoirs
         this.mouchoirText = this.add.text(400, 10, 'Mouchoirs : ' + mouchoirs, {
             fontSize: '28px',
             fill: '#000F05'
         });
-        this.mouchoirText.setScrollFactor(0);
+        this.mouchoirText.setScrollFactor(0).setDepth(10001);
 
         //timer
         runTimerText = this.add.text(16, 40, "00:00.000", {
@@ -1052,7 +1053,7 @@ class MainWorld extends Phaser.Scene {
         }, this);
         
         // this.physics.world.createDebugGraphic();
-        this.gameSpritesLayers = this.add.layer([this.house, this.parc, this.chantier, this.parc2, this.shop, this.house2, this.house3, this.bakery, player]); // @TODO ajouter tout ce qui doit être affecté par le blur dans ce tableau, check ligne 837, c'est là que le blur est appliqué sur toute la layer
+        this.gameSpritesLayers = this.add.layer([this.ciel1, this.ciel2, this.ciel3, this.ciel4, this.house, this.parc, this.chantier, this.parc2, this.shop, this.house2, this.house3, this.bakery, smallPlat, bigPlat, this.ground, this.ground2, this.parcGround, ...this.flaquesEau, ...this.flaquesBoue, ...obstacles, this.boueLong, bateau, bird, this.cone, player ]); // les ... sont pour décomposer les tableau pour que Phaser puisse appliquer l'effet sur tous les éléments du tableau
     }
     
     update() {
