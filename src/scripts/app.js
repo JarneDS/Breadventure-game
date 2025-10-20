@@ -1327,7 +1327,11 @@ class BakeryScene extends Phaser.Scene {
 
     update() {
 
-        if (player.anims.currentAnim && player.anims.currentAnim.key === 'receive_bread') {
+        if (player.anims.currentAnim &&
+            (player.anims.currentAnim.key === 'receive_bread_henri' ||
+             player.anims.currentAnim.key === 'receive_bread_juliette' ||
+             player.anims.currentAnim.keu === 'receive_umbrella_henri' ||
+             player.anims.currentAnim.key === 'receive_umbrella_juliette')) {
             return; // Empêche update d'écraser l'animation pendant qu'elle joue
         }
 
