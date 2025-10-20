@@ -1187,12 +1187,11 @@ class MainWorld extends Phaser.Scene {
             }
 
             this.scene.start('EndScene', {
-                returnX: player.x,
-                returnY: player.y,
                 money: money,
                 playerHasBread,
                 playerHasUmbrella,
-                character: selectedCharacter
+                character: selectedCharacter,
+                lastRunTimeMs
             });
         }
 
