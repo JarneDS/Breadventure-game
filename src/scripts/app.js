@@ -440,6 +440,8 @@ class Glasses extends Phaser.Scene {
 }
 
 class MainWorld extends Phaser.Scene {
+    gameSpritesLayers = this.add.layer(); // On déclare la variable à l'avance pour éviter une erreur de référence
+
     constructor() {
         super('MainWorld');
     }
@@ -834,7 +836,7 @@ class MainWorld extends Phaser.Scene {
 
             //Gestion blur pluie
             if (!blurRain) {
-                const blur = this.cameras.main.postFX.addBlur(4);
+                const blur = this.gameSpritesLayers.postFX.addBlur(4);
                 blurRain = blur;
 
                 overlayStack.push({
@@ -1050,7 +1052,7 @@ class MainWorld extends Phaser.Scene {
         }, this);
         
         // this.physics.world.createDebugGraphic();
-
+        this.gameSpritesLayers = this.add.layer([this.house, this.parc, this.chantier, this.parc2, this.shop, this.house2, this.house3, this.bakery, player]); // @TODO ajouter tout ce qui doit être affecté par le blur dans ce tableau, check ligne 837, c'est là que le blur est appliqué sur toute la layer
     }
     
     update() {
