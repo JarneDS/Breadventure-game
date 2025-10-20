@@ -1351,12 +1351,7 @@ class BakeryScene extends Phaser.Scene {
     }
 
     update() {
-
-        if (player.anims.currentAnim &&
-            (player.anims.currentAnim.key === 'receive_bread_henri' ||
-             player.anims.currentAnim.key === 'receive_bread_juliette' ||
-             player.anims.currentAnim.keu === 'receive_umbrella_henri' ||
-             player.anims.currentAnim.key === 'receive_umbrella_juliette')) {
+        if (player.anims.currentAnim && player.anims.currentAnim.key === `receive_bread_${selectedCharacter}`) {
             return; // Empêche update d'écraser l'animation pendant qu'elle joue
         }
 
@@ -1540,6 +1535,10 @@ class ShopScene extends Phaser.Scene {
     }
 
     update() {
+
+        if (player.anims.currentAnim && player.anims.currentAnim.key === `receive_umbrella_${selectedCharacter}`) {
+            return; // Empêche update d'écraser l'animation pendant qu'elle joue
+        }
         // sortir du shop
         if (Phaser.Input.Keyboard.JustDown(this.keyA) && shopTextShown2) {
             this.scene.start('MainWorld', {
