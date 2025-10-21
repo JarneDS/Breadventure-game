@@ -208,7 +208,6 @@ class LoadingScene extends Phaser.Scene {
         this.load.audio('loadingScene', 'assets/sounds/loading2.mp3');
         this.load.audio('marcheBoue', 'assets/sounds/marche_boue.mp3');
         this.load.audio('marcheEauFlaque', 'assets/sounds/marche_flaque.mp3');
-        this.load.audio('marche', 'assets/sounds/marche.mp3');
         this.load.audio('marcheRiviere', 'assets/sounds/marcheRiviere.mp3');
         this.load.audio('merdePigeon', 'assets/sounds/merdePigeon.mp3');
         this.load.audio('money', 'assets/sounds/money.mp3');
@@ -528,7 +527,6 @@ class MainWorld extends Phaser.Scene {
         this.pluieSon = this.sound.add('pluie');
         this.porteFermeSon = this.sound.add('porteFerme');
         this.porteOuvreSon = this.sound.add('porteOuvre');
-        this.marcheSon = this.sound.add('marche', { loop: true });
         // Sons d'ambiance
         this.zoneSounds = {
             ville: this.sound.add('ville', { loop: true, volume: 0 }),
@@ -1159,10 +1157,6 @@ class MainWorld extends Phaser.Scene {
     
     update() {
         this.player.setVelocityX(0);
-        // Saut
-        if (Phaser.Input.Keyboard.JustDown(cursors.up) && this.player.body.onFloor()) {
-            this.player.setVelocityY(-230);
-        }
 
         if (!runTimerActive && (Phaser.Input.Keyboard.JustDown(cursors.left) || Phaser.Input.Keyboard.JustDown(cursors.right))) {
             runTimerActive = true;
@@ -1177,18 +1171,18 @@ class MainWorld extends Phaser.Scene {
         // Déplacements X (perso ralenti soi contact obstacle et que overlay actif)
         const overlayActif = overlayEau || overlayBoue || overlayCaca || blurRain || (glassesRain && glassesRain.visible);
 
-            const speedLeft  = overlayActif ? -200 : -250; // gauche
-            const speedRight = overlayActif ?  200 :  800; // droite
+        const speedLeft  = overlayActif ? -200 : -250; // gauche
+        const speedRight = overlayActif ?  200 :  800; // droite
 
-            // Saut
-            if (Phaser.Input.Keyboard.JustDown(cursors.up) && this.player.body.onFloor()) {
+        // Saut
+        if (Phaser.Input.Keyboard.JustDown(cursors.up) && this.player.body.onFloor()) {
             this.player.setVelocityY(-230);
-            }
+        }
 
-            if (cursors.left.isDown) {
+        if (cursors.left.isDown) {
             this.player.setVelocityX(speedLeft);
             this.player.setFlipX(true);
-            } else if (cursors.right.isDown) {
+        } else if (cursors.right.isDown) {
             this.player.setVelocityX(speedRight);
             this.player.setFlipX(false);
         }
@@ -1200,10 +1194,16 @@ class MainWorld extends Phaser.Scene {
         if (!this.player.body.onFloor()) {
             this.player.anims.play('jumping' + prefix + '_' + selectedCharacter, true);
             this.player.setFrame(2);
+            if (!hasJumped) {
+                jumpSon.play();
+                hasJumped = true;
+            }
         } else if (this.player.body.velocity.x !== 0) {
             this.player.anims.play('walking' + prefix + '_' + selectedCharacter, true);
+            hasJumped = false;
         } else {
             this.player.anims.play('static' + prefix + '_' + selectedCharacter, true);
+            hasJumped = false;
         }
     
         if (this.player.x < 0) this.player.x = 0;
@@ -1335,7 +1335,7 @@ class MainWorld extends Phaser.Scene {
             this.player.x += deltaX;
         }
         this.bigPlat.prevX = this.bigPlat.x;
-/*
+
         let newZone = null;
 
         if (this.player.x > -40 && this.player.x <= 4252) newZone = 'ville';
@@ -1358,7 +1358,7 @@ class MainWorld extends Phaser.Scene {
             }
 
             this.currentZone = newZone;
-        }*/
+        }
 
        const birdBounds = this.bird.getBounds();
 
