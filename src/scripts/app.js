@@ -518,10 +518,8 @@ class MainWorld extends Phaser.Scene {
         this.bakery = this.add.tileSprite(13496, -286, 2048, 1024, 'bakery').setOrigin(0, 0);
 
         // sons
-        const bateauSon = this.sound.add('bateau');
         const boueSon = this.sound.add('boue');
         const checkoutSon = this.sound.add('checkout');
-        const constructionSon = this.sound.add('construction');
         const eauSon = this.sound.add('eau');
         const insectesSon = this.sound.add('insectes');
         const marcheBoueSon = this.sound.add('marcheBoue');
@@ -530,13 +528,27 @@ class MainWorld extends Phaser.Scene {
         const merdePigeonSon = this.sound.add('merdePigeon');
         const moneySon = this.sound.add('money');
         const obtentionItemSon = this.sound.add('obtentionItem');
-        const parcSon = this.sound.add('parc');
         const pigeonSon = this.sound.add('pigeon');
         const pluieSon = this.sound.add('pluie');
         const porteFermeSon = this.sound.add('porteFerme');
         const porteOuvreSon = this.sound.add('porteOuvre');
-        const villeSon = this.sound.add('ville');
         this.marcheSon = this.sound.add('marche', { loop: true });
+        // Sons d'ambiance
+        // --- Gestionnaire de sons d'ambiance --- //
+        this.zoneSounds = {
+            ville: this.sound.add('ville', { loop: true, volume: 0 }),
+            bateau: this.sound.add('bateau', { loop: true, volume: 0 }),
+            parc: this.sound.add('parc', { loop: true, volume: 0 }),
+            construction: this.sound.add('construction', { loop: true, volume: 0 })
+        };
+
+        for (let key in this.zoneSounds) {
+            this.zoneSounds[key].play();
+        }
+
+        this.currentZone = null;
+        this.lastZone = null;
+
         
         // bateau
         this.bateau = this.physics.add.image(4456, 610, 'bateau');
@@ -1313,6 +1325,30 @@ class MainWorld extends Phaser.Scene {
             this.player.x += deltaX;
         }
         this.bigPlat.prevX = this.bigPlat.x;
+
+        let newZone = null;
+
+        if (this.player.x > -40 && this.player.x <= 4252) newZone = 'ville';
+        else if (this.player.x > 4252 && this.player.x <= 5279) newZone = 'bateau';
+        else if (this.player.x > 5279 && this.player.x <= 6920) newZone = 'parc';
+        else if (this.player.x > 6920 && this.player.x <= 7825) newZone = 'ville';
+        else if (this.player.x > 7825 && this.player.x <= 9398) newZone = 'construction';
+        else if (this.player.x > 9398 && this.player.x <= 14050) newZone = 'ville';
+
+        // Si on change de zone
+        if (newZone && newZone !== this.currentZone) {
+            for (let key in this.zoneSounds) {
+                const targetVolume = (key === newZone) ? 0.4 : 0;
+                this.tweens.add({
+                    targets: this.zoneSounds[key],
+                    volume: targetVolume,
+                    duration: 1000,
+                    ease: 'Sine.easeInOut'
+                });
+            }
+
+            this.currentZone = newZone;
+        }
     }
 }
 
@@ -1686,6 +1722,9 @@ const config = {
     physics: {
         default: 'arcade',
         arcade: { gravity: { y: 0 }, debug: true }
+    },
+    audio: {
+        disableWebAudio: true,
     },
     render: { pixelArt: true, antialias: false }, // ajout pour une image nette (eau)
     scene: [LoadingScene, Glasses, MainWorld, BakeryScene, ShopScene, EndScene]
