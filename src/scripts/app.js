@@ -201,7 +201,6 @@ class LoadingScene extends Phaser.Scene {
         // sons
         this.load.audio('bateau', 'assets/sounds/bateau.mp3');
         this.load.audio('boue', 'assets/sounds/boue.mp3');
-        this.load.audio('checkout', 'assets/sounds/checkout.mp3');
         this.load.audio('construction', 'assets/sounds/construction.mp3');
         this.load.audio('eau', 'assets/sounds/eau.mp3');
         this.load.audio('insectes', 'assets/sounds/insecte.mp3');
@@ -518,9 +517,6 @@ class MainWorld extends Phaser.Scene {
         this.bakery = this.add.tileSprite(13496, -286, 2048, 1024, 'bakery').setOrigin(0, 0);
 
         // sons
-        this.boueSon = this.sound.add('boue');
-        this.checkoutSon = this.sound.add('checkout');
-        this.eauSon = this.sound.add('eau');
         this.insectesSon = this.sound.add('insectes');
         this.marcheBoueSon = this.sound.add('marcheBoue');
         this.marcheEauFlaqueSon = this.sound.add('marcheEauFlaque');
@@ -647,6 +643,10 @@ class MainWorld extends Phaser.Scene {
             overlayCaca.setDepth(2000);
 
             overlayStack.push(overlayCaca);
+
+            if (!this.merdePigeonSon.isPlaying) {
+                this.merdePigeonSon.play({ volume: 1 });
+            }
         });
     
         this.cone = this.physics.add.staticImage(30, 692, 'cone');
@@ -1354,12 +1354,14 @@ class BakeryScene extends Phaser.Scene {
     preload(data) {
         const character = (data && data.character) ? data.character : 'henri';
         loadCharacterSprites.call(this, character);
-
+        this.load.audio('checkout', 'assets/sounds/checkout.mp3');
     }
 
     create(data) {
         selectedCharacter = (data && data.character) ? data.character : 'henri';
         this.player = data.player;
+
+        this.checkoutSon = this.sound.add('checkout');
 
         cursors = this.input.keyboard.createCursorKeys();
         
@@ -1409,6 +1411,11 @@ class BakeryScene extends Phaser.Scene {
                 playerHasBread = true;
                 this.pain.disableBody(true, true);
                 money -= 5;
+
+                if (!this.checkoutSon.isPlaying) {
+                    this.checkoutSon.play({ volume: 1 });
+                }
+
                 const prefix = playerHasBread ? '_pain' : '';
                 if (playerHasBread) {
                     this.player.anims.play('receive_bread_' + selectedCharacter, true);
@@ -1507,11 +1514,14 @@ class ShopScene extends Phaser.Scene {
     preload(data) {
         const character = (data && data.character) ? data.character : 'henri';
         loadCharacterSprites.call(this, character);
+        this.load.audio('checkout', 'assets/sounds/checkout.mp3');
     }
 
     create(data) {
         selectedCharacter = (data && data.character) ? data.character : 'henri';
         this.player = data.player;
+
+        this.checkoutSon = this.sound.add('checkout');
 
         cursors = this.input.keyboard.createCursorKeys();
 
@@ -1541,6 +1551,11 @@ class ShopScene extends Phaser.Scene {
                 playerHasUmbrella = true;
                 this.parapluie.disableBody(true, true);
                 money -= 4;
+                
+                if (!this.checkoutSon.isPlaying) {
+                    this.checkoutSon.play({ volume: 1 });
+                }
+
                 const prefix = playerHasUmbrella ? '_umbrella': '';
                 if (playerHasUmbrella) {
                     this.player.anims.play('receive_umbrella_' + selectedCharacter, true);
