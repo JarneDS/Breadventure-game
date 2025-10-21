@@ -522,7 +522,9 @@ class MainWorld extends Phaser.Scene {
         this.marcheRiviereSon = this.sound.add('marcheRiviere');
         this.merdePigeonSon = this.sound.add('merdePigeon');
         this.moneySon = this.sound.add('money');
-        this.pigeonSon = this.sound.add('pigeon');
+        this.pigeonSon = this.sound.add('pigeon', { loop: true });
+        this.pigeonSonPlaying = false;
+
         this.pluieSon = this.sound.add('pluie');
         this.porteFermeSon = this.sound.add('porteFerme');
         this.porteOuvreSon = this.sound.add('porteOuvre');
@@ -841,6 +843,11 @@ class MainWorld extends Phaser.Scene {
                 this.physics.add.overlap(this.player, obstacle, () => {
                     obstacle.destroy();
                     money += 1;
+
+                    if (!this.moneySon.isPlaying) {
+                        this.moneySon.play({ volume: 1 });
+                    }
+
                     this.scoreText.setText('Argent : ' + money + "$");
                 }, null, this);
             }
@@ -1345,6 +1352,18 @@ class MainWorld extends Phaser.Scene {
 
             this.currentZone = newZone;
         }*/
+
+       const birdBounds = this.bird.getBounds();
+
+        const isVisible = Phaser.Geom.Intersects.RectangleToRectangle(birdBounds, this.cameras.main.worldView);
+
+        if (isVisible && !this.pigeonSonPlaying) {
+            this.pigeonSon.play();
+            this.pigeonSonPlaying = true;
+        } else if (!isVisible && this.pigeonSonPlaying) {
+            this.pigeonSon.stop();
+            this.pigeonSonPlaying = false;
+        }
     }
 }
 
