@@ -518,23 +518,22 @@ class MainWorld extends Phaser.Scene {
         this.bakery = this.add.tileSprite(13496, -286, 2048, 1024, 'bakery').setOrigin(0, 0);
 
         // sons
-        const boueSon = this.sound.add('boue');
-        const checkoutSon = this.sound.add('checkout');
-        const eauSon = this.sound.add('eau');
-        const insectesSon = this.sound.add('insectes');
-        const marcheBoueSon = this.sound.add('marcheBoue');
-        const marcheEauFlaqueSon = this.sound.add('marcheEauFlaque');
-        const marcheRiviereSon = this.sound.add('marcheRiviere');
-        const merdePigeonSon = this.sound.add('merdePigeon');
-        const moneySon = this.sound.add('money');
-        const obtentionItemSon = this.sound.add('obtentionItem');
-        const pigeonSon = this.sound.add('pigeon');
-        const pluieSon = this.sound.add('pluie');
-        const porteFermeSon = this.sound.add('porteFerme');
-        const porteOuvreSon = this.sound.add('porteOuvre');
+        this.boueSon = this.sound.add('boue');
+        this.checkoutSon = this.sound.add('checkout');
+        this.eauSon = this.sound.add('eau');
+        this.insectesSon = this.sound.add('insectes');
+        this.marcheBoueSon = this.sound.add('marcheBoue');
+        this.marcheEauFlaqueSon = this.sound.add('marcheEauFlaque');
+        this.marcheRiviereSon = this.sound.add('marcheRiviere');
+        this.merdePigeonSon = this.sound.add('merdePigeon');
+        this.moneySon = this.sound.add('money');
+        this.obtentionItemSon = this.sound.add('obtentionItem');
+        this.pigeonSon = this.sound.add('pigeon');
+        this.pluieSon = this.sound.add('pluie');
+        this.porteFermeSon = this.sound.add('porteFerme');
+        this.porteOuvreSon = this.sound.add('porteOuvre');
         this.marcheSon = this.sound.add('marche', { loop: true });
         // Sons d'ambiance
-        // --- Gestionnaire de sons d'ambiance --- //
         this.zoneSounds = {
             ville: this.sound.add('ville', { loop: true, volume: 0 }),
             bateau: this.sound.add('bateau', { loop: true, volume: 0 }),
@@ -678,6 +677,10 @@ class MainWorld extends Phaser.Scene {
                 .setVisible(false);
 
             this.physics.add.overlap(this.player, zoneEau, () => { // gère la zone d'eau rivière avec bateau
+                if (!this.marcheEauFlaqueSon.isPlaying) {
+                    this.marcheEauFlaqueSon.play({ volume: 1 });
+                }
+                
                 if (!overlayEau) {
                     overlayEau = this.add.image(0, 0, "eau_vue").setOrigin(0, 0);
                     overlayEau.displayWidth  = this.sys.game.config.width;
@@ -710,6 +713,10 @@ class MainWorld extends Phaser.Scene {
                 .setVisible(false);
 
             this.physics.add.overlap(this.player, zoneBoue, () => { // gère la zone de boue
+                if (!this.marcheBoueSon.isPlaying) {
+                    this.marcheBoueSon.play({ volume: 1 });
+                }
+                
                 if (!overlayBoue) {
                     overlayBoue = this.add.image(0, 0, "boue_vue").setOrigin(0, 0);
                     overlayBoue.displayWidth  = this.sys.game.config.width;
@@ -811,7 +818,6 @@ class MainWorld extends Phaser.Scene {
         this.cameras.main.setBounds(0, 0, 14050, 0);
         this.cameras.main.startFollow(this.player, true, 0.1, 0.1, 0, 245);
     
-        // argent
         // argent (ne génère qu'une pièce à la fois)
         if (this.obstacles.length === 0) { // mise en place zone interdite pour éviter spawn money dans zones inaccessibles
             const zonesInterdites = [
@@ -870,18 +876,6 @@ class MainWorld extends Phaser.Scene {
         if (runTimerActive) {
             runTimerText.setText(formatElapsed(Math.floor(Date.now() - runTimerStart)));
         }
-
-        /*this.uiLayer.add([this.scoreText, this.mouchoirText]);
-
-        const gameCam = this.cameras.main;
-        const uiCam   = this.cameras.add(0, 0, this.scale.width, this.scale.height);
-        uiCam.setScroll(0, 0);
-
-        // Caméra jeu -> gère pas l'affichage du HUD
-        gameCam.ignore(this.uiLayer);
-
-        // Gère uniquement le HUD
-        uiCam.ignore(this.children.list.filter(obj => obj !== this.uiLayer));*/
 
         // pluie
         this.rain = this.add.sprite(0, 0, 'rain', 0).setOrigin(0, 0);
@@ -1325,7 +1319,7 @@ class MainWorld extends Phaser.Scene {
             this.player.x += deltaX;
         }
         this.bigPlat.prevX = this.bigPlat.x;
-
+/*
         let newZone = null;
 
         if (this.player.x > -40 && this.player.x <= 4252) newZone = 'ville';
@@ -1348,7 +1342,7 @@ class MainWorld extends Phaser.Scene {
             }
 
             this.currentZone = newZone;
-        }
+        }*/
     }
 }
 
