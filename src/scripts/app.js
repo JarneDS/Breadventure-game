@@ -896,6 +896,10 @@ class MainWorld extends Phaser.Scene {
         overlayStack.push(glassesRain);
 
         const startRainFor = (ms) => {
+            if (!this.pluieSon.isPlaying) {
+                this.pluieSon.play({ volume: 1 });
+            }
+            
             this.rain.setVisible(true);
             this.rain.play('rain_loop', true);
 
@@ -934,6 +938,9 @@ class MainWorld extends Phaser.Scene {
                 const rainMs = Phaser.Math.Between(6000, 15000);
                 startRainFor(rainMs);
             });
+            if (this.pluieSon.isPlaying) {
+                this.pluieSon.stop();
+            }
         };
 
         scheduleNextRain();
