@@ -1263,6 +1263,7 @@ class MainWorld extends Phaser.Scene {
                 returnX: this.player.x,
                 returnY: this.player.y,
                 money: money,
+                returnMoney : this.objects,
                 player: this.player,
                 playerHasBread,
                 playerHasUmbrella,
@@ -1277,6 +1278,7 @@ class MainWorld extends Phaser.Scene {
                 returnY: this.player.y,
                 player: this.player,
                 money: money,
+                returnMoney : this.objects,
                 playerHasBread,
                 playerHasUmbrella,
                 character: selectedCharacter
