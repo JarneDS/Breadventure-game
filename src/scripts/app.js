@@ -214,7 +214,6 @@ class LoadingScene extends Phaser.Scene {
         this.load.audio('parc', 'assets/sounds/parc.mp3');
         this.load.audio('pigeon', 'assets/sounds/pigeon.mp3');
         this.load.audio('pluie', 'assets/sounds/pluie.mp3');
-        this.load.audio('porteFerme', 'assets/sounds/porteFerme.mp3');
         this.load.audio('porteOuvre', 'assets/sounds/porteOuvre.mp3');
         this.load.audio('ville', 'assets/sounds/ville.mp3');
         // pas charger loading.mp3 , plouf_dans_riviere.mp3
@@ -525,7 +524,6 @@ class MainWorld extends Phaser.Scene {
         this.pigeonSonPlaying = false;
 
         this.pluieSon = this.sound.add('pluie');
-        this.porteFermeSon = this.sound.add('porteFerme');
         this.porteOuvreSon = this.sound.add('porteOuvre');
         // Sons d'ambiance
         this.zoneSounds = {
@@ -618,7 +616,7 @@ class MainWorld extends Phaser.Scene {
 
         // player
         const spawnX = (data && data.playerX !== undefined) ? data.playerX : 100;
-        const spawnY = (data && data.playerY !== undefined) ? data.playerY : 736;
+        const spawnY = (data && data.playerY !== undefined) ? data.playerY : 738;
 
         this.player = this.physics.add.sprite(spawnX, spawnY, `player_${selectedCharacter.name}`);
         this.player.setOrigin(0.5, 1);
@@ -653,7 +651,6 @@ class MainWorld extends Phaser.Scene {
         this.ground = this.add.tileSprite(-40, 738, 4096, 100, 'ground').setOrigin(0, 0);
         this.ground2 = this.add.tileSprite(6104, 738, 8192, 100, 'ground').setOrigin(0, 0);
         this.parcGround = this.add.tileSprite(4056, 738, 2048, 100, 'groundParc').setOrigin(0, 0);
-        // this.flaqueEau = this.add.tileSprite(1000, 736, 92, 48, 'flaqueEau').setOrigin(0, 0); -> une seule flaque en x = 1000
 
         //flaques d'eau à différentes positions x
         const positionsFlaques = [ 
@@ -1259,6 +1256,10 @@ class MainWorld extends Phaser.Scene {
 
         // touche A pour entrer dans la boulangerie
         if (keyObject.isDown && bakeryTextShown && !playerHasBread){
+            if (!this.porteOuvreSon.isPlaying) {
+                this.porteOuvreSon.play({ volume: 1 });
+            }
+
             this.scene.start('BakeryScene', {
                 returnX: this.player.x,
                 returnY: this.player.y,
@@ -1273,6 +1274,10 @@ class MainWorld extends Phaser.Scene {
 
         // touche A pour entrer dans le shop
         if (keyObject.isDown && shopTextShown){
+            if (!this.porteOuvreSon.isPlaying) {
+                this.porteOuvreSon.play({ volume: 1 });
+            }
+
             this.scene.start('ShopScene', {
                 returnX: this.player.x,
                 returnY: this.player.y,
@@ -1386,6 +1391,7 @@ class BakeryScene extends Phaser.Scene {
         loadCharacterSprites.call(this, character);
         this.load.audio('obtentionItem', 'assets/sounds/obtentionItem.mp3');
         this.load.audio('checkout', 'assets/sounds/checkout.mp3');
+        this.load.audio('porteOuvre', 'assets/sounds/porteOuvre.mp3');
     }
 
     create(data) {
@@ -1394,6 +1400,7 @@ class BakeryScene extends Phaser.Scene {
 
         this.obtentionItemSon = this.sound.add('obtentionItem');
         this.checkoutSon = this.sound.add('checkout');
+        this.porteOuvreSon = this.sound.add('porteOuvre');
 
         cursors = this.input.keyboard.createCursorKeys();
         
@@ -1486,6 +1493,10 @@ class BakeryScene extends Phaser.Scene {
 
         // sortir de la boulangerie
         if (Phaser.Input.Keyboard.JustDown(this.keyA) && bakeryTextShown2) {
+            if (!this.porteOuvreSon.isPlaying) {
+                this.porteOuvreSon.play({ volume: 1 });
+            }
+
             this.scene.start('MainWorld', {
                 playerX: this.returnX,
                 playerY: this.returnY,
@@ -1548,6 +1559,7 @@ class ShopScene extends Phaser.Scene {
         const character = (data && data.character) ? data.character : 'henri';
         loadCharacterSprites.call(this, character);
         this.load.audio('checkout', 'assets/sounds/checkout.mp3');
+        this.load.audio('porteOuvre', 'assets/sounds/porteOuvre.mp3');
     }
 
     create(data) {
@@ -1555,6 +1567,7 @@ class ShopScene extends Phaser.Scene {
         this.player = data.player;
 
         this.checkoutSon = this.sound.add('checkout');
+        this.porteOuvreSon = this.sound.add('porteOuvre');
 
         cursors = this.input.keyboard.createCursorKeys();
 
@@ -1684,6 +1697,10 @@ class ShopScene extends Phaser.Scene {
         }
         // sortir du shop
         if (Phaser.Input.Keyboard.JustDown(this.keyA) && shopTextShown2) {
+            if (!this.porteOuvreSon.isPlaying) {
+                this.porteOuvreSon.play({ volume: 1 });
+            }
+
             this.scene.start('MainWorld', {
                 playerX: this.returnX,
                 playerY: this.returnY,
