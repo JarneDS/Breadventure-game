@@ -212,7 +212,6 @@ class LoadingScene extends Phaser.Scene {
         this.load.audio('marcheRiviere', 'assets/sounds/marcheRiviere.mp3');
         this.load.audio('merdePigeon', 'assets/sounds/merdePigeon.mp3');
         this.load.audio('money', 'assets/sounds/money.mp3');
-        this.load.audio('obtentionItem', 'assets/sounds/obtentionItem.mp3');
         this.load.audio('parc', 'assets/sounds/parc.mp3');
         this.load.audio('pigeon', 'assets/sounds/pigeon.mp3');
         this.load.audio('pluie', 'assets/sounds/pluie.mp3');
@@ -523,7 +522,6 @@ class MainWorld extends Phaser.Scene {
         this.marcheRiviereSon = this.sound.add('marcheRiviere');
         this.merdePigeonSon = this.sound.add('merdePigeon');
         this.moneySon = this.sound.add('money');
-        this.obtentionItemSon = this.sound.add('obtentionItem');
         this.pigeonSon = this.sound.add('pigeon');
         this.pluieSon = this.sound.add('pluie');
         this.porteFermeSon = this.sound.add('porteFerme');
@@ -579,21 +577,21 @@ class MainWorld extends Phaser.Scene {
         this.bird.anims.play('bird_fly', true);
 
         this.tweens.add({
-        targets: this.bird,
-        x: rightEdge,
-        duration: baseMs,
-        yoyo: true,
-        repeat: -1,
-        // inverse direction + random temps
-        onYoyo: (tween) => {
-            this.bird.setFlipX(!this.bird.flipX);
-            tween.timeScale = Phaser.Math.FloatBetween(0.95, 1.10);
-        },
-        // repetition à chaque boucle
-        onRepeat: (tween) => {
-            this.bird.setFlipX(!this.bird.flipX);
-            tween.timeScale = Phaser.Math.FloatBetween(0.95, 1.10);
-        }
+            targets: this.bird,
+            x: rightEdge,
+            duration: baseMs,
+            yoyo: true,
+            repeat: -1,
+            // inverse direction + random temps
+            onYoyo: (tween) => {
+                this.bird.setFlipX(!this.bird.flipX);
+                tween.timeScale = Phaser.Math.FloatBetween(0.95, 1.10);
+            },
+            // repetition à chaque boucle
+            onRepeat: (tween) => {
+                this.bird.setFlipX(!this.bird.flipX);
+                tween.timeScale = Phaser.Math.FloatBetween(0.95, 1.10);
+            }
         });
 
         //caca
@@ -773,7 +771,7 @@ class MainWorld extends Phaser.Scene {
         this.physics.add.collider(this.player, this.bateau);
         this.physics.add.collider(this.player, this.smallPlat); //Chantier plat petite grue
         this.physics.add.collider(this.player, this.bigPlat); //Chantier plat grande grue
-        
+
         // entrer dans la boulangerie (message)
         this.physics.add.overlap(this.player, enterBakery, () => {
             if (!bakeryTextShown) {
@@ -1031,27 +1029,31 @@ class MainWorld extends Phaser.Scene {
         this.physics.add.existing(eauRiviere, true);
 
         this.physics.add.overlap(this.player, eauRiviere, () => {
-        if (!overlayVisible) {
-            overlayVisible = true;
+            if (!overlayVisible) {
+                overlayVisible = true;
 
-            if (!overlay2) {
-            overlay2 = this.add.rectangle(
-                0, 0,
-                this.sys.game.config.width,
-                this.sys.game.config.height,
-                0x1A74CC
-            ).setOrigin(0);
+                if (!overlay2) {
+                overlay2 = this.add.rectangle(
+                    0, 0,
+                    this.sys.game.config.width,
+                    this.sys.game.config.height,
+                    0x1A74CC
+                ).setOrigin(0);
 
-            overlay2.setScrollFactor(0);
-            overlay2.setAlpha(0.9);
-            overlay2.setDepth(950);
+                overlay2.setScrollFactor(0);
+                overlay2.setAlpha(0.9);
+                overlay2.setDepth(950);
+                }
+
+                if (overlayEau) {
+                    overlayEau.destroy();
+                    overlayEau = null;
+                }
             }
 
-            if (overlayEau) {
-                overlayEau.destroy();
-                overlayEau = null;
+            if (!this.marcheRiviereSon.isPlaying) {
+                this.marcheRiviereSon.play({ volume: 1 });
             }
-        }
         }, null, this);
 
         this.events.on('update', () => {
@@ -1354,6 +1356,7 @@ class BakeryScene extends Phaser.Scene {
     preload(data) {
         const character = (data && data.character) ? data.character : 'henri';
         loadCharacterSprites.call(this, character);
+        this.load.audio('obtentionItem', 'assets/sounds/obtentionItem.mp3');
         this.load.audio('checkout', 'assets/sounds/checkout.mp3');
     }
 
@@ -1361,6 +1364,7 @@ class BakeryScene extends Phaser.Scene {
         selectedCharacter = (data && data.character) ? data.character : 'henri';
         this.player = data.player;
 
+        this.obtentionItemSon = this.sound.add('obtentionItem');
         this.checkoutSon = this.sound.add('checkout');
 
         cursors = this.input.keyboard.createCursorKeys();
@@ -1412,8 +1416,9 @@ class BakeryScene extends Phaser.Scene {
                 this.pain.disableBody(true, true);
                 money -= 5;
 
-                if (!this.checkoutSon.isPlaying) {
-                    this.checkoutSon.play({ volume: 1 });
+                if (!this.obtentionItemSon.isPlaying) {
+                    this.obtentionItemSon.play({ volume: 1 });
+                    this.obtentionItemSon.once("complete", () => this.checkoutSon.play());
                 }
 
                 const prefix = playerHasBread ? '_pain' : '';
@@ -1424,7 +1429,7 @@ class BakeryScene extends Phaser.Scene {
                     playerHasBread = false;
 
                     // Durée réelle de l’animation (4 frames à 6 fps ≈ 666 ms)
-                    this.time.delayedCall(2000, () => {
+                    this.time.delayedCall(2593, () => {
                         this.player.body.moves = true;
                         playerHasBread = true;
                         this.player.anims.play('static' + prefix + '_' + selectedCharacter, true);
@@ -1551,7 +1556,7 @@ class ShopScene extends Phaser.Scene {
                 playerHasUmbrella = true;
                 this.parapluie.disableBody(true, true);
                 money -= 4;
-                
+
                 if (!this.checkoutSon.isPlaying) {
                     this.checkoutSon.play({ volume: 1 });
                 }
@@ -1593,6 +1598,10 @@ class ShopScene extends Phaser.Scene {
 
         // Achat de mouchoir: -2 pièces si possible, MAJ HUD
         this.physics.add.overlap(this.player, this.mouchoirs, () => {
+             if (!this.checkoutSon.isPlaying) {
+                this.checkoutSon.play({ volume: 1 });
+            }
+
             if (!playerHasMouchoirs && money >= 2) {
                 playerHasMouchoirs = true;
                 this.mouchoirs.disableBody(true, true);
