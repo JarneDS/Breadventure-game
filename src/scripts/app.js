@@ -903,6 +903,7 @@ class MainWorld extends Phaser.Scene {
         this.rain.setScrollFactor(0);
         this.rain.setDepth(940);
         this.rain.setVisible(false);
+        this.isRaining = false;
         this.rain.displayWidth = this.sys.game.config.width;
         this.rain.displayHeight = this.sys.game.config.height;
 
@@ -912,48 +913,50 @@ class MainWorld extends Phaser.Scene {
         overlayStack.push(glassesRain);
 
         const startRainFor = (ms) => {
-        if (!this.pluieSon.isPlaying) this.pluieSon.play({ volume: 1 });
+            this.isRaining = true;
+            if (!this.pluieSon.isPlaying) this.pluieSon.play({ volume: 1 });
 
-        this.rain.setVisible(true);
-        this.rain.play('rain_loop', true);
+            this.rain.setVisible(true);
+            this.rain.play('rain_loop', true);
 
-        if (playerHasUmbrella) {
+            if (playerHasUmbrella) {
 
-            if (blurRain) { 
-            this.gameSpritesLayers.postFX.remove(blurRain); 
-            blurRain = null; 
+                if (blurRain) { 
+                this.gameSpritesLayers.postFX.remove(blurRain); 
+                blurRain = null; 
+                }
+                if (glassesRain) glassesRain.setVisible(false);
+                } else {
+
+                if (!blurRain) {
+                    const blur = this.gameSpritesLayers.postFX.addBlur(4);
+                    blurRain = blur;
+
+                    overlayStack.push({
+                        destroy: () => {
+                        if (blurRain) {
+                            this.gameSpritesLayers.postFX.remove(blurRain);
+                            blurRain = null;
+                        }
+                        }
+                    });
+                }
+
+                if (!glassesRain) {
+                    glassesRain = this.add.image(0, 0, "glassesRain").setOrigin(0, 0);
+                    glassesRain.setScrollFactor(0);
+                    glassesRain.setDepth(950);
+                    overlayStack.push(glassesRain);
+                }
+                glassesRain.setVisible(true);
             }
-            if (glassesRain) glassesRain.setVisible(false);
-            } else {
 
-            if (!blurRain) {
-                const blur = this.gameSpritesLayers.postFX.addBlur(4);
-                blurRain = blur;
-
-                overlayStack.push({
-                    destroy: () => {
-                    if (blurRain) {
-                        this.gameSpritesLayers.postFX.remove(blurRain);
-                        blurRain = null;
-                    }
-                    }
-                });
-            }
-
-            if (!glassesRain) {
-                glassesRain = this.add.image(0, 0, "glassesRain").setOrigin(0, 0);
-                glassesRain.setScrollFactor(0);
-                glassesRain.setDepth(950);
-                overlayStack.push(glassesRain);
-            }
-            glassesRain.setVisible(true);
-        }
-
-        this.time.delayedCall(ms, () => {
-            this.rain.stop();
-            this.rain.setVisible(false);
-            scheduleNextRain();
-        });
+            this.time.delayedCall(ms, () => {
+                this.rain.stop();
+                this.rain.setVisible(false);
+                this.isRaining = false;
+                scheduleNextRain();
+            });
         };
 
         const scheduleNextRain = () => {
@@ -1225,16 +1228,19 @@ class MainWorld extends Phaser.Scene {
         // Animation
         let prefix = '';
 
-        if (playerHasBrum) {
+        if (playerHasBread && playerHasUmbrella && this.isRaining) {
+            // Pain + parapluie → animation combinée
             prefix = '_brum';
-        } else if (playerHasUmbrella) {
+        } else if (playerHasUmbrella && this.isRaining) {
+            // Parapluie seulement quand il pleut
             prefix = '_umbrella';
         } else if (playerHasBread) {
+            // Pain sans pluie
             prefix = '_bread';
         } else {
+            // Rien
             prefix = '';
         }
-
 
         if (!this.player.body.onFloor()) {
             this.player.anims.play('jumping' + prefix + '_' + selectedCharacter, true);
