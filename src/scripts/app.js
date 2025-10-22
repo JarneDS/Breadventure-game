@@ -52,6 +52,9 @@ let playerHasBread = false;
 let playerHasUmbrella = false;
 let playerHasMouchoirs = false;
 
+
+let playerHasBrum = false;
+
 let selectedCharacter = 'henri';
 let character;
 let perso;
@@ -1186,18 +1189,23 @@ class MainWorld extends Phaser.Scene {
         
         const jumpSon = this.sound.add('jump');
 
+        if (playerHasBread && playerHasUmbrella) {
+            playerHasBrum = true;
+        }
+
         // Animation
         let prefix = '';
 
-        if (playerHasUmbrella) {
+        if (playerHasBrum) {
+            prefix = '_brum';
+        } else if (playerHasUmbrella) {
             prefix = '_umbrella';
         } else if (playerHasBread) {
             prefix = '_bread';
-        /*} else if (playerHasBrum) {
-            prefix = '_brum';*/
         } else {
             prefix = '';
         }
+
 
         if (!this.player.body.onFloor()) {
             this.player.anims.play('jumping' + prefix + '_' + selectedCharacter, true);
@@ -1282,6 +1290,7 @@ class MainWorld extends Phaser.Scene {
                 player: this.player,
                 playerHasBread,
                 playerHasUmbrella,
+                playerHasBrum,
                 character: selectedCharacter
             });  
         }
@@ -1302,6 +1311,7 @@ class MainWorld extends Phaser.Scene {
                 returnMoney : this.objects,
                 playerHasBread,
                 playerHasUmbrella,
+                playerHasBrum,
                 character: selectedCharacter
             });  
         }
@@ -1319,6 +1329,7 @@ class MainWorld extends Phaser.Scene {
                 playerHasBread,
                 player: this.player,
                 playerHasUmbrella,
+                playerHasBrum,
                 character: selectedCharacter,
             });
         }
@@ -1474,15 +1485,16 @@ class BakeryScene extends Phaser.Scene {
 
                 let prefix = '';
 
-                if (playerHasUmbrella) {
+                if (playerHasBrum) {
+                    prefix = '_brum';
+                } else if (playerHasUmbrella) {
                     prefix = '_umbrella';
                 } else if (playerHasBread) {
                     prefix = '_bread';
-                /*} else if (playerHasBrum) {
-                    prefix = '_brum';*/
                 } else {
                     prefix = '';
                 }
+
 
                 if (playerHasBread) {
                     this.player.anims.play('receive_bread_' + selectedCharacter, true);
@@ -1531,6 +1543,7 @@ class BakeryScene extends Phaser.Scene {
                 money: money,
                 playerHasBread,
                 playerHasUmbrella,
+                playerHasBrum,
                 character: selectedCharacter
             });
         }
@@ -1561,18 +1574,23 @@ class BakeryScene extends Phaser.Scene {
             this.player.setFlipX(false);
         }
 
+        if (playerHasBread && playerHasUmbrella) {
+            playerHasBrum = true;
+        }
+
         // Animation
         let prefix = '';
 
-        if (playerHasUmbrella) {
+        if (playerHasBrum) {
+            prefix = '_brum';
+        } else if (playerHasUmbrella) {
             prefix = '_umbrella';
         } else if (playerHasBread) {
             prefix = '_bread';
-        /*} else if (playerHasBrum) {
-            prefix = '_brum';*/
         } else {
             prefix = '';
         }
+
 
         if (!this.player.body.onFloor()) {
             this.player.anims.play('jumping' + prefix + '_' + selectedCharacter, true);
@@ -1746,6 +1764,7 @@ class ShopScene extends Phaser.Scene {
                 money: money,
                 playerHasBread,
                 playerHasUmbrella,
+                playerHasBrum,
                 character: selectedCharacter
             });
         }
@@ -1776,18 +1795,23 @@ class ShopScene extends Phaser.Scene {
             this.player.setFlipX(false);
         }
 
+        if (playerHasBread && playerHasUmbrella) {
+            playerHasBrum = true;
+        }
+
         // Animation
         let prefix = '';
 
-        if (playerHasUmbrella) {
+        if (playerHasBrum) {
+            prefix = '_brum';
+        } else if (playerHasUmbrella) {
             prefix = '_umbrella';
         } else if (playerHasBread) {
             prefix = '_bread';
-        /*} else if (playerHasBrum) {
-            prefix = '_brum';*/
         } else {
             prefix = '';
         }
+
 
         if (!this.player.body.onFloor()) {
             this.player.anims.play('jumping' + prefix + '_' + selectedCharacter, true);
