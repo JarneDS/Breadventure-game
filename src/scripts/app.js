@@ -481,6 +481,15 @@ class MainWorld extends Phaser.Scene {
         this.bateau;
     }
 
+    stopAmbianceSounds() {
+        for (let key in this.zoneSounds) {
+            this.zoneSounds[key].stop();
+        }
+        if (this.pluieSon && this.pluieSon.isPlaying) {
+            this.pluieSon.stop();
+        }
+    }
+
     preload(data){
         const character = (data && data.character) ? data.character : 'henri';
         this.obstacles = [];
@@ -1156,6 +1165,10 @@ class MainWorld extends Phaser.Scene {
             mouchoirs -= 1;
             this.mouchoirText.setText("Mouchoirs : " + mouchoirs);
         }, this);
+
+        this.porteOuvreSon.once("complete", function() {
+            this.stopAmbianceSounds();
+        }.bind(this));
         
         // this.physics.world.createDebugGraphic();
         this.gameSpritesLayers = this.add.layer([
@@ -1317,9 +1330,6 @@ class MainWorld extends Phaser.Scene {
                 this.porteOuvreSon.play({ volume: 1 });
             }
 
-            this.porteOuvreSon.once("complete", () => this.sound.stopAll());
-
-
             this.scene.start('BakeryScene', {
                 returnX: this.player.x,
                 returnY: this.player.y,
@@ -1338,8 +1348,6 @@ class MainWorld extends Phaser.Scene {
             if (!this.porteOuvreSon.isPlaying) {
                 this.porteOuvreSon.play({ volume: 1 });
             }
-
-            this.porteOuvreSon.once("complete", () => this.sound.stopAll());
 
             this.scene.start('ShopScene', {
                 returnX: this.player.x,
@@ -1461,6 +1469,7 @@ class BakeryScene extends Phaser.Scene {
         this.load.audio('obtentionItem', 'assets/sounds/obtentionItem.mp3');
         this.load.audio('checkout', 'assets/sounds/checkout.mp3');
         this.load.audio('porteOuvre', 'assets/sounds/porteOuvre.mp3');
+        this.load.audio('jump', 'assets/sounds/jump.mp3');
     }
 
     create(data) {
@@ -1470,6 +1479,7 @@ class BakeryScene extends Phaser.Scene {
         this.obtentionItemSon = this.sound.add('obtentionItem');
         this.checkoutSon = this.sound.add('checkout');
         this.porteOuvreSon = this.sound.add('porteOuvre');
+        this.jumpSon = this.sound.add('jump');
 
         cursors = this.input.keyboard.createCursorKeys();
         
@@ -1637,10 +1647,17 @@ class BakeryScene extends Phaser.Scene {
             prefix = '';
         }
 
+        if (this.player.body.onFloor()) {
+            hasJumped = false;
+        }
 
         if (!this.player.body.onFloor()) {
             this.player.anims.play('jumping' + prefix + '_' + selectedCharacter, true);
             this.player.setFrame(2);
+            if (!hasJumped) {
+                this.jumpSon.play();
+                hasJumped = true;
+            }
         } else if (this.player.body.velocity.x !== 0) {
             this.player.anims.play('walking' + prefix + '_' + selectedCharacter, true);
         } else {
@@ -1662,6 +1679,7 @@ class ShopScene extends Phaser.Scene {
         loadCharacterSprites.call(this, character);
         this.load.audio('checkout', 'assets/sounds/checkout.mp3');
         this.load.audio('porteOuvre', 'assets/sounds/porteOuvre.mp3');
+        this.load.audio('jump', 'assets/sounds/jump.mp3');
     }
 
     create(data) {
@@ -1670,6 +1688,7 @@ class ShopScene extends Phaser.Scene {
 
         this.checkoutSon = this.sound.add('checkout');
         this.porteOuvreSon = this.sound.add('porteOuvre');
+        this.jumpSon = this.sound.add('jump');
 
         cursors = this.input.keyboard.createCursorKeys();
 
@@ -1691,7 +1710,7 @@ class ShopScene extends Phaser.Scene {
 
         this.mouchoirs = this.physics.add.image(784, 660, 'mouchoirs');
 
-        this.moneyText = this.add.text(10, 10, 'Argent : ' + money + '$', { fontSize: '28px', fontFamily: 'Fira Sans Condensed', fontStyle: 'bold', backgroundColor: "rgba(255,255,255,0.4)" });
+        this.moneyText = this.add.text(10, 10, 'Argent : ' + money + '$', { fontSize: '28px', fill: '#000F05', fontFamily: 'Fira Sans Condensed', fontStyle: 'bold', backgroundColor: "rgba(255,255,255,0.4)" });
         this.moneyText.setScrollFactor(0);
 
         // Achat parapluie: -4 pièces si possible, MAJ HUD
@@ -1863,10 +1882,17 @@ class ShopScene extends Phaser.Scene {
             prefix = '';
         }
 
+        if (this.player.body.onFloor()) {
+            hasJumped = false;
+        }
 
         if (!this.player.body.onFloor()) {
             this.player.anims.play('jumping' + prefix + '_' + selectedCharacter, true);
             this.player.setFrame(2);
+            if (!hasJumped) {
+                this.jumpSon.play();
+                hasJumped = true;
+            }
         } else if (this.player.body.velocity.x !== 0) {
             this.player.anims.play('walking' + prefix + '_' + selectedCharacter, true);
         } else {
