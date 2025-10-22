@@ -903,7 +903,7 @@ class MainWorld extends Phaser.Scene {
         this.rain.setScrollFactor(0);
         this.rain.setDepth(940);
         this.rain.setVisible(false);
-        this.isRaining = false;
+        this.isRaining = false; // pour que isRaining soit en état false dès le début
         this.rain.displayWidth = this.sys.game.config.width;
         this.rain.displayHeight = this.sys.game.config.height;
 
@@ -913,7 +913,7 @@ class MainWorld extends Phaser.Scene {
         overlayStack.push(glassesRain);
 
         const startRainFor = (ms) => {
-            this.isRaining = true;
+            this.isRaining = true; // pour que quand la pluie commence que isRaining passe en état true
             if (!this.pluieSon.isPlaying) this.pluieSon.play({ volume: 1 });
 
             this.rain.setVisible(true);
@@ -954,7 +954,7 @@ class MainWorld extends Phaser.Scene {
             this.time.delayedCall(ms, () => {
                 this.rain.stop();
                 this.rain.setVisible(false);
-                this.isRaining = false;
+                this.isRaining = false; // pour que quand la pluie s'arrête que isRaining passe en état false
                 scheduleNextRain();
             });
         };
@@ -1229,7 +1229,7 @@ class MainWorld extends Phaser.Scene {
         let prefix = '';
 
         if (playerHasBread && playerHasUmbrella && this.isRaining) {
-            // Pain + parapluie → animation combinée
+            // Pain + parapluie
             prefix = '_brum';
         } else if (playerHasUmbrella && this.isRaining) {
             // Parapluie seulement quand il pleut
