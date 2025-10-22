@@ -34,15 +34,15 @@ function formatElapsed(ms) {
 let overlayEau = null; //flaque eau
 let overlayBoue = null; //flaque boue
 let overlayCaca = null; //caca bird
-let glassesRain = null;
+let glassesRain = null; //overlay pluie
 let blurRain = null; //pluie blur lunettes
 
 let overlayStack = []; //pile des overlays -> utile pour effacer le denier apparu
 
 let mouchoirs = 10; //valeur par défaut - valeur TEST -> à modifier
-let shopTextShown = false;
-let shopText = null;
-let houseText = null;
+let shopTextShown = false; //affichage texte shop
+let shopText = null; //texte shop
+let houseText = null; //affichage texte maison
 
 //let insects;
 let playerOnBoat;
