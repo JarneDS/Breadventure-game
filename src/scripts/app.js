@@ -894,14 +894,20 @@ class MainWorld extends Phaser.Scene {
         overlayStack.push(glassesRain);
 
         const startRainFor = (ms) => {
-            if (!this.pluieSon.isPlaying) {
-                this.pluieSon.play({ volume: 1 });
-            }
-            
-            this.rain.setVisible(true);
-            this.rain.play('rain_loop', true);
+        if (!this.pluieSon.isPlaying) this.pluieSon.play({ volume: 1 });
 
-            //Gestion blur pluie
+        this.rain.setVisible(true);
+        this.rain.play('rain_loop', true);
+
+        if (playerHasUmbrella) {
+
+            if (blurRain) { 
+            this.gameSpritesLayers.postFX.remove(blurRain); 
+            blurRain = null; 
+            }
+            if (glassesRain) glassesRain.setVisible(false);
+            } else {
+
             if (!blurRain) {
                 const blur = this.gameSpritesLayers.postFX.addBlur(4);
                 blurRain = blur;
@@ -923,11 +929,13 @@ class MainWorld extends Phaser.Scene {
                 overlayStack.push(glassesRain);
             }
             glassesRain.setVisible(true);
-            this.time.delayedCall(ms, () => {
-                this.rain.stop();
-                this.rain.setVisible(false);
-                scheduleNextRain();
-            });
+        }
+
+        this.time.delayedCall(ms, () => {
+            this.rain.stop();
+            this.rain.setVisible(false);
+            scheduleNextRain();
+        });
         };
 
         const scheduleNextRain = () => {
