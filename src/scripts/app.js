@@ -632,6 +632,8 @@ class MainWorld extends Phaser.Scene {
         this.physics.add.overlap(this.player, this.poops, (_player, poop) => {
             poop.destroy();
 
+            if (playerHasUmbrella) return;
+
             if (overlayCaca) {
                 overlayCaca.destroy();
                 overlayCaca = null;
@@ -640,12 +642,7 @@ class MainWorld extends Phaser.Scene {
             overlayCaca = this.add.image(0, 0, "merde").setOrigin(0, 0);
             overlayCaca.setScrollFactor(0);
             overlayCaca.setDepth(2000);
-
             overlayStack.push(overlayCaca);
-
-            if (!this.merdePigeonSon.isPlaying) {
-                this.merdePigeonSon.play({ volume: 1 });
-            }
         });
     
         this.cone = this.physics.add.staticImage(30, 692, 'cone');
@@ -1107,10 +1104,13 @@ class MainWorld extends Phaser.Scene {
         
         this.physics.add.overlap(this.player, this.poops, (_player, poop) => {
             poop.destroy();
+            if (playerHasUmbrella) return;
+
             const splash = this.add.image(0, 0, "merde").setOrigin(0, 0);
             splash.setScrollFactor(0);
             splash.setDepth(2000);
             splash.setAlpha(0.95);
+            overlayStack.push(splash);
         });
 
         this.input.keyboard.on("keydown-E", () => {
