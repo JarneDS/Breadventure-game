@@ -366,14 +366,20 @@ class LoadingScene extends Phaser.Scene {
 
         const textExplication = this.add.text(597, 340, 'Veuillez utiliser <- et -> pour changer de personnage', {
             fontSize: '28px',
-            fill: '#000'
+            fill: '#000F05',
+            fontFamily: 'Arial',
+            fontStyle: 'bold',
+            backgroundColor: "rgba(255,255,255,0.4)"
         });
 
         textExplication.setOrigin(0.5, 0.5);
 
         const appuyA = this.add.text(597, 600, 'Appuyer sur A pour commencer le jeu avec ' + selectedCharacter, {
             fontSize: '36px',
-            fill: '#000'
+            fill: '#000F05',
+            fontFamily: 'Arial',
+            fontStyle: 'bold',
+            backgroundColor: "rgba(255,255,255,0.4)"
         });
 
         appuyA.setOrigin(0.5, 0.5);
@@ -774,7 +780,10 @@ class MainWorld extends Phaser.Scene {
             if (!bakeryTextShown) {
                 bakeryText = this.add.text(10, 50, 'Appuyer sur A pour entrer dans la boulangerie', {
                     fontSize: '28px',
-                    fill: '#000F05'
+                    fill: '#000F05',
+                    fontFamily: 'Arial',
+                    fontStyle: 'bold',
+                    backgroundColor: "rgba(255,255,255,0.4)"
                 });
                 bakeryText.setScrollFactor(0);
                 bakeryTextShown = true;
@@ -787,7 +796,10 @@ class MainWorld extends Phaser.Scene {
             if (!shopTextShown) {
                 shopText = this.add.text(10, 50, 'Appuyer sur A pour entrer dans la boutique', {
                     fontSize: '28px',
-                    fill: '#000F05'
+                    fill: '#000F05',
+                    fontFamily: 'Arial',
+                    fontStyle: 'bold',
+                    backgroundColor: "rgba(255,255,255,0.4)"
                 });
                 shopText.setScrollFactor(0);
                 shopTextShown = true;
@@ -800,7 +812,10 @@ class MainWorld extends Phaser.Scene {
             if (!houseTextShown && playerHasBread) {
                 houseText = this.add.text(10, 50, 'Appuyer sur A pour rentrer chez vous', {
                     fontSize: '28px',
-                    fill: '#000F05'
+                    fill: '#000F05',
+                    fontFamily: 'Arial',
+                    fontStyle: 'bold',
+                    backgroundColor: "rgba(255,255,255,0.4)"
                 });
                 houseText.setScrollFactor(0);
                 houseTextShown = true;
@@ -853,14 +868,20 @@ class MainWorld extends Phaser.Scene {
 
         this.scoreText = this.add.text(10, 10, 'Argent : ' + money + '$', {
             fontSize: '28px',
-            fill: '#000F05'
+            fill: '#000F05',
+            fontFamily: 'Arial',
+            fontStyle: 'bold',
+            backgroundColor: "rgba(255,255,255,0.4)"
         });
         this.scoreText.setScrollFactor(0).setDepth(10001);
 
         // HUD mouchoirs
         this.mouchoirText = this.add.text(700, 10, 'Mouchoirs : ' + mouchoirs, {
             fontSize: '28px',
-            fill: '#000F05'
+            fill: '#000F05',
+            fontFamily: 'Arial',
+            fontStyle: 'bold',
+            backgroundColor: "rgba(255,255,255,0.4)"
         });
         this.mouchoirText.setScrollFactor(0).setDepth(10001);
 
@@ -1257,7 +1278,10 @@ class MainWorld extends Phaser.Scene {
             if (!painPrisShown && distance2 <= 100) {
                 painPris = this.add.text(10, 50, 'Vous avez déjà un pain...', {
                     fontSize: '28px',
-                    fill: '#000F05'
+                    fill: '#000F05',
+                    fontFamily: 'Arial',
+                    fontStyle: 'bold',
+                    backgroundColor: "rgba(255,255,255,0.4)"
                 });
                 painPris.setScrollFactor(0);
                 painPrisShown = true;
@@ -1455,7 +1479,7 @@ class BakeryScene extends Phaser.Scene {
         this.player.body.gravity.y = 400;
 
         // HUD argent dans la boulangerie
-        this.moneyText = this.add.text(10, 10, 'Argent : ' + money + '$', { fontSize: '28px' });
+        this.moneyText = this.add.text(10, 10, 'Argent : ' + money + '$', { fontSize: '28px', fontFamily: 'Arial', fontStyle: 'bold', backgroundColor: "rgba(255,255,255,0.4)" });
         this.moneyText.setScrollFactor(0);
 
         let exitBakery = this.physics.add.staticImage(159, 685, null).setSize(58, 100).setVisible(false);
@@ -1467,7 +1491,10 @@ class BakeryScene extends Phaser.Scene {
             if (!bakeryTextShown2) {
                 bakeryText2 = this.add.text(10, 50, 'Appuyer sur A pour sortir', {
                     fontSize: '28px',
-                    fill: '#fafafa'
+                    fill: '#fafafa',
+                    fontFamily: 'Arial',
+                    fontStyle: 'bold',
+                    backgroundColor: "rgba(255,255,255,0.4)"
                 });
                 bakeryText2.setScrollFactor(0);
                 bakeryTextShown2 = true;
@@ -1527,11 +1554,11 @@ class BakeryScene extends Phaser.Scene {
                 if (this.moneyText) this.moneyText.setText('Argent : ' + money + '$');
 
                 // Achat -> -5$ +texte pour user
-                const txt = this.add.text(10, 50, '-5$', { fontSize: '28px', fill: '#ff5555' });
+                const txt = this.add.text(10, 50, '-5$', { fontSize: '28px', fill: '#ff5555', fontFamily: 'Arial', fontStyle: 'bold', backgroundColor: "rgba(255,255,255,0.4)" });
                 txt.setScrollFactor(0);
                 this.time.delayedCall(1200, () => txt.destroy());
             } else if (money < 5) { //Alerte argent pas suffisant (pas 5$ dispo)
-                const warn = this.add.text(10, 50, 'Pas assez d\'argent !', { fontSize: '28px', fill: '#ff0000' });
+                const warn = this.add.text(10, 50, 'Pas assez d\'argent !', { fontSize: '28px', fill: '#ff0000', fontFamily: 'Arial', fontStyle: 'bold', backgroundColor: "rgba(255,255,255,0.4)" });
                 warn.setScrollFactor(0);
                 this.time.delayedCall(1500, () => warn.destroy());
             }
@@ -1658,7 +1685,7 @@ class ShopScene extends Phaser.Scene {
 
         this.mouchoirs = this.physics.add.image(784, 660, 'mouchoirs');
 
-        this.moneyText = this.add.text(10, 10, 'Argent : ' + money + '$', { fontSize: '28px' });
+        this.moneyText = this.add.text(10, 10, 'Argent : ' + money + '$', { fontSize: '28px', fontFamily: 'Arial', fontStyle: 'bold', backgroundColor: "rgba(255,255,255,0.4)" });
         this.moneyText.setScrollFactor(0);
 
         // Achat parapluie: -4 pièces si possible, MAJ HUD
@@ -1690,11 +1717,11 @@ class ShopScene extends Phaser.Scene {
                 if (this.moneyText) this.moneyText.setText('Argent : ' + money + '$');
 
                 // Achat -> -4$ + texte pour user
-                const txt = this.add.text(10, 50, '-4$', { fontSize: '28px', fill: '#ff5555' });
+                const txt = this.add.text(10, 50, '-4$', { fontSize: '28px', fill: '#ff5555', fontFamily: 'Arial', fontStyle: 'bold', backgroundColor: "rgba(255,255,255,0.4)" });
                 txt.setScrollFactor(0);
                 this.time.delayedCall(1200, () => txt.destroy());
             } else if (money < 4) { //Alerte argent pas suffisant (pas 4$ dispo)
-                const warn = this.add.text(10, 50, 'Pas assez d\'argent !', { fontSize: '28px', fill: '#ff0000' });
+                const warn = this.add.text(10, 50, 'Pas assez d\'argent !', { fontSize: '28px', fill: '#ff0000', fontFamily: 'Arial', fontStyle: 'bold', backgroundColor: "rgba(255,255,255,0.4)" });
                 warn.setScrollFactor(0);
                 this.time.delayedCall(1500, () => warn.destroy());
             }
@@ -1702,8 +1729,10 @@ class ShopScene extends Phaser.Scene {
 
         this.mouchoirText = this.add.text(400, 10, 'Mouchoirs : ' + mouchoirs, {
             fontSize: '28px',
-            //fill: '#000F05'
-            fill: '#FFF'
+            fill: '#000F05',
+            fontFamily: 'Arial',
+            fontStyle: 'bold',
+            backgroundColor: "rgba(255,255,255,0.4)"
         });
         this.mouchoirText.setScrollFactor(0);
 
@@ -1724,11 +1753,11 @@ class ShopScene extends Phaser.Scene {
                 this.mouchoirText.setText("Mouchoirs : " + mouchoirs);
 
                 // Achat -> -2$ +texte pour user
-                const txt = this.add.text(10, 50, '-2$', { fontSize: '28px', fill: '#ff5555' });
+                const txt = this.add.text(10, 50, '-2$', { fontSize: '28px', fill: '#ff5555', fontFamily: 'Arial', fontStyle: 'bold', backgroundColor: "rgba(255,255,255,0.4)" });
                 txt.setScrollFactor(0);
                 this.time.delayedCall(1200, () => txt.destroy());
             } else if (money < 2) { //Alerte argent pas suffisant (pas 2$ dispo)
-                const warn = this.add.text(10, 50, 'Pas assez d\'argent !', { fontSize: '28px', fill: '#ff0000' });
+                const warn = this.add.text(10, 50, 'Pas assez d\'argent !', { fontSize: '28px', fill: '#ff0000', fontFamily: 'Arial', fontStyle: 'bold', backgroundColor: "rgba(255,255,255,0.4)" });
                 warn.setScrollFactor(0);
                 this.time.delayedCall(1500, () => warn.destroy());
             }
@@ -1740,8 +1769,10 @@ class ShopScene extends Phaser.Scene {
             if (!shopTextShown2) {
                 shopText2 = this.add.text(10, 50, 'Appuyer sur A pour sortir', {
                     fontSize: '28px',
-                    //fill: '#000F05'
-                    fill: '#FFF'
+                    fill: '#000F05',
+                    fontFamily: 'Arial',
+                    fontStyle: 'bold',
+                    backgroundColor: "rgba(255,255,255,0.4)"
                 });
                 shopText2.setScrollFactor(0);
                 shopTextShown2 = true;
@@ -1855,7 +1886,10 @@ class EndScene extends Phaser.Scene {
         if (typeof lastRunTimeMs === "number" && lastRunTimeMs > 0) {
             this.add.text(400, 300, "Votre temps : " + formatElapsed(lastRunTimeMs), {
                 fontSize: "28px",
-                color: "#000"
+                color: "#000F05",
+                fontFamily: 'Arial',
+                fontStyle: 'bold',
+                backgroundColor: "rgba(255,255,255,0.4)"
             });
         }
     // son
@@ -1868,7 +1902,10 @@ class EndScene extends Phaser.Scene {
 
         const appuyA = this.add.text(597, 600, 'Appuyer sur A pour commencer le jeu avec ' + selectedCharacter, {
             fontSize: '36px',
-            fill: '#000'
+            fill: '#000F05',
+            fontFamily: 'Arial',
+            fontStyle: 'bold',
+            backgroundColor: "rgba(255,255,255,0.4)"
         });
 
         appuyA.setOrigin(0.5, 0.5);
