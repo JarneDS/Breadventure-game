@@ -1844,10 +1844,34 @@ class EndScene extends Phaser.Scene {
                 color: "#000"
             });
         }
-    }
+    // son
+        const loadingSceneSon = this.sound.add('loadingScene');
+        loadingSceneSon.play({ loop: true });
 
-    update() {
+        this.bg = this.add.tileSprite(0, 0, 1194, 834, 'intro').setOrigin(0, 0);
+        this.logo = this.add.tileSprite(597, 150, 873, 105, 'logo').setOrigin(0.5, 0.5);
+        perso = this.add.sprite(100, 712, 'player_brum_static_henri');
 
+        const appuyA = this.add.text(597, 600, 'Appuyer sur A pour commencer le jeu avec ' + selectedCharacter, {
+            fontSize: '36px',
+            fill: '#000'
+        });
+
+        appuyA.setOrigin(0.5, 0.5);
+
+        perso.play('static_brum_henri');
+
+        appuyA.setText('Appuyer sur A pour redémarrer le jeu');
+
+        cursors = this.input.keyboard.createCursorKeys();
+
+        // Ajout d'une touche A
+        this.keyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
+
+        // Attendre que l'utilisateur appuie sur A
+        this.input.keyboard.on('keydown-A', () => {
+            this.scene.start('LoadingScene');
+        });
     }
 }
 
