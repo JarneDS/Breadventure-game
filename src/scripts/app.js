@@ -931,7 +931,7 @@ class MainWorld extends Phaser.Scene {
         };
 
         const scheduleNextRain = () => {
-            const waitMs = Phaser.Math.Between(5000, 20000);
+            const waitMs = Phaser.Math.Between(10000, 20000);
             this.time.delayedCall(waitMs, () => {
                 const rainMs = Phaser.Math.Between(6000, 15000);
                 startRainFor(rainMs);
@@ -1168,7 +1168,7 @@ class MainWorld extends Phaser.Scene {
             runTimerText.setText(formatElapsed(elapsed));
         }
     
-        // Déplacements X (perso ralenti soi contact obstacle et que overlay actif)
+        // Déplacements X (perso ralenti si contact obstacle et que overlay actif)
         const overlayActif = overlayEau || overlayBoue || overlayCaca || blurRain || (glassesRain && glassesRain.visible);
 
         const speedLeft  = overlayActif ? -200 : -250; // gauche
@@ -1273,7 +1273,7 @@ class MainWorld extends Phaser.Scene {
             }
         }
 
-        // touche A pour entrer dans la boulangerie
+        // touche A pour entrer dans boulangerie
         if (keyObject.isDown && bakeryTextShown && !playerHasBread){
             if (!this.porteOuvreSon.isPlaying) {
                 this.porteOuvreSon.play({ volume: 1 });
@@ -1295,7 +1295,7 @@ class MainWorld extends Phaser.Scene {
             });  
         }
 
-        // touche A pour entrer dans le shop
+        // touche A pour entrer dans shop
         if (keyObject.isDown && shopTextShown){
             if (!this.porteOuvreSon.isPlaying) {
                 this.porteOuvreSon.play({ volume: 1 });
@@ -1471,7 +1471,7 @@ class BakeryScene extends Phaser.Scene {
 
         this.pain = this.physics.add.image(583, 668, 'pain');
 
-        // Achat du pain: -5 pièces si possible, MAJ HUD
+        // Achat du pain: -5 pièces si possible + MAJ HUD
         this.physics.add.overlap(this.player, this.pain, () => {
             if (!playerHasBread && money >= 5) {
                 playerHasBread = true;
@@ -1502,7 +1502,7 @@ class BakeryScene extends Phaser.Scene {
                     this.player.body.moves = false;
                     playerHasBread = false;
 
-                    // Durée réelle de l’animation (4 frames à 6 fps ≈ 666 ms)
+                    // Durée réelle de animation (4 frames à 6 fps ≈ 666 ms)
                     this.time.delayedCall(2593, () => {
                         this.player.body.moves = true;
                         playerHasBread = true;
@@ -1530,7 +1530,7 @@ class BakeryScene extends Phaser.Scene {
             return; // Empêche update d'écraser l'animation pendant qu'elle joue
         }
 
-        // sortir de la boulangerie
+        // sortie boulangerie
         if (Phaser.Input.Keyboard.JustDown(this.keyA) && bakeryTextShown2) {
             if (!this.porteOuvreSon.isPlaying) {
                 this.porteOuvreSon.play({ volume: 1 });
@@ -1557,7 +1557,7 @@ class BakeryScene extends Phaser.Scene {
             }
         }
 
-        // Mouvement
+        // Mouvement axe X
         this.player.setVelocityX(0);
 
         // Saut
@@ -1647,7 +1647,7 @@ class ShopScene extends Phaser.Scene {
         this.moneyText = this.add.text(10, 10, 'Argent : ' + money + '$', { fontSize: '28px' });
         this.moneyText.setScrollFactor(0);
 
-        // Achat du parapluie: -4 pièces si possible, MAJ HUD
+        // Achat parapluie: -4 pièces si possible, MAJ HUD
         this.physics.add.overlap(this.player, this.parapluie, () => {
             if (!playerHasUmbrella && money >= 4) {
                 playerHasUmbrella = true;
@@ -1675,7 +1675,7 @@ class ShopScene extends Phaser.Scene {
                 // MAJ texte argent
                 if (this.moneyText) this.moneyText.setText('Argent : ' + money + '$');
 
-                // Achat -> -4$ +texte pour user
+                // Achat -> -4$ + texte pour user
                 const txt = this.add.text(10, 50, '-4$', { fontSize: '28px', fill: '#ff5555' });
                 txt.setScrollFactor(0);
                 this.time.delayedCall(1200, () => txt.destroy());
