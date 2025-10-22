@@ -1260,7 +1260,8 @@ class MainWorld extends Phaser.Scene {
                 this.porteOuvreSon.play({ volume: 1 });
             }
 
-            this.sound.stopAll();
+            this.porteOuvreSon.once("complete", () => this.sound.stopAll());
+
 
             this.scene.start('BakeryScene', {
                 returnX: this.player.x,
@@ -1280,7 +1281,7 @@ class MainWorld extends Phaser.Scene {
                 this.porteOuvreSon.play({ volume: 1 });
             }
 
-            this.sound.stopAll();
+            this.porteOuvreSon.once("complete", () => this.sound.stopAll());
 
             this.scene.start('ShopScene', {
                 returnX: this.player.x,
