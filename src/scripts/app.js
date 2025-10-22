@@ -251,19 +251,19 @@ class LoadingScene extends Phaser.Scene {
 
             // pain
             this.anims.create({
-                key:`walking_pain_${char}`,
+                key:`walking_bread_${char}`,
                 frames: this.anims.generateFrameNumbers(`player_bread_walking_${char}`, { start: 0, end: 5 }),
                 frameRate: 24,
                 repeat: -1
             })
             this.anims.create({
-                key:`static_pain_${char}`,
+                key:`static_bread_${char}`,
                 frames: this.anims.generateFrameNumbers(`player_bread_static_${char}`, { start: 0, end: 1 }),
                 frameRate: 3,
                 repeat: -1
             })
             this.anims.create({
-                key:`jumping_pain_${char}`,
+                key:`jumping_bread_${char}`,
                 frames: this.anims.generateFrameNumbers(`player_bread_jumping_${char}`, { start: 0, end: 2 }),
                 frameRate: 6,
                 repeat: 0
@@ -375,7 +375,7 @@ class LoadingScene extends Phaser.Scene {
 
         appuyA.setOrigin(0.5, 0.5);
 
-        perso.play('static_pain_henri');
+        perso.play('static_bread_henri');
 
     
         let selectedIndex = 0; // 0 = henri, 1 = juliette
@@ -397,13 +397,13 @@ class LoadingScene extends Phaser.Scene {
             character.forEach((char, index) => {
                 if (index === selectedIndex) {
                     selectedCharacter = char.name;
-                    perso.play(`static_pain_${char.name}`);
+                    perso.play(`static_bread_${char.name}`);
                     char.setAlpha(1);
                 } else {
                     char.setAlpha(0.7);
                 }
             });
-            perso.play(`static_pain_${selectedCharacter}`);
+            perso.play(`static_bread_${selectedCharacter}`);
 
             appuyA.setText('Appuyer sur A pour commencer le jeu avec ' + selectedCharacter.charAt(0).toUpperCase() + selectedCharacter.slice(1));
         }
@@ -1186,8 +1186,19 @@ class MainWorld extends Phaser.Scene {
         
         const jumpSon = this.sound.add('jump');
 
-        // Animations selon possession du pain
-        const prefix = playerHasBread ? '_pain' : '';
+        // Animation
+        let prefix = '';
+
+        if (playerHasUmbrella) {
+            prefix = '_umbrella';
+        } else if (playerHasBread) {
+            prefix = '_bread';
+        /*} else if (playerHasBrum) {
+            prefix = '_brum';*/
+        } else {
+            prefix = '';
+        }
+
         if (!this.player.body.onFloor()) {
             this.player.anims.play('jumping' + prefix + '_' + selectedCharacter, true);
             this.player.setFrame(2);
@@ -1461,7 +1472,18 @@ class BakeryScene extends Phaser.Scene {
                     this.obtentionItemSon.once("complete", () => this.checkoutSon.play());
                 }
 
-                const prefix = playerHasBread ? '_pain' : '';
+                let prefix = '';
+
+                if (playerHasUmbrella) {
+                    prefix = '_umbrella';
+                } else if (playerHasBread) {
+                    prefix = '_bread';
+                /*} else if (playerHasBrum) {
+                    prefix = '_brum';*/
+                } else {
+                    prefix = '';
+                }
+
                 if (playerHasBread) {
                     this.player.anims.play('receive_bread_' + selectedCharacter, true);
                     this.player.setVelocity(0, 0);
@@ -1539,8 +1561,19 @@ class BakeryScene extends Phaser.Scene {
             this.player.setFlipX(false);
         }
 
-        // Animation (avec ou sans pain)
-        const prefix = playerHasBread ? '_pain' : '';
+        // Animation
+        let prefix = '';
+
+        if (playerHasUmbrella) {
+            prefix = '_umbrella';
+        } else if (playerHasBread) {
+            prefix = '_bread';
+        /*} else if (playerHasBrum) {
+            prefix = '_brum';*/
+        } else {
+            prefix = '';
+        }
+
         if (!this.player.body.onFloor()) {
             this.player.anims.play('jumping' + prefix + '_' + selectedCharacter, true);
             this.player.setFrame(2);
@@ -1743,8 +1776,19 @@ class ShopScene extends Phaser.Scene {
             this.player.setFlipX(false);
         }
 
-        // Animation (avec ou sans pain)
-        const prefix = playerHasUmbrella ? '_umbrella' : '';
+        // Animation
+        let prefix = '';
+
+        if (playerHasUmbrella) {
+            prefix = '_umbrella';
+        } else if (playerHasBread) {
+            prefix = '_bread';
+        /*} else if (playerHasBrum) {
+            prefix = '_brum';*/
+        } else {
+            prefix = '';
+        }
+
         if (!this.player.body.onFloor()) {
             this.player.anims.play('jumping' + prefix + '_' + selectedCharacter, true);
             this.player.setFrame(2);
