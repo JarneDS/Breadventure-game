@@ -1413,6 +1413,10 @@ class MainWorld extends Phaser.Scene {
             this.pigeonSon.stop();
             this.pigeonSonPlaying = false;
         }
+
+        // Effet de parallaxe : chaque fond défile à une vitesse différente selon la position de la caméra
+        this.ciel1.tilePositionX = this.cameras.main.scrollX * 0.06;
+        this.ciel4.tilePositionX = this.cameras.main.scrollX * 0.06;
     }
 }
 
