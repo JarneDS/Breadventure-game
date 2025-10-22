@@ -1446,6 +1446,7 @@ class BakeryScene extends Phaser.Scene {
         this.returnX = data.returnX;
         this.returnY = data.returnY;
         
+        this.bgBakery = this.add.tileSprite(0, -290, 1940, 1024, 'cielVille').setOrigin(0, 0);
         this.interiorBakery = this.add.tileSprite(0, -190, 1194, 1024, 'interieur_bakery').setOrigin(0, 0);
         this.player = this.physics.add.sprite(161, 736, "player");
         this.player.setOrigin(0.5, 1);
@@ -1642,6 +1643,7 @@ class ShopScene extends Phaser.Scene {
         this.returnX = data.returnX;
         this.returnY = data.returnY;
 
+        this.bgShop = this.add.tileSprite(0, -290, 1940, 1024, 'cielVille').setOrigin(0, 0);
         this.interiorShop = this.add.tileSprite(0, -190, 1194, 1024, 'interieur_shop').setOrigin(0, 0);
         this.player = this.physics.add.sprite(586, 736, "player");
         this.player.setOrigin(0.5, 1);
@@ -1894,7 +1896,7 @@ const config = {
     height: 834,
     physics: {
         default: 'arcade',
-        arcade: { gravity: { y: 0 }, debug: true }
+        arcade: { gravity: { y: 0 }, debug: false }
     },
     audio: {
         disableWebAudio: true,
