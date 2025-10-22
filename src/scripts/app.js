@@ -1882,7 +1882,8 @@ class EndScene extends Phaser.Scene {
 
         // Attendre que l'utilisateur appuie sur A
         this.input.keyboard.on('keydown-A', () => {
-            this.scene.start('LoadingScene');
+            this.game.destroy(true);
+            window.location.reload();
         });
     }
 }
