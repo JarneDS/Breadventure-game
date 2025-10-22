@@ -885,7 +885,7 @@ class MainWorld extends Phaser.Scene {
         this.scoreText.setScrollFactor(0).setDepth(10001);
 
         // HUD mouchoirs
-        this.mouchoirText = this.add.text(700, 10, 'Mouchoirs : ' + mouchoirs, {
+        this.mouchoirText = this.add.text(1017, 10, 'Mouchoirs : ' + mouchoirs, {
             fontSize: '28px',
             fill: '#000F05',
             fontFamily: 'Fira Sans Condensed',
@@ -895,7 +895,7 @@ class MainWorld extends Phaser.Scene {
         this.mouchoirText.setScrollFactor(0).setDepth(10001);
 
         //timer
-        runTimerText = this.add.text(400, 10, "00:00.000", {
+        runTimerText = this.add.text(540, 10, "00:00.000", {
             fontSize: "21px",
             fontFamily: "Fira Sans Condensed",
             color: "#000F05",
