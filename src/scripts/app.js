@@ -516,7 +516,6 @@ class MainWorld extends Phaser.Scene {
         loadCharacterSprites.call(this, character);
     }
 
-    
     create(data){
         selectedCharacter = (data && data.character) ? data.character : 'henri';
         gameSpritesLayers = this.add.layer(); // On déclare la variable à l'avance pour éviter une erreur de référence
@@ -542,12 +541,12 @@ class MainWorld extends Phaser.Scene {
         this.ciel4 = this.add.tileSprite(6970, -286, 7080, 1024, 'cielVille2').setOrigin(0, 0);
 
         // exec quand le jeu est chargé une premiere fois
-        this.house = this.add.tileSprite(-40, 226, 4096, 512, 'background2').setOrigin(0, 0);
+        this.house = this.add.tileSprite(-40, 226, 4096, 512, 'background').setOrigin(0, 0);
         this.parc = this.add.tileSprite(4056, -185, 2048, 924, 'background1').setOrigin(0, 0);
         this.chantier = this.add.tileSprite(7320, -285, 2048, 1024, 'chantier').setOrigin(0, 0); //chantier
         this.parc2 = this.add.tileSprite(6090, -285, 880, 1024, 'parc_se').setOrigin(0, 0).setFlipX(1);
         this.shop = this.add.tileSprite(6970, -286, 2048, 1024, 'shop').setOrigin(0, 0);
-        this.house2 = this.add.tileSprite(9400, 226, 2048, 512, 'background2').setOrigin(0, 0);
+        this.house2 = this.add.tileSprite(9400, 226, 2048, 512, 'background').setOrigin(0, 0);
         this.house3 = this.add.tileSprite(11448, 226, 2048, 512, 'background').setOrigin(0, 0);
         this.bakery = this.add.tileSprite(13496, -286, 2048, 1024, 'bakery').setOrigin(0, 0);
 
@@ -1467,7 +1466,7 @@ class MainWorld extends Phaser.Scene {
         // Si on change de zone
         if (newZone && newZone !== this.currentZone) {
             for (let key in this.zoneSounds) {
-                const targetVolume = (key === newZone) ? 0.4 : 0;
+                const targetVolume = (key === newZone) ? 0.5 : 0;
                 this.tweens.add({
                     targets: this.zoneSounds[key],
                     volume: targetVolume,
@@ -1500,6 +1499,34 @@ class MainWorld extends Phaser.Scene {
 class BakeryScene extends Phaser.Scene {
     constructor() {
         super('BakeryScene');
+    }
+
+    addFog() {
+        // Création d’un rectangle semi-transparent couvrant l’écran
+        const graphics = this.add.graphics();
+        graphics.fillStyle(0xdbdbdbff, 1); // couleur + opacité complète
+        graphics.fillRect(0, 0, this.scale.width, this.scale.height);
+
+        // Créer une texture de brouillard à partir du graphic
+        const fogTextureKey = 'fogTexture';
+        graphics.generateTexture(fogTextureKey, this.scale.width, this.scale.height);
+        graphics.destroy();
+
+        // Ajouter le sprite de brouillard
+        this.fogSprite = this.add.sprite(0, 0, fogTextureKey).setOrigin(0, 0);
+        this.fogSprite.setScrollFactor(0); // reste fixe à la caméra
+        this.fogSprite.setAlpha(0.9);
+
+        // Animation d’apparition du brouillard
+        this.tweens.add({
+            targets: this.fogSprite,
+            alpha: 0,
+            duration: 4000,
+            ease: 'Linear',
+            onComplete: () => {
+                this.fogSprite.destroy();
+            }
+        });
     }
 
     preload(data) {
@@ -1535,6 +1562,9 @@ class BakeryScene extends Phaser.Scene {
         this.player.setSize(42, 90);
         this.player.setOffset((144 - 42) / 2, 144 - 90);
         this.player.body.gravity.y = 400;
+
+        // Ajoute le brouillard dès le début de la scène
+        this.addFog();
 
         // HUD argent dans la boulangerie
         this.moneyText = this.add.text(10, 10, 'Argent : ' + money + '$', { 
@@ -1735,6 +1765,34 @@ class ShopScene extends Phaser.Scene {
         super('ShopScene');
     }
 
+    addFog() {
+        // Création d’un rectangle semi-transparent couvrant l’écran
+        const graphics = this.add.graphics();
+        graphics.fillStyle(0xdbdbdbff, 1); // couleur + opacité complète
+        graphics.fillRect(0, 0, this.scale.width, this.scale.height);
+
+        // Créer une texture de brouillard à partir du graphic
+        const fogTextureKey = 'fogTexture';
+        graphics.generateTexture(fogTextureKey, this.scale.width, this.scale.height);
+        graphics.destroy();
+
+        // Ajouter le sprite de brouillard
+        this.fogSprite = this.add.sprite(0, 0, fogTextureKey).setOrigin(0, 0);
+        this.fogSprite.setScrollFactor(0); // reste fixe à la caméra
+        this.fogSprite.setAlpha(0.9);
+
+        // Animation d’apparition du brouillard
+        this.tweens.add({
+            targets: this.fogSprite,
+            alpha: 0,
+            duration: 4000,
+            ease: 'Linear',
+            onComplete: () => {
+                this.fogSprite.destroy();
+            }
+        });
+    }
+
     preload(data) {
         const character = (data && data.character) ? data.character : 'henri';
         loadCharacterSprites.call(this, character);
@@ -1770,6 +1828,9 @@ class ShopScene extends Phaser.Scene {
         this.parapluie = this.physics.add.image(382, 662, 'parapluie');
 
         this.mouchoirs = this.physics.add.image(784, 660, 'mouchoirs');
+
+        // Ajoute le brouillard dès le début de la scène
+        this.addFog();
 
         this.moneyText = this.add.text(10, 10, 'Argent : ' + money + '$', {
             fontSize: '28px',
@@ -1846,21 +1907,21 @@ class ShopScene extends Phaser.Scene {
 
         // Achat de mouchoir: -2 pièces si possible, MAJ HUD
         this.physics.add.overlap(this.player, this.mouchoirs, () => {
-             if (!this.checkoutSon.isPlaying) {
+            if (!this.checkoutSon.isPlaying) {
                 this.checkoutSon.play({ volume: 1 });
             }
 
-            if (!playerHasMouchoirs && money >= 2) {
-                playerHasMouchoirs = true;
-                this.mouchoirs.disableBody(true, true);
+            // Condition d'achat
+            if (money >= 2) {
+                this.mouchoirs.disableBody(true, true); // cache les mouchoirs
                 money -= 2;
                 mouchoirs += 1;
 
-                // MAJ texte argent
-                if (this.moneyText) {this.moneyText.setText('Argent : ' + money + '$')};
-                this.mouchoirText.setText("Mouchoirs : " + mouchoirs);
+                // MAJ texte argent et mouchoirs
+                if (this.moneyText) this.moneyText.setText('Argent : ' + money + '$');
+                this.mouchoirText.setText('Mouchoirs : ' + mouchoirs);
 
-                // Achat -> -2$ +texte pour user
+                // Petit feedback visuel
                 const txt = this.add.text(10, 50, '-2$', {
                     fontSize: '28px',
                     fill: '#ff5555',
@@ -1871,7 +1932,13 @@ class ShopScene extends Phaser.Scene {
                 });
                 txt.setScrollFactor(0);
                 this.time.delayedCall(1200, () => txt.destroy());
-            } else if (money < 2) { //Alerte argent pas suffisant (pas 2$ dispo)
+
+                // 💡 Réapparition après 2 secondes
+                this.time.delayedCall(1000, () => {
+                    this.mouchoirs.enableBody(true, 784, 660, true, true);
+                });
+
+            } else { // Pas assez d'argent
                 const warn = this.add.text(10, 50, 'Pas assez d\'argent !', {
                     fontSize: '28px',
                     fill: '#ff0000',
