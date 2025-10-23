@@ -9,7 +9,7 @@ font.load().then(function () {
 });
 
 let cursors;
-let money = 4; // valeur par défaut
+let money = 2; // valeur par défaut
 let bakeryTextShown = false;
 let houseTextShown = false; //texte maison
 let bakeryText = null;
@@ -376,7 +376,9 @@ class LoadingScene extends Phaser.Scene {
             fontSize: '28px',
             fill: '#000F05',
             fontFamily: 'Fira Sans Condensed',
-            backgroundColor: "rgba(255,255,255,0.4)"
+            fontStyle: 'bold',
+            backgroundColor: "rgba(255,255,255,0.4)",
+            padding: { x: 6, y: 3 }
         });
 
         textExplication.setOrigin(0.5, 0.5);
@@ -385,7 +387,9 @@ class LoadingScene extends Phaser.Scene {
             fontSize: '36px',
             fill: '#000F05',
             fontFamily: 'Fira Sans Condensed',
-            backgroundColor: "rgba(255,255,255,0.4)"
+            fontStyle: 'bold',
+            backgroundColor: "rgba(255,255,255,0.4)",
+            padding: { x: 6, y: 3 }
         });
 
         appuyA.setOrigin(0.5, 0.5);
@@ -797,7 +801,9 @@ class MainWorld extends Phaser.Scene {
                     fontSize: '28px',
                     fill: '#000F05',
                     fontFamily: 'Fira Sans Condensed',
-                    backgroundColor: "rgba(255,255,255,0.4)"
+                    fontStyle: 'bold',
+                    backgroundColor: "rgba(255,255,255,0.4)",
+                    padding: { x: 6, y: 3 }
                 });
                 bakeryText.setScrollFactor(0);
                 bakeryTextShown = true;
@@ -812,7 +818,9 @@ class MainWorld extends Phaser.Scene {
                     fontSize: '28px',
                     fill: '#000F05',
                     fontFamily: 'Fira Sans Condensed',
-                    backgroundColor: "rgba(255,255,255,0.4)"
+                    fontStyle: 'bold',
+                    backgroundColor: "rgba(255,255,255,0.4)",
+                    padding: { x: 6, y: 3 }
                 });
                 shopText.setScrollFactor(0);
                 shopTextShown = true;
@@ -827,7 +835,9 @@ class MainWorld extends Phaser.Scene {
                     fontSize: '28px',
                     fill: '#000F05',
                     fontFamily: 'Fira Sans Condensed',
-                    backgroundColor: "rgba(255,255,255,0.4)"
+                    fontStyle: 'bold',
+                    backgroundColor: "rgba(255,255,255,0.4)",
+                    padding: { x: 6, y: 3 }
                 });
                 houseText.setScrollFactor(0);
                 houseTextShown = true;
@@ -882,16 +892,20 @@ class MainWorld extends Phaser.Scene {
             fontSize: '28px',
             fill: '#000F05',
             fontFamily: 'Fira Sans Condensed',
-            backgroundColor: "rgba(255,255,255,0.4)"
+            fontStyle: 'bold',
+            backgroundColor: "rgba(255,255,255,0.4)",
+            padding: { x: 6, y: 3 }
         });
         this.scoreText.setScrollFactor(0).setDepth(10001);
 
         // HUD mouchoirs
-        this.mouchoirText = this.add.text(1017, 10, 'Mouchoirs : ' + mouchoirs, {
+        this.mouchoirText = this.add.text(1005, 10, 'Mouchoirs : ' + mouchoirs, {
             fontSize: '28px',
             fill: '#000F05',
             fontFamily: 'Fira Sans Condensed',
-            backgroundColor: "rgba(255,255,255,0.4)"
+            fontStyle: 'bold',
+            backgroundColor: "rgba(255,255,255,0.4)",
+            padding: { x: 6, y: 3 }
         });
         this.mouchoirText.setScrollFactor(0).setDepth(10001);
 
@@ -1498,7 +1512,13 @@ class BakeryScene extends Phaser.Scene {
         this.player.body.gravity.y = 400;
 
         // HUD argent dans la boulangerie
-        this.moneyText = this.add.text(10, 10, 'Argent : ' + money + '$', { fontSize: '28px', fontFamily: 'Fira Sans Condensed', backgroundColor: "rgba(255,255,255,0.4)" });
+        this.moneyText = this.add.text(10, 10, 'Argent : ' + money + '$', { 
+            fontSize: '28px', fill: '#000F05', 
+            fontFamily: 'Fira Sans Condensed', 
+            fontStyle: 'bold', 
+            backgroundColor: "rgba(255,255,255,0.4)",
+            padding: { x: 6, y: 3 }
+        });
         this.moneyText.setScrollFactor(0);
 
         let exitBakery = this.physics.add.staticImage(159, 685, null).setSize(58, 100).setVisible(false);
@@ -1510,9 +1530,11 @@ class BakeryScene extends Phaser.Scene {
             if (!bakeryTextShown2) {
                 bakeryText2 = this.add.text(10, 50, 'Appuyer sur A pour sortir', {
                     fontSize: '28px',
-                    fill: '#fafafa',
+                    fill: '#000F05',
                     fontFamily: 'Fira Sans Condensed',
-                    backgroundColor: "rgba(255,255,255,0.4)"
+                    fontStyle: 'bold',
+                    backgroundColor: "rgba(255,255,255,0.4)",
+                    padding: { x: 6, y: 3 }
                 });
                 bakeryText2.setScrollFactor(0);
                 bakeryTextShown2 = true;
@@ -1570,11 +1592,25 @@ class BakeryScene extends Phaser.Scene {
                 if (this.moneyText) this.moneyText.setText('Argent : ' + money + '$');
 
                 // Achat -> -5$ +texte pour user
-                const txt = this.add.text(10, 50, '-5$', { fontSize: '28px', fill: '#ff5555', fontFamily: 'Fira Sans Condensed', backgroundColor: "rgba(255,255,255,0.4)" });
+                const txt = this.add.text(10, 50, '-5$', { 
+                    fontSize: '28px',
+                    fill: '#ff5555',
+                    fontFamily: 'Fira Sans Condensed',
+                    fontStyle: 'bold',
+                    backgroundColor: "rgba(255,255,255,0.4)",
+                    padding: { x: 6, y: 3 }
+                });
                 txt.setScrollFactor(0);
                 this.time.delayedCall(1200, () => txt.destroy());
-            } else if (money < 5) { //Alerte argent pas suffisant (pas 5$ dispo)
-                const warn = this.add.text(10, 50, 'Pas assez d\'argent !', { fontSize: '28px', fill: '#ff0000', fontFamily: 'Fira Sans Condensed', backgroundColor: "rgba(255,255,255,0.4)" });
+            } else if (money < 5) { //Alerte argent pas suffisant
+                const warn = this.add.text(10, 50, 'Pas assez d\'argent !', {
+                    fontSize: '28px',
+                    fill: '#ff0000',
+                    fontFamily: 'Fira Sans Condensed',
+                    fontStyle: 'bold',
+                    backgroundColor: "rgba(255,255,255,0.4)",
+                    padding: { x: 6, y: 3 }
+                });
                 warn.setScrollFactor(0);
                 this.time.delayedCall(1500, () => warn.destroy());
             }
@@ -1710,7 +1746,14 @@ class ShopScene extends Phaser.Scene {
 
         this.mouchoirs = this.physics.add.image(784, 660, 'mouchoirs');
 
-        this.moneyText = this.add.text(10, 10, 'Argent : ' + money + '$', { fontSize: '28px', fill: '#000F05', fontFamily: 'Fira Sans Condensed', backgroundColor: "rgba(255,255,255,0.4)" });
+        this.moneyText = this.add.text(10, 10, 'Argent : ' + money + '$', {
+            fontSize: '28px',
+            fill: '#000F05',
+            fontFamily: 'Fira Sans Condensed',
+            fontStyle: 'bold',
+            backgroundColor: "rgba(255,255,255,0.4)",
+            padding: { x: 6, y: 3 }
+        });
         this.moneyText.setScrollFactor(0);
 
         // Achat parapluie: -4 pièces si possible, MAJ HUD
@@ -1742,11 +1785,25 @@ class ShopScene extends Phaser.Scene {
                 if (this.moneyText) this.moneyText.setText('Argent : ' + money + '$');
 
                 // Achat -> -4$ + texte pour user
-                const txt = this.add.text(10, 50, '-4$', { fontSize: '28px', fill: '#ff5555', fontFamily: 'Fira Sans Condensed', backgroundColor: "rgba(255,255,255,0.4)" });
+                const txt = this.add.text(10, 50, '-4$', {
+                    fontSize: '28px',
+                    fill: '#ff5555',
+                    fontFamily: 'Fira Sans Condensed',
+                    fontStyle: 'bold',
+                    backgroundColor: "rgba(255,255,255,0.4)",
+                    padding: { x: 6, y: 3 }
+                });
                 txt.setScrollFactor(0);
                 this.time.delayedCall(1200, () => txt.destroy());
             } else if (money < 4) { //Alerte argent pas suffisant (pas 4$ dispo)
-                const warn = this.add.text(10, 50, 'Pas assez d\'argent !', { fontSize: '28px', fill: '#ff0000', fontFamily: 'Fira Sans Condensed', backgroundColor: "rgba(255,255,255,0.4)" });
+                const warn = this.add.text(10, 50, 'Pas assez d\'argent !', { 
+                    fontSize: '28px',
+                    fill: '#ff0000',
+                    fontFamily: 'Fira Sans Condensed',
+                    fontStyle: 'bold',
+                    backgroundColor: "rgba(255,255,255,0.4)",
+                    padding: { x: 6, y: 3 }
+                });
                 warn.setScrollFactor(0);
                 this.time.delayedCall(1500, () => warn.destroy());
             }
@@ -1756,7 +1813,9 @@ class ShopScene extends Phaser.Scene {
             fontSize: '28px',
             fill: '#000F05',
             fontFamily: 'Fira Sans Condensed',
-            backgroundColor: "rgba(255,255,255,0.4)"
+            fontStyle: 'bold',
+            backgroundColor: "rgba(255,255,255,0.4)",
+            padding: { x: 6, y: 3 }
         });
         this.mouchoirText.setScrollFactor(0);
 
@@ -1777,11 +1836,25 @@ class ShopScene extends Phaser.Scene {
                 this.mouchoirText.setText("Mouchoirs : " + mouchoirs);
 
                 // Achat -> -2$ +texte pour user
-                const txt = this.add.text(10, 50, '-2$', { fontSize: '28px', fill: '#ff5555', fontFamily: 'Fira Sans Condensed', backgroundColor: "rgba(255,255,255,0.4)" });
+                const txt = this.add.text(10, 50, '-2$', {
+                    fontSize: '28px',
+                    fill: '#ff5555',
+                    fontFamily: 'Fira Sans Condensed',
+                    fontStyle: 'bold',
+                    backgroundColor: "rgba(255,255,255,0.4)",
+                    padding: { x: 6, y: 3 }
+                });
                 txt.setScrollFactor(0);
                 this.time.delayedCall(1200, () => txt.destroy());
             } else if (money < 2) { //Alerte argent pas suffisant (pas 2$ dispo)
-                const warn = this.add.text(10, 50, 'Pas assez d\'argent !', { fontSize: '28px', fill: '#ff0000', fontFamily: 'Fira Sans Condensed', backgroundColor: "rgba(255,255,255,0.4)" });
+                const warn = this.add.text(10, 50, 'Pas assez d\'argent !', {
+                    fontSize: '28px',
+                    fill: '#ff0000',
+                    fontFamily: 'Fira Sans Condensed',
+                    fontStyle: 'bold',
+                    backgroundColor: "rgba(255,255,255,0.4)",
+                    padding: { x: 6, y: 3 }
+                });
                 warn.setScrollFactor(0);
                 this.time.delayedCall(1500, () => warn.destroy());
             }
@@ -1795,7 +1868,9 @@ class ShopScene extends Phaser.Scene {
                     fontSize: '28px',
                     fill: '#000F05',
                     fontFamily: 'Fira Sans Condensed',
-                    backgroundColor: "rgba(255,255,255,0.4)"
+                    fontStyle: 'bold',
+                    backgroundColor: "rgba(255,255,255,0.4)",
+                    padding: { x: 6, y: 3 }
                 });
                 shopText2.setScrollFactor(0);
                 shopTextShown2 = true;
@@ -1918,7 +1993,9 @@ class EndScene extends Phaser.Scene {
                 fontSize: "28px",
                 color: "#000F05",
                 fontFamily: 'Fira Sans Condensed',
-                backgroundColor: "rgba(255,255,255,0.4)"
+                fontStyle: 'bold',
+                backgroundColor: "rgba(255,255,255,0.4)",
+                padding: { x: 6, y: 3 }
             });
         }
     // son
@@ -1933,7 +2010,9 @@ class EndScene extends Phaser.Scene {
             fontSize: '36px',
             fill: '#000F05',
             fontFamily: 'Fira Sans Condensed',
-            backgroundColor: "rgba(255,255,255,0.4)"
+            fontStyle: 'bold',
+            backgroundColor: "rgba(255,255,255,0.4)",
+            padding: { x: 6, y: 3 }
         });
 
         appuyA.setOrigin(0.5, 0.5);
