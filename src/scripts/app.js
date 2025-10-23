@@ -713,6 +713,7 @@ class MainWorld extends Phaser.Scene {
         ];
         this.flaquesEau = [];
         let hasSplashed = false;
+
         positionsFlaques.forEach(pos => {
             const flaque = this.add.image(pos.x, pos.y, 'flaqueEau').setOrigin(0, 0);
             this.flaquesEau.push(flaque);
@@ -728,13 +729,12 @@ class MainWorld extends Phaser.Scene {
                 
                 const randomX = Phaser.Math.Between(0, this.sys.game.config.width);
                 const randomY = Phaser.Math.Between(0, this.sys.game.config.height);
-
                 if (!hasSplashed) {
-                    console.log('splash');
                     hasSplashed = true;
-                    overlayEau = this.add.image(randomX, randomY, "eau_vue").setOrigin(0, 0);
-                    overlayEau.displayWidth  = 500;
-                    overlayEau.displayHeight = 350;
+                    overlayEau = this.add.image(randomX, randomY, "eau_vue").setOrigin(0.5, 0.5);
+                    overlayEau.displayWidth  = this.sys.game.config.width;
+                    overlayEau.displayHeight = this.sys.game.config.height;
+                    overlayEau.angle = Phaser.Math.Between(0, 360);
                     overlayEau.setAlpha(0.8);
                     overlayEau.setScrollFactor(0);
                     overlayEau.setDepth(999);
@@ -742,7 +742,7 @@ class MainWorld extends Phaser.Scene {
 
                     setTimeout(() => {
                         hasSplashed = false;
-                    }, 300);
+                    }, 500);
                 }
             }, null, this);
         });
@@ -771,13 +771,21 @@ class MainWorld extends Phaser.Scene {
                     this.marcheBoueSon.play({ volume: 1 });
                 }
                 
-                if (!overlayBoue) {
-                    overlayBoue = this.add.image(0, 0, "boue_vue").setOrigin(0, 0);
+                const randomX = Phaser.Math.Between(0, this.sys.game.config.width);
+                const randomY = Phaser.Math.Between(0, this.sys.game.config.height);
+                if (!hasSplashed) {
+                    hasSplashed = true;
+                    overlayBoue = this.add.image(randomX, randomY, "boue_vue").setOrigin(0.5, 0.5);
                     overlayBoue.displayWidth  = this.sys.game.config.width;
                     overlayBoue.displayHeight = this.sys.game.config.height;
+                    overlayBoue.angle = Phaser.Math.Between(0, 360);
                     overlayBoue.setScrollFactor(0);
                     overlayBoue.setDepth(999);
                     overlayStack.push(overlayBoue);
+                    
+                    setTimeout(() => {
+                        hasSplashed = false;
+                    }, 500);
                 }
             }, null, this);
         });
