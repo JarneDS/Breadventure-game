@@ -27,6 +27,7 @@ let runTimerText = null;
 let lastRunTimeMs = 0;
 let runTimerActive = false;
 let runTimerStart = 0;
+let currentTime = 0;
 
 function formatElapsed(ms) {
     const totalSeconds = Math.floor(ms / 1000);
@@ -919,7 +920,8 @@ class MainWorld extends Phaser.Scene {
         }).setScrollFactor(0).setDepth(10001);
 
         if (runTimerActive) {
-            runTimerText.setText(formatElapsed(Math.floor(Date.now() - runTimerStart)));
+            currentTime = formatElapsed(Math.floor(Date.now() - runTimerStart))
+            runTimerText.setText(currentTime);
         }
 
         // pluie
@@ -1214,6 +1216,12 @@ class MainWorld extends Phaser.Scene {
             this.cone,
             this.player
         ]); // les ... sont pour décomposer les tableau pour que Phaser puisse appliquer l'effet sur tous les éléments du tableau
+
+        this.input.keyboard.on('keydown-D', () => {
+            this.scene.start('EndScene', {
+                currentTime
+            });
+        })
     }
     
     update() {
@@ -1232,7 +1240,7 @@ class MainWorld extends Phaser.Scene {
         // Déplacements X (perso ralenti si contact obstacle et que overlay actif)
         const overlayActif = overlayEau || overlayBoue || overlayCaca || blurRain || (glassesRain && glassesRain.visible);
 
-        const speedLeft  = overlayActif ? -200 : -250; // gauche
+        const speedLeft  = overlayActif ? -200 : -800; // gauche
         const speedRight = overlayActif ?  200 :  800; // droite
 
         // Saut
@@ -1392,6 +1400,7 @@ class MainWorld extends Phaser.Scene {
                 playerHasUmbrella,
                 playerHasBrum,
                 character: selectedCharacter,
+                runTime: lastRunTimeMs
             });
         }
 
@@ -1989,16 +1998,6 @@ class EndScene extends Phaser.Scene {
     }
 
     create(data) {
-        if (typeof lastRunTimeMs === "number" && lastRunTimeMs > 0) {
-            this.add.text(400, 300, "Votre temps : " + formatElapsed(lastRunTimeMs), {
-                fontSize: "28px",
-                color: "#000F05",
-                fontFamily: 'Fira Sans Condensed',
-                fontStyle: 'bold',
-                backgroundColor: "rgba(255,255,255,0.4)",
-                padding: { x: 6, y: 3 }
-            });
-        }
     // son
         const loadingSceneSon = this.sound.add('loadingScene');
         loadingSceneSon.play({ loop: true });
@@ -2006,6 +2005,17 @@ class EndScene extends Phaser.Scene {
         this.bg = this.add.tileSprite(0, 0, 1194, 834, 'intro').setOrigin(0, 0);
         this.logo = this.add.tileSprite(597, 150, 873, 105, 'logo').setOrigin(0.5, 0.5);
         perso = this.add.sprite(100, 712, 'player_brum_static_henri');
+
+        lastRunTimeMs = Math.floor(Date.now() - runTimerStart);
+        let timerText;
+            timerText = this.add.text(597, 400, "Votre temps : " + formatElapsed(lastRunTimeMs), {
+                fontSize: "28px",
+                color: "#000F05",
+                fontFamily: 'Fira Sans Condensed',
+                fontStyle: 'bold',
+                backgroundColor: "rgba(255,255,255,0.4)",
+                padding: { x: 6, y: 3 }
+            });
 
         const appuyA = this.add.text(597, 600, 'Appuyer sur A pour commencer le jeu avec ' + selectedCharacter, {
             fontSize: '36px',
@@ -2016,11 +2026,10 @@ class EndScene extends Phaser.Scene {
             padding: { x: 6, y: 3 }
         });
 
+        timerText.setOrigin(0.5, 0.5);
         appuyA.setOrigin(0.5, 0.5);
 
         perso.play('static_brum_henri');
-
-        appuyA.setText('Appuyer sur A pour redémarrer le jeu');
 
         cursors = this.input.keyboard.createCursorKeys();
 
