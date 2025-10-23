@@ -970,6 +970,7 @@ class MainWorld extends Phaser.Scene {
                     glassesRain = this.add.image(0, 0, "glassesRain").setOrigin(0, 0);
                     glassesRain.setScrollFactor(0);
                     glassesRain.setDepth(950);
+                    glassesRain.setAlpha(0.6);
                     overlayStack.push(glassesRain);
                 }
                 glassesRain.setVisible(true);
