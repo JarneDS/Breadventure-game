@@ -2195,7 +2195,7 @@ class EndScene extends Phaser.Scene {
                 padding: { x: 6, y: 3 }
             });
 
-        const appuyA = this.add.text(597, 600, 'Appuyer sur A pour commencer le jeu avec ' + selectedCharacter, {
+        const appuyA = this.add.text(597, 600, 'Appuyer sur A pour retourner au menu principal', {
             fontSize: '36px',
             fill: '#000F05',
             fontFamily: 'Fira Sans Condensed',
