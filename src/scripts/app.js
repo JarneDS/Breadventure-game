@@ -454,16 +454,74 @@ class LoadingScene extends Phaser.Scene {
 
         cursors = this.input.keyboard.createCursorKeys();
 
-        // Ajout d'une touche A
-        this.keyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
-
         // Attendre que l'utilisateur appuie sur A
         this.input.keyboard.on('keydown-A', () => {
             const charToSend = selectedCharacter || 'henri';
-            this.scene.start('Glasses', { character: charToSend });
+            this.scene.start('ExplenationScene', { character: charToSend });
             loadingSceneSon.stop();
         });
     }
+}
+
+class ExplenationScene extends Phaser.Scene {
+    constructor() {
+        super('ExplenationScene');
+    }
+
+    preload(data){
+        const character = (data && data.character) ? data.character : 'henri';
+        loadCharacterSprites.call(this, character);
+    }
+
+    create(data){
+        selectedCharacter = (data && data.character) ? data.character : 'henri';
+
+        this.bg = this.add.tileSprite(0, 0, 1194, 834, 'intro').setOrigin(0, 0);
+
+        const titre = this.add.text(597, 180, 'Avis aux joueurs sans lunettes : ', {
+            fontSize: '36px',
+            fill: '#ff0000',
+            fontFamily: 'Fira Sans Condensed',
+            fontStyle: 'bold',
+            backgroundColor: "rgba(255,255,255,0.4)",
+            padding: { x: 6, y: 3 }
+        });
+
+        titre.setOrigin(0.5, 0.5);
+
+        const txtExplicatif = this.add.text(597, 418,
+            'Découvrez le calvaire de ce handicap !\n' +
+            'Dans ce jeu, déplacez-vous avec les flèches latérales\n' +
+            'et sautez avec la flèche du haut.\n' +
+            'Votre mission : récupérer le pain pour le dîner.\n' +
+            'Évitez flaques, pluie et le pigeon farceur.\n' +
+            'Passez au shop pour acheter des mouchoirs (2 €)\n' +
+            'ou un parapluie (4 €) — ils vous seront précieux !\n' +
+            'Mais gardez assez d\'argent pour le pain (5 €).\n' +
+            'Bonne chance !',
+            {
+                fontSize: '28px',
+                fill: '#000F05',
+                fontFamily: 'Fira Sans Condensed',
+                fontStyle: 'bold',
+                backgroundColor: "rgba(255,255,255,0.4)",
+                padding: { x: 6, y: 3 },
+                lineSpacing: 10
+            }
+        );
+
+        txtExplicatif.setOrigin(0.5, 0.5);
+
+        perso = this.add.sprite(100, 712, `player_bread_static_${selectedCharacter}`);
+
+        perso.play(`static_bread_${selectedCharacter}`);
+
+        this.input.keyboard.on('keydown-A', () => {
+            this.scene.start('Glasses', { character: selectedCharacter });
+        });
+    }
+
+    update(){}
 }
 
 class Glasses extends Phaser.Scene {
@@ -471,8 +529,7 @@ class Glasses extends Phaser.Scene {
         super('Glasses');
     }
 
-    preload(){
-    }
+    preload(){}
 
    create(data){
         selectedCharacter = (data && data.character) ? data.character : 'henri';
@@ -489,8 +546,7 @@ class Glasses extends Phaser.Scene {
     }
 
     
-    update(){
-    }
+    update(){}
 }
 
 class MainWorld extends Phaser.Scene {
@@ -2167,7 +2223,7 @@ const config = {
         disableWebAudio: true,
     },
     render: { pixelArt: true, antialias: false }, // ajout pour une image nette (eau)
-    scene: [LoadingScene, Glasses, MainWorld, BakeryScene, ShopScene, EndScene]
+    scene: [LoadingScene, ExplenationScene, Glasses, MainWorld, BakeryScene, ShopScene, EndScene]
 };
 
 const game = new Phaser.Game(config);
