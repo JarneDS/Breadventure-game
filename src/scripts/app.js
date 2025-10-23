@@ -512,6 +512,17 @@ class ExplenationScene extends Phaser.Scene {
 
         txtExplicatif.setOrigin(0.5, 0.5);
 
+        const appuyA = this.add.text(597, 700, 'Appuyer sur A pour commencer le jeu avec ' + selectedCharacter.charAt(0).toUpperCase() + selectedCharacter.slice(1), {
+            fontSize: '36px',
+            fill: '#000F05',
+            fontFamily: 'Fira Sans Condensed',
+            fontStyle: 'bold',
+            backgroundColor: "rgba(255,255,255,0.4)",
+            padding: { x: 6, y: 3 }
+        });
+
+        appuyA.setOrigin(0.5, 0.5);
+
         perso = this.add.sprite(100, 712, `player_bread_static_${selectedCharacter}`);
 
         perso.play(`static_bread_${selectedCharacter}`);
@@ -1337,8 +1348,8 @@ class MainWorld extends Phaser.Scene {
         // Déplacements X (perso ralenti si contact obstacle et que overlay actif)
         const overlayActif = overlayEau || overlayBoue || overlayCaca || blurRain || (glassesRain && glassesRain.visible);
 
-        const speedLeft  = overlayActif ? -200 : -800; // gauche
-        const speedRight = overlayActif ?  200 :  800; // droite
+        const speedLeft  = overlayActif ? -200 : -250; // gauche
+        const speedRight = overlayActif ?  200 :  250; // droite
 
         // Saut
         if (Phaser.Input.Keyboard.JustDown(cursors.up) && this.player.body.onFloor()) {
@@ -1797,10 +1808,10 @@ class BakeryScene extends Phaser.Scene {
 
         // Gauche / Droite
         if (cursors.left.isDown) {
-            this.player.setVelocityX(-230);
+            this.player.setVelocityX(-250);
             this.player.setFlipX(true);
         } else if (cursors.right.isDown) {
-            this.player.setVelocityX(230);
+            this.player.setVelocityX(250);
             this.player.setFlipX(false);
         }
 
@@ -2108,10 +2119,10 @@ class ShopScene extends Phaser.Scene {
 
         // Gauche / Droite
         if (cursors.left.isDown) {
-            this.player.setVelocityX(-230);
+            this.player.setVelocityX(-250);
             this.player.setFlipX(true);
         } else if (cursors.right.isDown) {
-            this.player.setVelocityX(230);
+            this.player.setVelocityX(250);
             this.player.setFlipX(false);
         }
 
@@ -2217,7 +2228,7 @@ const config = {
     height: 834,
     physics: {
         default: 'arcade',
-        arcade: { gravity: { y: 0 }, debug: true }
+        arcade: { gravity: { y: 0 }, debug: false }
     },
     audio: {
         disableWebAudio: true,
