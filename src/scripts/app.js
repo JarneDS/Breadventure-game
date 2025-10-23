@@ -47,7 +47,7 @@ let blurRain = null; //pluie blur lunettes
 
 let overlayStack = []; //pile des overlays -> utile pour effacer le denier apparu
 
-let mouchoirs = 10; //valeur par défaut - valeur TEST -> à modifier
+let mouchoirs = 2; //valeur par défaut - valeur TEST -> à modifier
 let shopTextShown = false; //affichage texte shop
 let shopText = null; //texte shop
 let houseText = null; //affichage texte maison
