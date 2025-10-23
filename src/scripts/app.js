@@ -627,7 +627,7 @@ class MainWorld extends Phaser.Scene {
         
         const dropPoop = () => {
             const p = this.poops.create(this.bird.x, this.bird.y + 10, "caca");
-            p.setDepth(1200);
+            p.setDepth(900);
             p.setVelocityX(Phaser.Math.Between(-20, 20)); //drift x
             p.setVelocityY(Phaser.Math.Between(40, 120)); //chute verticale
             p.setGravityY(800);
