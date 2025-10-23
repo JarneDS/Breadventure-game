@@ -701,6 +701,7 @@ class MainWorld extends Phaser.Scene {
         this.ground2 = this.add.tileSprite(6104, 738, 8192, 100, 'ground').setOrigin(0, 0);
         this.parcGround = this.add.tileSprite(4056, 738, 2048, 100, 'groundParc').setOrigin(0, 0);
 
+        
         //flaques d'eau à différentes positions x
         const positionsFlaques = [ 
             { x: 1000, y: 735 },
@@ -711,7 +712,7 @@ class MainWorld extends Phaser.Scene {
             { x: 13000, y: 735 },
         ];
         this.flaquesEau = [];
-
+        let hasSplashed = false;
         positionsFlaques.forEach(pos => {
             const flaque = this.add.image(pos.x, pos.y, 'flaqueEau').setOrigin(0, 0);
             this.flaquesEau.push(flaque);
@@ -725,14 +726,23 @@ class MainWorld extends Phaser.Scene {
                     this.marcheEauFlaqueSon.play({ volume: 1 });
                 }
                 
-                if (!overlayEau) {
-                    overlayEau = this.add.image(0, 0, "eau_vue").setOrigin(0, 0);
-                    overlayEau.displayWidth  = this.sys.game.config.width;
-                    overlayEau.displayHeight = this.sys.game.config.height;
+                const randomX = Phaser.Math.Between(0, this.sys.game.config.width);
+                const randomY = Phaser.Math.Between(0, this.sys.game.config.height);
+
+                if (!hasSplashed) {
+                    console.log('splash');
+                    hasSplashed = true;
+                    overlayEau = this.add.image(randomX, randomY, "eau_vue").setOrigin(0, 0);
+                    overlayEau.displayWidth  = 500;
+                    overlayEau.displayHeight = 350;
                     overlayEau.setAlpha(0.8);
                     overlayEau.setScrollFactor(0);
                     overlayEau.setDepth(999);
                     overlayStack.push(overlayEau);
+
+                    setTimeout(() => {
+                        hasSplashed = false;
+                    }, 300);
                 }
             }, null, this);
         });
@@ -1152,7 +1162,7 @@ class MainWorld extends Phaser.Scene {
             this.player.getBounds(),
             eauRiviere.getBounds()
         );
-
+        
         // Sortie de l'eau
         if (!isTouching && overlayVisible) {
             overlayVisible = false;
@@ -2143,7 +2153,7 @@ const config = {
     height: 834,
     physics: {
         default: 'arcade',
-        arcade: { gravity: { y: 0 }, debug: false }
+        arcade: { gravity: { y: 0 }, debug: true }
     },
     audio: {
         disableWebAudio: true,
