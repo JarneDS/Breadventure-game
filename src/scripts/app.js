@@ -1825,7 +1825,9 @@ class ShopScene extends Phaser.Scene {
         let groundColliderShop = this.physics.add.staticImage(600, 784, null).setSize(1200, 100).setVisible(false);
         this.physics.add.collider(this.player, groundColliderShop);
 
-        this.parapluie = this.physics.add.image(382, 662, 'parapluie');
+        if (!playerHasUmbrella) {
+            this.parapluie = this.physics.add.image(382, 662, 'parapluie');
+        }
 
         this.mouchoirs = this.physics.add.image(784, 660, 'mouchoirs');
 
@@ -1844,7 +1846,7 @@ class ShopScene extends Phaser.Scene {
 
         // Achat parapluie: -4 pièces si possible, MAJ HUD
         this.physics.add.overlap(this.player, this.parapluie, () => {
-            if (!playerHasUmbrella && money >= 4) {
+            if (this.parapluie && !playerHasUmbrella && money >= 4) {
                 playerHasUmbrella = true;
                 this.parapluie.disableBody(true, true);
                 money -= 4;
