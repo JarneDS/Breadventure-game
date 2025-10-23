@@ -1,12 +1,11 @@
 import "phaser";
 
+// code de Front Face Observer par Bram Stein https://github.com/bramstein/fontfaceobserver
 var FontFaceObserver = require('fontfaceobserver');
 
 var font = new FontFaceObserver('Fira Sans Condensed');
 
-font.load().then(function () {
-  console.log('Fira Sans Condensed has loaded');
-});
+font.load().then(function () {});
 
 let cursors;
 let money = 2; // valeur par défaut
@@ -200,6 +199,10 @@ class LoadingScene extends Phaser.Scene {
             frameWidth: 1194,
             frameHeight: 1024,
         })
+        this.load.spritesheet("arrow", "assets/objects/fleche.png", {
+            frameWidth: 64,
+            frameHeight: 64,
+        })
         
     /*
         //insectes
@@ -358,6 +361,13 @@ class LoadingScene extends Phaser.Scene {
             key:'bird_fly',
             frames: this.anims.generateFrameNumbers('bird', { start: 0, end: 5 }),
             frameRate: 10,
+            repeat: -1
+        })
+
+        this.anims.create({
+            key:'arrow',
+            frames: this.anims.generateFrameNumbers('arrow', { start: 0, end: 6 }),
+            frameRate: 12,
             repeat: -1
         })
 
@@ -540,6 +550,20 @@ class MainWorld extends Phaser.Scene {
         this.house2 = this.add.tileSprite(9400, 226, 2048, 512, 'background2').setOrigin(0, 0);
         this.house3 = this.add.tileSprite(11448, 226, 2048, 512, 'background').setOrigin(0, 0);
         this.bakery = this.add.tileSprite(13496, -286, 2048, 1024, 'bakery').setOrigin(0, 0);
+
+        const arrow = this.add.sprite(7140, 630, 'arrow');
+        arrow.anims.play('arrow', true);
+        arrow.setDepth(1000);
+
+        const arrow2 = this.add.sprite(13758, 630, 'arrow');
+        arrow2.anims.play('arrow', true);
+        arrow2.setDepth(1000);
+
+        if (playerHasBread) {
+            const arrow3 = this.add.sprite(352, 630, 'arrow');
+            arrow3.anims.play('arrow', true);
+            arrow3.setDepth(1000);
+        }
 
         // sons
         this.insectesSon = this.sound.add('insectes');
