@@ -21,7 +21,7 @@
   },
   "homepage": "https://github.com/dwmaj/workflow#readme",
   "devDependencies": {
-    "browser-sync": "^2.27.7",
+    "browser-sync": "^3.0.4",
     "browser-sync-webpack-plugin": "^2.3.0",
     "laravel-mix": "^6.0.41",
     "rimraf": "^3.0.2",
@@ -29,6 +29,7 @@
     "sass-loader": "^12.4.0"
   },
   "dependencies": {
+    "fontfaceobserver": "^2.3.0",
     "phaser": "^3.90.0",
     "tween": "^0.9.0"
   }

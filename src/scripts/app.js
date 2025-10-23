@@ -1,5 +1,13 @@
 import "phaser";
 
+var FontFaceObserver = require('fontfaceobserver');
+
+var font = new FontFaceObserver('Fira Sans Condensed');
+
+font.load().then(function () {
+  console.log('Fira Sans Condensed has loaded');
+});
+
 let cursors;
 let money = 4; // valeur par défaut
 let bakeryTextShown = false;
@@ -125,8 +133,8 @@ function loadCharacterSprites(character) {
         frameHeight: 144,
     })
 }
-
 class LoadingScene extends Phaser.Scene {
+
     constructor() {
         super('LoadingScene');
         this.player;
@@ -1482,7 +1490,7 @@ class BakeryScene extends Phaser.Scene {
         this.interiorBakery = this.add.tileSprite(0, -190, 1194, 1024, 'interieur_bakery').setOrigin(0, 0);
 
         this.pain = this.physics.add.image(583, 668, 'pain');
-        
+
         this.player = this.physics.add.sprite(161, 736, "player");
         this.player.setOrigin(0.5, 1);
         this.player.setSize(42, 90);
