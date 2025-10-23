@@ -1,7 +1,7 @@
 import "phaser";
 
 let cursors;
-let money = 7; // valeur par défaut
+let money = 4; // valeur par défaut
 let bakeryTextShown = false;
 let houseTextShown = false; //texte maison
 let bakeryText = null;
