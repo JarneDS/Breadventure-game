@@ -1480,6 +1480,9 @@ class BakeryScene extends Phaser.Scene {
         
         this.bgBakery = this.add.tileSprite(0, -290, 1940, 1024, 'cielVille').setOrigin(0, 0);
         this.interiorBakery = this.add.tileSprite(0, -190, 1194, 1024, 'interieur_bakery').setOrigin(0, 0);
+
+        this.pain = this.physics.add.image(583, 668, 'pain');
+        
         this.player = this.physics.add.sprite(161, 736, "player");
         this.player.setOrigin(0.5, 1);
         this.player.setSize(42, 90);
@@ -1515,8 +1518,6 @@ class BakeryScene extends Phaser.Scene {
         this.time.delayedCall(500, () => { this.canExit = true; });
         
         this.keyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
-
-        this.pain = this.physics.add.image(583, 668, 'pain');
 
         // Achat du pain: -5 pièces si possible + MAJ HUD
         this.physics.add.overlap(this.player, this.pain, () => {
