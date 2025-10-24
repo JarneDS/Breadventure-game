@@ -1827,11 +1827,7 @@ class BakeryScene extends Phaser.Scene {
         // Animation
         let prefix = '';
 
-        if (playerHasBrum) {
-            prefix = '_brum';
-        } else if (playerHasUmbrella) {
-            prefix = '_umbrella';
-        } else if (playerHasBread) {
+        if (playerHasBread) {
             prefix = '_bread';
         } else {
             prefix = '';
@@ -2138,11 +2134,7 @@ class ShopScene extends Phaser.Scene {
         // Animation
         let prefix = '';
 
-        if (playerHasBrum) {
-            prefix = '_brum';
-        } else if (playerHasUmbrella) {
-            prefix = '_umbrella';
-        } else if (playerHasBread) {
+        if (playerHasBread) {
             prefix = '_bread';
         } else {
             prefix = '';
