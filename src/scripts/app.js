@@ -8,7 +8,7 @@ var font = new FontFaceObserver('Fira Sans Condensed');
 font.load().then(function () {});
 
 let cursors;
-let money = 2; // valeur par défaut
+let money = 3; // valeur par défaut
 let bakeryTextShown = false;
 let houseTextShown = false; //texte maison
 let bakeryText = null;
