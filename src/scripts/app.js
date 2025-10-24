@@ -152,7 +152,6 @@ class LoadingScene extends Phaser.Scene {
         this.load.image("chantier","assets/bg/chantier.png"); //chantier
         this.load.image("ground", "assets/bg/sol.png");
         this.load.image("cone", "assets/objects/travaux-panneau.png");
-        this.load.image("money", "assets/objects/money.png");
         this.load.image("bateau", "assets/objects/bateau.png");
         this.load.image("smallPlat", "assets/objects/platformSmall.png"); //platformSmall
         this.load.image("bigPlat", "assets/objects/platformBig.png"); //platformBig
@@ -203,6 +202,10 @@ class LoadingScene extends Phaser.Scene {
         this.load.spritesheet("arrow", "assets/objects/fleche.png", {
             frameWidth: 64,
             frameHeight: 64,
+        })
+        this.load.spritesheet("money", "assets/objects/money.png", {
+            frameWidth: 64,
+            frameHeight: 96,
         })
         
     /*
@@ -369,6 +372,13 @@ class LoadingScene extends Phaser.Scene {
             key:'arrow',
             frames: this.anims.generateFrameNumbers('arrow', { start: 0, end: 6 }),
             frameRate: 12,
+            repeat: -1
+        })
+
+        this.anims.create({
+            key: 'money',
+            frames: this.anims.generateFrameNumbers('money', { start: 0, end: 11 }),
+            frameRate: 11,
             repeat: -1
         })
 
@@ -978,8 +988,9 @@ class MainWorld extends Phaser.Scene {
                     randomX = Phaser.Math.Between(1200, 10000);
                 } while (isInZonesInterdites(randomX));
 
-                let obstacle = this.physics.add.staticImage(randomX, 695, 'money');
+                let obstacle = this.physics.add.sprite(randomX, 695, 'money');
                 this.obstacles.push(obstacle);
+                obstacle.play('money', true);
 
                 this.physics.add.overlap(this.player, obstacle, () => {
                     obstacle.destroy();
