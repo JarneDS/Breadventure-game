@@ -593,6 +593,11 @@ class MainWorld extends Phaser.Scene {
 
     create(data){
         selectedCharacter = (data && data.character) ? data.character : 'henri';
+        
+        if (data && data.playerHasUmbrella !== undefined) {
+            playerHasUmbrella = data.playerHasUmbrella;
+        }
+
         gameSpritesLayers = this.add.layer(); // On déclare la variable à l'avance pour éviter une erreur de référence
         this.player = data.player;
 
@@ -750,23 +755,6 @@ class MainWorld extends Phaser.Scene {
         this.player.setOffset((144 - 42) / 2, 144 - 90);
         this.player.body.gravity.y = 400;
         this.player.money = money;
-
-        //Overlay caca
-        this.physics.add.overlap(this.player, this.poops, (_player, poop) => {
-            poop.destroy();
-
-            if (playerHasUmbrella) return;
-
-            if (overlayCaca) {
-                overlayCaca.destroy();
-                overlayCaca = null;
-            }
-
-            overlayCaca = this.add.image(0, 0, "merde").setOrigin(0, 0);
-            overlayCaca.setScrollFactor(0);
-            overlayCaca.setDepth(2000);
-            overlayStack.push(overlayCaca);
-        });
     
         this.cone = this.physics.add.staticImage(30, 692, 'cone');
 
@@ -1114,6 +1102,26 @@ class MainWorld extends Phaser.Scene {
         };
 
         scheduleNextRain();
+
+        this.physics.add.overlap(this.player, this.poops, (_player, poop) => {
+            // Si le joueur a le parapluie ET qu'il pleut → on détruit le poop (bloqué)
+            if (playerHasUmbrella && this.isRaining) {
+                poop.destroy();
+                return;
+            }
+
+            // Sinon, on affiche le splash / overlay
+            if (overlayCaca) {
+                overlayCaca.destroy();
+                overlayCaca = null;
+            }
+
+            overlayCaca = this.add.image(0, 0, "merde").setOrigin(0, 0);
+            overlayCaca.setScrollFactor(0);
+            overlayCaca.setDepth(2000);
+            overlayStack.push(overlayCaca);
+        });
+
     
         // animation bateau
         this.tweens.add({
@@ -1268,17 +1276,6 @@ class MainWorld extends Phaser.Scene {
             }
         }
         });
-        
-        this.physics.add.overlap(this.player, this.poops, (_player, poop) => {
-            poop.destroy();
-            if (playerHasUmbrella) return;
-
-            const splash = this.add.image(0, 0, "merde").setOrigin(0, 0);
-            splash.setScrollFactor(0);
-            splash.setDepth(2000);
-            splash.setAlpha(0.95);
-            overlayStack.push(splash);
-        });
 
         this.input.keyboard.on("keydown-E", () => {
             if (mouchoirs <= 0) return;
@@ -1357,7 +1354,7 @@ class MainWorld extends Phaser.Scene {
         const overlayActif = overlayEau || overlayBoue || overlayCaca || blurRain || (glassesRain && glassesRain.visible);
 
         const speedLeft  = overlayActif ? -200 : -250; // gauche
-        const speedRight = overlayActif ?  200 :  250; // droite
+        const speedRight = overlayActif ?  200 :  800; // droite
 
         // Saut
         if (Phaser.Input.Keyboard.JustDown(cursors.up) && this.player.body.onFloor()) {
