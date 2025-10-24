@@ -393,13 +393,13 @@ class LoadingScene extends Phaser.Scene {
         this.logo = this.add.tileSprite(597, 150, 873, 105, 'logo').setOrigin(0.5, 0.5);
         perso = this.add.sprite(100, 712, 'player_bread_static_henri');
 
-        const textExplication = this.add.text(597, 340, 'Veuillez utiliser <- et -> pour changer de personnage', {
+        const textExplication = this.add.text(597, 340, 'Veuillez utiliser \u2190 et \u2192 pour changer de personnage', {
             fontSize: '28px',
             fill: '#000F05',
             fontFamily: 'Fira Sans Condensed',
             fontStyle: 'bold',
             backgroundColor: "rgba(255,255,255,0.4)",
-            padding: { x: 6, y: 3 }
+            padding: { x: 12, y: 9 }
         });
 
         textExplication.setOrigin(0.5, 0.5);
@@ -410,7 +410,7 @@ class LoadingScene extends Phaser.Scene {
             fontFamily: 'Fira Sans Condensed',
             fontStyle: 'bold',
             backgroundColor: "rgba(255,255,255,0.4)",
-            padding: { x: 6, y: 3 }
+            padding: { x: 12, y: 9 }
         });
 
         appuyA.setOrigin(0.5, 0.5);
@@ -488,23 +488,24 @@ class ExplenationScene extends Phaser.Scene {
 
         this.bg = this.add.tileSprite(0, 0, 1194, 834, 'intro').setOrigin(0, 0);
 
-        const titre = this.add.text(597, 170, 'Avis aux joueurs : ', {
+        const titre = this.add.text(597, 183, 'Avis aux joueurs : ', {
             fontSize: '36px',
             fill: '#ff0000',
             fontFamily: 'Fira Sans Condensed',
             fontStyle: 'bold',
             backgroundColor: "rgba(255,255,255,0.4)",
-            padding: { x: 6, y: 3 }
+            padding: { x: 12, y: 9 }
         });
 
         titre.setOrigin(0.5, 0.5);
 
-        const txtExplicatif = this.add.text(597, 425,
-            'Déplacez-vous avec les flèches latérales\n' +
-            'et sautez avec la flèche du haut.\n' +
-            'Dans la boutique: mouchoirs - 2$ et\n' +
-            'parapluie - 4$\n' +
-            'Dans la boulangerie: pain - 5$\n' +
+        const txtExplicatif = this.add.text(597, 410,
+            'Déplacement latéral : touches \u2190 et \u2192 \n' +
+            'Saut : touche \u2191 \n' +
+            'Nettoyez vos lunettes avec "E"\n' +
+            'Entrez dans les batiments avec "A"\n' +
+            'Dans la boutique : mouchoirs - 2$ et parapluie - 4$\n' +
+            'Dans la boulangerie : pain - 5$\n' +
             'Bonne chance !',
             {
                 fontSize: '24px',
@@ -512,7 +513,7 @@ class ExplenationScene extends Phaser.Scene {
                 fontFamily: 'Fira Sans Condensed',
                 fontStyle: 'bold',
                 backgroundColor: "rgba(255,255,255,0.4)",
-                padding: { x: 80, y: 77 },
+                padding: { x: 12, y: 9 },
                 lineSpacing: 12
             }
         );
@@ -525,7 +526,7 @@ class ExplenationScene extends Phaser.Scene {
             fontFamily: 'Fira Sans Condensed',
             fontStyle: 'bold',
             backgroundColor: "rgba(255,255,255,0.4)",
-            padding: { x: 6, y: 3 }
+            padding: { x: 12, y: 9 }
         });
 
         appuyA.setOrigin(0.5, 0.5);
@@ -907,7 +908,7 @@ class MainWorld extends Phaser.Scene {
                     fontFamily: 'Fira Sans Condensed',
                     fontStyle: 'bold',
                     backgroundColor: "rgba(255,255,255,0.4)",
-                    padding: { x: 6, y: 3 }
+                    padding: { x: 12, y: 9 }
                 });
                 bakeryText.setScrollFactor(0);
                 bakeryTextShown = true;
@@ -924,7 +925,7 @@ class MainWorld extends Phaser.Scene {
                     fontFamily: 'Fira Sans Condensed',
                     fontStyle: 'bold',
                     backgroundColor: "rgba(255,255,255,0.4)",
-                    padding: { x: 6, y: 3 }
+                    padding: { x: 12, y: 9 }
                 });
                 shopText.setScrollFactor(0);
                 shopTextShown = true;
@@ -941,7 +942,7 @@ class MainWorld extends Phaser.Scene {
                     fontFamily: 'Fira Sans Condensed',
                     fontStyle: 'bold',
                     backgroundColor: "rgba(255,255,255,0.4)",
-                    padding: { x: 6, y: 3 }
+                    padding: { x: 12, y: 9 }
                 });
                 houseText.setScrollFactor(0);
                 houseTextShown = true;
@@ -999,7 +1000,7 @@ class MainWorld extends Phaser.Scene {
             fontFamily: 'Fira Sans Condensed',
             fontStyle: 'bold',
             backgroundColor: "rgba(255,255,255,0.4)",
-            padding: { x: 6, y: 3 }
+            padding: { x: 12, y: 9 }
         });
         this.scoreText.setScrollFactor(0).setDepth(10001);
 
@@ -1010,7 +1011,7 @@ class MainWorld extends Phaser.Scene {
             fontFamily: 'Fira Sans Condensed',
             fontStyle: 'bold',
             backgroundColor: "rgba(255,255,255,0.4)",
-            padding: { x: 6, y: 3 }
+            padding: { x: 12, y: 9 }
         });
         this.mouchoirText.setScrollFactor(0).setDepth(10001);
 
@@ -1020,7 +1021,7 @@ class MainWorld extends Phaser.Scene {
             fontFamily: "Fira Sans Condensed",
             color: "#000F05",
             backgroundColor: "rgba(255,255,255,0.4)",
-            padding: { x: 6, y: 3 }
+            padding: { x: 12, y: 9 }
         }).setScrollFactor(0).setDepth(10001);
 
         if (runTimerActive) {
@@ -1671,7 +1672,7 @@ class BakeryScene extends Phaser.Scene {
             fontFamily: 'Fira Sans Condensed', 
             fontStyle: 'bold', 
             backgroundColor: "rgba(255,255,255,0.4)",
-            padding: { x: 6, y: 3 }
+            padding: { x: 12, y: 9 }
         });
         this.moneyText.setScrollFactor(0);
 
@@ -1688,7 +1689,7 @@ class BakeryScene extends Phaser.Scene {
                     fontFamily: 'Fira Sans Condensed',
                     fontStyle: 'bold',
                     backgroundColor: "rgba(255,255,255,0.4)",
-                    padding: { x: 6, y: 3 }
+                    padding: { x: 12, y: 9 }
                 });
                 bakeryText2.setScrollFactor(0);
                 bakeryTextShown2 = true;
@@ -1752,7 +1753,7 @@ class BakeryScene extends Phaser.Scene {
                     fontFamily: 'Fira Sans Condensed',
                     fontStyle: 'bold',
                     backgroundColor: "rgba(255,255,255,0.4)",
-                    padding: { x: 6, y: 3 }
+                    padding: { x: 12, y: 9 }
                 });
                 txt.setScrollFactor(0);
                 this.time.delayedCall(1200, () => txt.destroy());
@@ -1763,7 +1764,7 @@ class BakeryScene extends Phaser.Scene {
                     fontFamily: 'Fira Sans Condensed',
                     fontStyle: 'bold',
                     backgroundColor: "rgba(255,255,255,0.4)",
-                    padding: { x: 6, y: 3 }
+                    padding: { x: 12, y: 9 }
                 });
                 warn.setScrollFactor(0);
                 this.time.delayedCall(1500, () => warn.destroy());
@@ -1935,7 +1936,7 @@ class ShopScene extends Phaser.Scene {
             fontFamily: 'Fira Sans Condensed',
             fontStyle: 'bold',
             backgroundColor: "rgba(255,255,255,0.4)",
-            padding: { x: 6, y: 3 }
+            padding: { x: 12, y: 9 }
         });
         this.moneyText.setScrollFactor(0);
 
@@ -1974,7 +1975,7 @@ class ShopScene extends Phaser.Scene {
                     fontFamily: 'Fira Sans Condensed',
                     fontStyle: 'bold',
                     backgroundColor: "rgba(255,255,255,0.4)",
-                    padding: { x: 6, y: 3 }
+                    padding: { x: 12, y: 9 }
                 });
                 txt.setScrollFactor(0);
                 this.time.delayedCall(1200, () => txt.destroy());
@@ -1985,7 +1986,7 @@ class ShopScene extends Phaser.Scene {
                     fontFamily: 'Fira Sans Condensed',
                     fontStyle: 'bold',
                     backgroundColor: "rgba(255,255,255,0.4)",
-                    padding: { x: 6, y: 3 }
+                    padding: { x: 12, y: 9 }
                 });
                 warn.setScrollFactor(0);
                 this.time.delayedCall(1500, () => warn.destroy());
@@ -1998,7 +1999,7 @@ class ShopScene extends Phaser.Scene {
             fontFamily: 'Fira Sans Condensed',
             fontStyle: 'bold',
             backgroundColor: "rgba(255,255,255,0.4)",
-            padding: { x: 6, y: 3 }
+            padding: { x: 12, y: 9 }
         });
         this.mouchoirText.setScrollFactor(0);
 
@@ -2025,7 +2026,7 @@ class ShopScene extends Phaser.Scene {
                     fontFamily: 'Fira Sans Condensed',
                     fontStyle: 'bold',
                     backgroundColor: "rgba(255,255,255,0.4)",
-                    padding: { x: 6, y: 3 }
+                    padding: { x: 12, y: 9 }
                 });
                 txt.setScrollFactor(0);
                 this.time.delayedCall(1200, () => txt.destroy());
@@ -2042,7 +2043,7 @@ class ShopScene extends Phaser.Scene {
                     fontFamily: 'Fira Sans Condensed',
                     fontStyle: 'bold',
                     backgroundColor: "rgba(255,255,255,0.4)",
-                    padding: { x: 6, y: 3 }
+                    padding: { x: 12, y: 9 }
                 });
                 warn.setScrollFactor(0);
                 this.time.delayedCall(1500, () => warn.destroy());
@@ -2059,7 +2060,7 @@ class ShopScene extends Phaser.Scene {
                     fontFamily: 'Fira Sans Condensed',
                     fontStyle: 'bold',
                     backgroundColor: "rgba(255,255,255,0.4)",
-                    padding: { x: 6, y: 3 }
+                    padding: { x: 12, y: 9 }
                 });
                 shopText2.setScrollFactor(0);
                 shopTextShown2 = true;
@@ -2189,7 +2190,7 @@ class EndScene extends Phaser.Scene {
                 fontFamily: 'Fira Sans Condensed',
                 fontStyle: 'bold',
                 backgroundColor: "rgba(255,255,255,0.4)",
-                padding: { x: 6, y: 3 }
+                padding: { x: 12, y: 9 }
             });
 
         const appuyA = this.add.text(597, 600, 'Appuyer sur A pour retourner au menu principal', {
@@ -2198,7 +2199,7 @@ class EndScene extends Phaser.Scene {
             fontFamily: 'Fira Sans Condensed',
             fontStyle: 'bold',
             backgroundColor: "rgba(255,255,255,0.4)",
-            padding: { x: 6, y: 3 }
+            padding: { x: 12, y: 9 }
         });
 
         timerText.setOrigin(0.5, 0.5);
