@@ -1354,7 +1354,7 @@ class MainWorld extends Phaser.Scene {
         const overlayActif = overlayEau || overlayBoue || overlayCaca || blurRain || (glassesRain && glassesRain.visible);
 
         const speedLeft  = overlayActif ? -200 : -250; // gauche
-        const speedRight = overlayActif ?  200 :  800; // droite
+        const speedRight = overlayActif ?  200 :  250; // droite
 
         // Saut
         if (Phaser.Input.Keyboard.JustDown(cursors.up) && this.player.body.onFloor()) {
