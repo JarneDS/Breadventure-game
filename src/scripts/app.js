@@ -488,7 +488,7 @@ class ExplenationScene extends Phaser.Scene {
 
         this.bg = this.add.tileSprite(0, 0, 1194, 834, 'intro').setOrigin(0, 0);
 
-        const titre = this.add.text(597, 180, 'Avis aux joueurs sans lunettes : ', {
+        const titre = this.add.text(597, 180, 'Avis aux joueurs : ', {
             fontSize: '36px',
             fill: '#ff0000',
             fontFamily: 'Fira Sans Condensed',
@@ -500,11 +500,11 @@ class ExplenationScene extends Phaser.Scene {
         titre.setOrigin(0.5, 0.5);
 
         const txtExplicatif = this.add.text(597, 418,
-            'Découvrez le calvaire de ce handicap !\n' +
+            'Découvrez le calvaire de porter des lunettes !\n' +
             'Dans ce jeu, déplacez-vous avec les flèches latérales\n' +
             'et sautez avec la flèche du haut.\n' +
             'Votre mission : récupérer le pain pour le dîner.\n' +
-            'Évitez flaques, pluie et le pigeon farceur.\n' +
+            'Évitez flaques, pluie et le pigeon.\n' +
             'Passez au shop pour acheter des mouchoirs (2 €)\n' +
             'ou un parapluie (4 €) — ils vous seront précieux !\n' +
             'Mais gardez assez d\'argent pour le pain (5 €).\n' +
