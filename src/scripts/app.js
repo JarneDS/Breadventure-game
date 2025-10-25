@@ -902,7 +902,7 @@ class MainWorld extends Phaser.Scene {
         // entrer dans la boulangerie (message)
         this.physics.add.overlap(this.player, enterBakery, () => {
             if (!bakeryTextShown) {
-                bakeryText = this.add.text(10, 50, 'Appuyer sur A pour entrer dans la boulangerie', {
+                bakeryText = this.add.text(10, 70, 'Appuyer sur A pour entrer dans la boulangerie', {
                     fontSize: '28px',
                     fill: '#000F05',
                     fontFamily: 'Fira Sans Condensed',
@@ -912,14 +912,14 @@ class MainWorld extends Phaser.Scene {
                 });
                 bakeryText.setScrollFactor(0);
                 bakeryTextShown = true;
-                bakeryText.setDepth(950);
+                bakeryText.setDepth(10000);
             }
         }, null, this);
 
         // entrer dans le shop (message)
         this.physics.add.overlap(this.player, enterShop, () => {
             if (!shopTextShown) {
-                shopText = this.add.text(10, 50, 'Appuyer sur A pour entrer dans la boutique', {
+                shopText = this.add.text(10, 70, 'Appuyer sur A pour entrer dans la boutique', {
                     fontSize: '28px',
                     fill: '#000F05',
                     fontFamily: 'Fira Sans Condensed',
@@ -929,7 +929,7 @@ class MainWorld extends Phaser.Scene {
                 });
                 shopText.setScrollFactor(0);
                 shopTextShown = true;
-                shopText.setDepth(950);
+                shopText.setDepth(10000);
             }
         }, null, this);
 
@@ -1683,7 +1683,7 @@ class BakeryScene extends Phaser.Scene {
 
         this.physics.add.overlap(this.player, exitBakery, () => {
             if (!bakeryTextShown2) {
-                bakeryText2 = this.add.text(10, 50, 'Appuyer sur A pour sortir', {
+                bakeryText2 = this.add.text(10, 70, 'Appuyer sur A pour sortir', {
                     fontSize: '28px',
                     fill: '#000F05',
                     fontFamily: 'Fira Sans Condensed',
@@ -2054,7 +2054,7 @@ class ShopScene extends Phaser.Scene {
 
         this.physics.add.overlap(this.player, exitShop, () => {
             if (!shopTextShown2) {
-                shopText2 = this.add.text(10, 50, 'Appuyer sur A pour sortir', {
+                shopText2 = this.add.text(10, 70, 'Appuyer sur A pour sortir', {
                     fontSize: '28px',
                     fill: '#000F05',
                     fontFamily: 'Fira Sans Condensed',
