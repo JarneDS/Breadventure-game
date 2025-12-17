@@ -451,7 +451,8 @@ class LoadingScene extends Phaser.Scene {
             soundButton.setFrame(soundOn ? 1 : 0);
         });
 
-    
+        this.sound.volume = 0.2;
+
         let selectedIndex = 0; // 0 = henri, 1 = juliette
 
         const selectPlayer = this.add.sprite(517, 450, 'henri');
@@ -1411,7 +1412,7 @@ class MainWorld extends Phaser.Scene {
         const overlayActif = overlayEau || overlayBoue || overlayCaca || blurRain || (glassesRain && glassesRain.visible);
 
         const speedLeft  = overlayActif ? -200 : -250; // gauche
-        const speedRight = overlayActif ?  2000 :  2050; // droite
+        const speedRight = overlayActif ?  200 :  250; // droite
 
         // Saut
         if (Phaser.Input.Keyboard.JustDown(cursors.up) && this.player.body.onFloor()) {
