@@ -70,6 +70,23 @@ let gameSpritesLayers;
 
 let hasJumped = false;
 
+let soundOn = true;
+
+Phaser.Sound.BaseSoundManager.prototype.selectAllAudio = function(action) {
+    this.sounds.forEach(sound => {
+        if (action === 'play') {
+            if (!sound.isPlaying) {
+                sound.play();
+            }
+        } else if (action === 'stop') {
+            if (sound.isPlaying) {
+                sound.stop();
+            }
+        }
+    });
+};
+
+
 function loadCharacterSprites(character) {
     // walking
     this.load.spritesheet(`player_walking_${character}`, `assets/player/${character}walking.png`,{
@@ -236,6 +253,11 @@ class LoadingScene extends Phaser.Scene {
         this.load.audio('ville', 'assets/sounds/ville.mp3');
         // pas charger loading.mp3 , plouf_dans_riviere.mp3
 
+        this.load.spritesheet("son", "assets/sounds/sonON_OFF.png", {
+            frameWidth: 35,
+            frameHeight: 35,
+        });
+
         loadCharacterSprites.call(this, 'henri');
         loadCharacterSprites.call(this, 'juliette');
     }
@@ -244,6 +266,7 @@ class LoadingScene extends Phaser.Scene {
         // son
         const loadingSceneSon = this.sound.add('loadingScene');
         loadingSceneSon.play({ loop: true });
+
         // animations
         // base
         let characters = ['henri', 'juliette'];
@@ -417,6 +440,17 @@ class LoadingScene extends Phaser.Scene {
 
         perso.play('static_bread_henri');
 
+        const soundButton = this.add.sprite(30, 100, "son", soundOn ? 1 : 0)
+            .setInteractive()
+            .setScrollFactor(0);
+
+        soundButton.on('pointerdown', () => {
+            soundOn = !soundOn;
+            this.sound.mute = !soundOn;
+
+            soundButton.setFrame(soundOn ? 1 : 0);
+        });
+
     
         let selectedIndex = 0; // 0 = henri, 1 = juliette
 
@@ -466,6 +500,7 @@ class LoadingScene extends Phaser.Scene {
 
         // Attendre que l'utilisateur appuie sur A
         this.input.keyboard.on('keydown-A', () => {
+            this.sound.selectAllAudio('stop');
             const charToSend = selectedCharacter || 'henri';
             this.scene.start('ExplenationScene', { character: charToSend });
             loadingSceneSon.stop();
@@ -485,6 +520,8 @@ class ExplenationScene extends Phaser.Scene {
 
     create(data){
         selectedCharacter = (data && data.character) ? data.character : 'henri';
+
+        this.sound.mute = !soundOn;
 
         this.bg = this.add.tileSprite(0, 0, 1194, 834, 'intro').setOrigin(0, 0);
 
@@ -536,6 +573,7 @@ class ExplenationScene extends Phaser.Scene {
         perso.play(`static_bread_${selectedCharacter}`);
 
         this.input.keyboard.on('keydown-A', () => {
+            this.sound.selectAllAudio('stop');
             this.scene.start('Glasses', { character: selectedCharacter });
         });
     }
@@ -554,12 +592,15 @@ class Glasses extends Phaser.Scene {
         selectedCharacter = (data && data.character) ? data.character : 'henri';
         this.cameras.main.postFX.addBlur(8);
 
+        this.sound.mute = !soundOn;
+
         this.bg = this.add.tileSprite(0, 0, 1194, 834, 'intro').setOrigin(0, 0);
         
         const lunettes = this.add.sprite(this.scale.width / 2, this.scale.height / 2, 'lunettes');
         lunettes.anims.play('glasses', true);
 
         lunettes.on('animationcomplete', () => {
+            this.sound.selectAllAudio('stop');
             this.scene.start('MainWorld', { character: selectedCharacter });
         });
     }
@@ -594,6 +635,8 @@ class MainWorld extends Phaser.Scene {
 
     create(data){
         selectedCharacter = (data && data.character) ? data.character : 'henri';
+
+        this.sound.mute = !soundOn;
         
         if (data && data.playerHasUmbrella !== undefined) {
             playerHasUmbrella = data.playerHasUmbrella;
@@ -1029,6 +1072,19 @@ class MainWorld extends Phaser.Scene {
             runTimerText.setText(currentTime);
         }
 
+        const soundButton = this.add.sprite(30, 100, "son", soundOn ? 1 : 0)
+            .setInteractive()
+            .setScrollFactor(0)
+            .setDepth(10001);
+
+        soundButton.on('pointerdown', () => {
+            soundOn = !soundOn;
+            this.sound.mute = !soundOn;
+
+            soundButton.setFrame(soundOn ? 1 : 0);
+        });
+
+
         // pluie
         this.rain = this.add.sprite(0, 0, 'rain', 0).setOrigin(0, 0);
         this.rain.setScrollFactor(0);
@@ -1355,7 +1411,7 @@ class MainWorld extends Phaser.Scene {
         const overlayActif = overlayEau || overlayBoue || overlayCaca || blurRain || (glassesRain && glassesRain.visible);
 
         const speedLeft  = overlayActif ? -200 : -250; // gauche
-        const speedRight = overlayActif ?  200 :  250; // droite
+        const speedRight = overlayActif ?  2000 :  2050; // droite
 
         // Saut
         if (Phaser.Input.Keyboard.JustDown(cursors.up) && this.player.body.onFloor()) {
@@ -1466,7 +1522,7 @@ class MainWorld extends Phaser.Scene {
             if (!this.porteOuvreSon.isPlaying) {
                 this.porteOuvreSon.play({ volume: 1 });
             }
-
+            this.sound.selectAllAudio('stop');
             this.scene.start('BakeryScene', {
                 returnX: this.player.x,
                 returnY: this.player.y,
@@ -1485,7 +1541,7 @@ class MainWorld extends Phaser.Scene {
             if (!this.porteOuvreSon.isPlaying) {
                 this.porteOuvreSon.play({ volume: 1 });
             }
-
+            this.sound.selectAllAudio('stop');
             this.scene.start('ShopScene', {
                 returnX: this.player.x,
                 returnY: this.player.y,
@@ -1642,6 +1698,8 @@ class BakeryScene extends Phaser.Scene {
         selectedCharacter = (data && data.character) ? data.character : 'henri';
         this.player = data.player;
 
+        this.sound.mute = !soundOn;
+
         this.obtentionItemSon = this.sound.add('obtentionItem');
         this.checkoutSon = this.sound.add('checkout');
         this.porteOuvreSon = this.sound.add('porteOuvre');
@@ -1782,7 +1840,7 @@ class BakeryScene extends Phaser.Scene {
             if (!this.porteOuvreSon.isPlaying) {
                 this.porteOuvreSon.play({ volume: 1 });
             }
-
+            this.sound.selectAllAudio('stop');
             this.scene.start('MainWorld', {
                 playerX: this.returnX,
                 playerY: this.returnY,
@@ -1900,6 +1958,8 @@ class ShopScene extends Phaser.Scene {
     create(data) {
         selectedCharacter = (data && data.character) ? data.character : 'henri';
         this.player = data.player;
+
+        this.sound.mute = !soundOn;
 
         this.checkoutSon = this.sound.add('checkout');
         this.porteOuvreSon = this.sound.add('porteOuvre');
@@ -2089,7 +2149,7 @@ class ShopScene extends Phaser.Scene {
             if (!this.porteOuvreSon.isPlaying) {
                 this.porteOuvreSon.play({ volume: 1 });
             }
-
+            this.sound.selectAllAudio('stop');
             this.scene.start('MainWorld', {
                 playerX: this.returnX,
                 playerY: this.returnY,
@@ -2177,6 +2237,8 @@ class EndScene extends Phaser.Scene {
     // son
         const loadingSceneSon = this.sound.add('loadingScene');
         loadingSceneSon.play({ loop: true });
+
+        this.sound.mute = !soundOn;
 
         this.bg = this.add.tileSprite(0, 0, 1194, 834, 'intro').setOrigin(0, 0);
         this.logo = this.add.tileSprite(597, 150, 873, 105, 'logo').setOrigin(0.5, 0.5);
