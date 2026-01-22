@@ -2092,7 +2092,7 @@ class ShopScene extends Phaser.Scene {
                 txt.setScrollFactor(0);
                 this.time.delayedCall(1200, () => txt.destroy());
 
-                // 💡 Réapparition après 2 secondes
+                // Réapparition après 2 secondes
                 this.time.delayedCall(1000, () => {
                     this.mouchoirs.enableBody(true, 784, 660, true, true);
                 });
