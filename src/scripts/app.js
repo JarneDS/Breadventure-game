@@ -1803,8 +1803,9 @@ class BakeryScene extends Phaser.Scene {
                 }
 
                 // MAJ texte argent
-                if (this.moneyText) this.moneyText.setText('Argent : ' + money + '$');
-
+                if (this.moneyText) {
+                    this.moneyText.setText('Argent : ' + money + '$');
+                }
                 // Achat -> -5$ +texte pour user
                 const txt = this.add.text(10, 50, '-5$', { 
                     fontSize: '28px',
